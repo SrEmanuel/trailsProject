@@ -1,0 +1,33 @@
+.navbar{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+    svg{
+        width: 160px;
+        max-width: 50%;
+    }
+
+    div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 50%;
+
+        a{
+            text-decoration: none;
+            color: var(--grey);
+            font-size: 18px;
+            line-height: 20px;
+        }
+
+
+        button{
+            width: 100px;
+        }
+    }
+
+}
