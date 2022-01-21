@@ -1,0 +1,34 @@
+body{
+  margin:0;
+  border:0;
+  padding:0;
+
+  font-family: 'Roboto', sans-serif;
+  
+  button{
+    background: var(--green);
+    border-radius: 10px;
+    outline: none;
+    border: 0;
+    font-size: 18px;
+    line-height: 20px;
+    padding: 10px;
+    color: var(--white);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+
+:root{
+  --grey: #525256 ;
+  --green: #3BEAA8;
+  --purple: #5E5483;
+  --dark-purple: #322153;
+  --background: #F0F0F0;
+  --dark-green: #2FBB86;
+  --white: #FFFFFF;
+  --red: #EB5A50;
+}
