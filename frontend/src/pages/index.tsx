@@ -1,7 +1,9 @@
-import { NavBar } from "../components";
+import { NavBar } from "../components/Navbar";
 
 export function Home(){
     return(
-        <NavBar />
+        <div className="container">
+            <NavBar />
+        </div>
     )
 }
