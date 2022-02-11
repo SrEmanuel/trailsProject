@@ -5,17 +5,14 @@
     align-items: center;
     justify-content: space-between;
 
-    svg{
-        width: 160px;
-        max-width: 50%;
-    }
 
     div{
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        width: 50%;
+        width: 60%;
+        max-width: 500px;
 
         a{
             text-decoration: none;

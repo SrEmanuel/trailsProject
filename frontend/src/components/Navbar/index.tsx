@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import "./styles.scss";
-import { ReactComponent as Logo } from "../assets/images/Logo.svg";
+import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 
 export function NavBar() {
   return (
