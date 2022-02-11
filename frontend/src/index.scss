@@ -2,6 +2,7 @@ body{
   margin:0;
   border:0;
   padding:0;
+  background: #F0F0F0;
 
   font-family: 'Roboto', sans-serif;
   
@@ -18,6 +19,15 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 70px;
+    padding-top: 20px;
   }
 
 }
