@@ -18,6 +18,12 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 0.2s;
+
+    &:hover{
+      cursor: pointer;
+      background: var(--dark-green);
+    }
   }
 
   h1{
