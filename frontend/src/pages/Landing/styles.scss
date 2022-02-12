@@ -63,4 +63,44 @@
             
         }
     }
+
+    @media(max-width:850px){
+        display:flex;
+        flex-direction: column-reverse;
+        align-items: center;
+
+        img{
+            width: 35%;
+        }
+
+        section{
+            width: 50%;
+            align-items: center;
+            text-align: center;
+
+            h1{
+                font-size: 28px;
+            }
+        }
+    }
+
+    @media(max-width:720px){
+        img{
+            display: none;
+        }
+
+        section{
+            height: 100%;
+            width: 90%;
+            justify-content:space-evenly;
+
+            h1{
+                font-size: 24px;
+            }
+
+            .button-container{
+                width: 90%;
+            }
+        }
+    }
 }
