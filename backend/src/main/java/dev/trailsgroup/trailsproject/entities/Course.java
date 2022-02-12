@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,11 +26,11 @@ public class Course implements Serializable {
 
     @CreatedDate
     private Date createdDate;
-
     @LastModifiedDate
     private Date lastModifiedDate;
 
-    //TODO implements createdAt and uptadedAt, if necessary
+    @OneToMany(mappedBy = "id.course")
+    private Set<UserCourse> items = new HashSet<>();
 
     public Course(){}
 
@@ -78,6 +79,16 @@ public class Course implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @JsonIgnore
+    public Set<User> getUsers(){
+        Set<User> set = new HashSet<>();
+        for(UserCourse x : items){
+            set.add(x.getUser());
+        }
+        return set;
+    }
+
 
     public Set<Topic> getTopics() {
         return topics;
