@@ -2,7 +2,9 @@ package dev.trailsgroup.trailsproject.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_user")
@@ -18,6 +20,10 @@ public class User implements Serializable {
     private Integer type;
     private Boolean status;
     //TODO implements createdAt and uptadedAt, if necessary
+
+    @OneToMany(mappedBy = "id.user")
+    private Set<UserCourse> items =  new HashSet<>();
+
 
     public User(){}
 
@@ -89,5 +95,13 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, email);
+    }
+
+    public Set<Course> getCourses(){
+        Set<Course> set = new HashSet<>();
+        for(UserCourse x : items){
+            set.add(x.getCourse());
+        }
+        return set;
     }
 }
