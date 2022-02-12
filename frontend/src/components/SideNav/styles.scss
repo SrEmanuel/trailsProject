@@ -1,6 +1,6 @@
 .hamburguer{
     display: none;
-    z-index:2;
+    z-index:4;
 
     @media(max-width:720px){
         display: flex;
@@ -20,9 +20,10 @@
     right: -100%;
     top: 0;
     bottom: 0;
-    position: absolute;
+    position: fixed;
     background: var(--white);
     transition: 0.2s;
+    z-index:3;
 
     a{
         margin-left: 30px;
