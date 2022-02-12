@@ -28,6 +28,10 @@ body{
     justify-content: center;
     padding-inline: 70px;
     padding-top: 20px;
+
+    @media(max-width:350px){
+      padding: 10vw;
+    }
   }
 
 }
