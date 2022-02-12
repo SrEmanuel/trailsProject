@@ -15,7 +15,7 @@
 
     width: 200px;
     height: 100vh;
-    right: -200px;
+    right: -100%;
     top: 0;
     bottom: 0;
     position: absolute;
@@ -24,6 +24,6 @@
 }
 
 .active{
-    right: 0;
+    right: 0
 }
     
