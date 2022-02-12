@@ -22,8 +22,6 @@ public class Topic implements Serializable {
     @ManyToOne
     private Course course;
 
-    @OneToMany
-    private Set<Subject> subjects;
 
     public Topic(Integer id, String name, Integer position, Course course) {
         this.id = id;
