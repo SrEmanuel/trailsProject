@@ -10,9 +10,7 @@
 .menu{
     display: flex;
     flex-direction: column;
-    align-items:center;
-    justify-content:center;
-
+    align-items:flex-start;
     width: 200px;
     height: 100vh;
     right: -100%;
@@ -20,7 +18,18 @@
     bottom: 0;
     position: absolute;
     background: var(--white);
-    transition: 0.3s;
+    transition: 0.2s;
+
+    a{
+        margin-left: 30px;
+        &:first-of-type{
+            margin-top: 100px;
+        }
+
+        &:not(:first-of-type){
+            margin-top: 20px;
+        }
+    }
 }
 
 .active{
