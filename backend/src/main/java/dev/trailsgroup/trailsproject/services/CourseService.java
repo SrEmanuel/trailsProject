@@ -1,7 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +14,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class CourseService {
 
     //TODO implement authentication and password encryption
 
     //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
-    private UserRepository repository;
+    private CourseRepository repository;
 
-    public List<User> findAll(){
+    public List<Course> findAll(){
         return repository.findAll();
     }
 
-    public User findById(Integer id){
-        Optional<User> obj =  repository.findById(id);
+    public Course findById(Integer id){
+        Optional<Course> obj =  repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
+    public Course insert(Course obj){
         return repository.save(obj);
     }
 
@@ -46,22 +46,19 @@ public class UserService {
         }
     }
 
-    public User update(Integer id, User obj){
+    public Course update(Integer id, Course obj){
         try{
-            User userDatabase = repository.getById(id);
-            userUpdateInformation(userDatabase, obj);
-            return repository.save(userDatabase);
+            Course courseDatabase = repository.getById(id);
+            courseUpdateInformation(courseDatabase, obj);
+            return repository.save(courseDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void userUpdateInformation(User userDataBase, User obj){
-        userDataBase.setName(obj.getName());
-        userDataBase.setEmail(obj.getEmail());
-        userDataBase.setStatus(obj.getStatus());
-        userDataBase.setType(obj.getType());
-        userDataBase.setPassword(obj.getPassword());
+    public void courseUpdateInformation(Course courseDataBase, Course obj){
+        courseDataBase.setName(obj.getName());
+        courseDataBase.setImage(obj.getImage());
     }
 
 }

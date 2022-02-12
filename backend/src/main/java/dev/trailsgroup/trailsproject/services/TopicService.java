@@ -1,7 +1,9 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.entities.Topic;
+import dev.trailsgroup.trailsproject.entities.topic;
+import dev.trailsgroup.trailsproject.repositories.TopicRepository;
+import dev.trailsgroup.trailsproject.repositories.topicRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +16,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class TopicService {
 
     //TODO implement authentication and password encryption
 
     //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
-    private UserRepository repository;
+    private TopicRepository repository;
 
-    public List<User> findAll(){
+    public List<Topic> findAll(){
         return repository.findAll();
     }
 
-    public User findById(Integer id){
-        Optional<User> obj =  repository.findById(id);
+    public Topic findById(Integer id){
+        Optional<Topic> obj =  repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
+    public Topic insert(Topic obj){
         return repository.save(obj);
     }
 
@@ -46,22 +48,19 @@ public class UserService {
         }
     }
 
-    public User update(Integer id, User obj){
+    public Topic update(Integer id, Topic obj){
         try{
-            User userDatabase = repository.getById(id);
-            userUpdateInformation(userDatabase, obj);
-            return repository.save(userDatabase);
+            Topic topicDatabase = repository.getById(id);
+            topicUpdateInformation(topicDatabase, obj);
+            return repository.save(topicDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void userUpdateInformation(User userDataBase, User obj){
-        userDataBase.setName(obj.getName());
-        userDataBase.setEmail(obj.getEmail());
-        userDataBase.setStatus(obj.getStatus());
-        userDataBase.setType(obj.getType());
-        userDataBase.setPassword(obj.getPassword());
+    public void topicUpdateInformation(Topic topicDataBase, Topic obj){
+        topicDataBase.setName(obj.getName());
+        topicDataBase.set
     }
 
 }

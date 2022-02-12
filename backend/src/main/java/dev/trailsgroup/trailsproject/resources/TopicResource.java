@@ -1,7 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
-import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.services.UserService;
+import dev.trailsgroup.trailsproject.entities.Topic;
+import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,30 +11,28 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserResource {
+@RequestMapping(value = "/topics")
+public class TopicResource {
 
     //TODO IMPLEMENT AUTHENTICATION
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
-
     @Autowired
-    private UserService service;
+    private TopicService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
-        List<User> list = service.findAll();
+    public ResponseEntity<List<Topic>> findAll(){
+        List<Topic> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Integer id){
-        User obj = service.findById(id);
+    public ResponseEntity<Topic> findById(@PathVariable Integer id){
+        Topic obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User obj){
+    public ResponseEntity<Topic> insert(@RequestBody Topic obj){
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
@@ -48,7 +46,7 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update( @PathVariable Integer id, @RequestBody User obj){
+    public ResponseEntity<Topic> update( @PathVariable Integer id, @RequestBody Topic obj){
         obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
