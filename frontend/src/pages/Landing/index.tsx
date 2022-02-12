@@ -19,6 +19,7 @@ export function Home() {
             <button>Cadastre-se</button>
           </div>
         </section>
+        <img src={Trails} alt="imagem de homem perdido em trilha" />
       </div>
     </div>
   );
