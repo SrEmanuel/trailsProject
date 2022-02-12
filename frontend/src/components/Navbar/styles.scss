@@ -1,30 +1,36 @@
-.navbar{
+.navbar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  div {
     display: flex;
     flex-direction: row;
-    width: 100%;
     align-items: center;
     justify-content: space-between;
+    width: 60%;
+    max-width: 500px;
 
-
-    div{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 60%;
-        max-width: 500px;
-
-        a{
-            text-decoration: none;
-            color: var(--grey);
-            font-size: 18px;
-            line-height: 20px;
-        }
-
-
-        button{
-            width: 100px;
-        }
+    a {
+      text-decoration: none;
+      color: var(--grey);
+      font-size: 18px;
+      line-height: 20px;
     }
 
+    button {
+      width: 100px;
+    }
+
+    @media (max-width: 720px) {
+      justify-content: flex-end;
+
+      a,
+      button {
+        display: none;
+      }
+    }
+  }
 }
