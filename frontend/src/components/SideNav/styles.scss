@@ -1,11 +1,29 @@
 .hamburguer{
     display: none;
+    z-index:2;
 
     @media(max-width:720px){
         display: flex;
     }
 }
 
-.side-nav{
-    
+.menu{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+
+    width: 200px;
+    height: 100vh;
+    right: -200px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    background: var(--white);
+    transition: 0.3s;
 }
+
+.active{
+    right: 0;
+}
+    
