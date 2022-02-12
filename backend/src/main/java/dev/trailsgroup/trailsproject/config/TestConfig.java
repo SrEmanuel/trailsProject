@@ -1,4 +1,4 @@
-crpackage dev.trailsgroup.trailsproject.config;
+package dev.trailsgroup.trailsproject.config;
 
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
