@@ -2,6 +2,8 @@ package dev.trailsgroup.trailsproject.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,8 +22,11 @@ public class Topic implements Serializable {
 
 
     @ManyToOne
+    @JoinColumn(name = "course_id")
     private Course course;
 
+    @OneToMany(mappedBy = "topic")
+    private List<Subject> subjects = new ArrayList<>();
 
     public Topic(Integer id, String name, Integer position, Course course) {
         this.id = id;
@@ -63,6 +68,10 @@ public class Topic implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
     @Override
