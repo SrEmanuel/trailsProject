@@ -18,6 +18,8 @@ public class UserService {
 
     //TODO implement authentication and password encryption
 
+    //TODO IMPLEMENT ADD COURSE ENDPOINT
+
     @Autowired
     private UserRepository repository;
 
