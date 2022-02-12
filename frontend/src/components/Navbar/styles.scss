@@ -27,8 +27,8 @@
     @media (max-width: 720px) {
       justify-content: flex-end;
 
-      a,
-      button {
+      >a,
+      >button {
         display: none;
       }
     }
