@@ -19,6 +19,7 @@ public class Subject implements Serializable {
 
 
     @ManyToOne
+    @JoinColumn(name = "topic_id")
     private Topic topic;
 
     public Subject(){}

@@ -34,7 +34,7 @@ public class Course implements Serializable {
 
     public Course(){}
 
-    @OneToMany
+    @OneToMany(mappedBy = "course")
     private Set<Topic> topics = new HashSet<>();
 
     public Course(Integer id, String name, String image) {
