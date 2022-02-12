@@ -1,5 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,7 +21,7 @@ public class User implements Serializable {
     private String email;
     private Integer type;
     private Boolean status;
-    //TODO implements createdAt and uptadedAt, if necessary
+
 
     @OneToMany(mappedBy = "id.user")
     private Set<UserCourse> items =  new HashSet<>();
@@ -52,7 +54,9 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getPassword() {
+
+    @JsonIgnore
+    public String getPassword() { //TODO Verify that later. We cannot allow the password go out in any case.
         return password;
     }
 
