@@ -21,7 +21,6 @@ public class TopicService {
 
     //TODO implement authentication and password encryption
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
     private TopicRepository repository;
@@ -67,6 +66,7 @@ public class TopicService {
 
     public void topicUpdateInformation(Topic topicDataBase, Topic obj){
         topicDataBase.setName(obj.getName());
+        topicDataBase.setPosition(obj.getPosition());
     }
 
 }
