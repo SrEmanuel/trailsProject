@@ -1,5 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Set;
 public class Topic implements Serializable {
 
 
+    //TODO See the implementation of Course ID into a rest endpoint
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,6 +23,7 @@ public class Topic implements Serializable {
 
 
     private Integer position; //variable to show in witch position this topic really is
+
 
 
     @ManyToOne
@@ -62,6 +67,7 @@ public class Topic implements Serializable {
         this.position = position;
     }
 
+    @JsonIgnore
     public Course getCourse() {
         return course;
     }
