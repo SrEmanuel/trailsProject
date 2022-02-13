@@ -79,6 +79,12 @@ public class Topic implements Serializable {
         this.course = course;
     }
 
+
+    @JsonIgnore
+    public Integer getSubjectsCount(){
+        return subjects.size();
+    }
+
     public List<Subject> getSubjects() {
         return subjects;
     }
