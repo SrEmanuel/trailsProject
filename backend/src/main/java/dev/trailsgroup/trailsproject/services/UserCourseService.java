@@ -22,12 +22,16 @@ public class UserCourseService {
     @Autowired
     private UserCourseRepository userCourseRepository;
 
-    public UserCourse insert(UserCourseDTO obj){
-        User user = userRepository.getById(obj.getUserId());
-        Course course = courseRepository.getById(obj.getCourseId());
+    public UserCourseDTO insert(Integer userId, Integer courseId){
+        User user = userRepository.getById(userId);
+        Course course = courseRepository.getById(courseId);
         UserCourse userCourse = new UserCourse(course, user);
 
-        return userCourseRepository.save(userCourse);
+        userCourseRepository.save(userCourse);
+        UserCourseDTO response = new UserCourseDTO();
+        response.setUserId(userId);
+        response.setCourseId(courseId);
+        return response;
 
 
 

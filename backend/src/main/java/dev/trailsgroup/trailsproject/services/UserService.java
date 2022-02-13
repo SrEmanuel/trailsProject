@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
+import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -64,6 +66,11 @@ public class UserService {
         userDataBase.setStatus(obj.getStatus());
         userDataBase.setType(obj.getType());
         userDataBase.setPassword(obj.getPassword());
+    }
+
+    public Set<Course> getCourses(Integer id){
+        Set<Course> courses = repository.getById(id).getCourses();
+        return courses;
     }
 
 

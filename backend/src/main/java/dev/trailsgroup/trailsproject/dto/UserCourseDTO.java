@@ -2,17 +2,11 @@ package dev.trailsgroup.trailsproject.dto;
 
 public class UserCourseDTO {
 
-    private Integer userId;
     private Integer courseId;
+    private Integer userId;
 
-    public UserCourseDTO(){}
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public UserCourseDTO() {
     }
 
     public Integer getCourseId() {
@@ -21,5 +15,13 @@ public class UserCourseDTO {
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
