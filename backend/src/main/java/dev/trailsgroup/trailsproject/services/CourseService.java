@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourseService {
@@ -59,6 +61,10 @@ public class CourseService {
     public void courseUpdateInformation(Course courseDataBase, Course obj){
         courseDataBase.setName(obj.getName());
         courseDataBase.setImage(obj.getImage());
+    }
+
+    public Set<Topic> getTopics(Integer id){
+        return repository.getById(id).getTopics();
     }
 
 }

@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/courses")
@@ -53,6 +55,11 @@ public class CourseResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping(value = "/{id}/topics")
+    public ResponseEntity<Set<Topic>> getCourses(@PathVariable Integer id){
+        Set<Topic> courses = service.getTopics(id);
+        return ResponseEntity.ok().body(courses);
+    }
 
 
 
