@@ -1,6 +1,8 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
@@ -63,5 +65,6 @@ public class UserService {
         userDataBase.setType(obj.getType());
         userDataBase.setPassword(obj.getPassword());
     }
+
 
 }

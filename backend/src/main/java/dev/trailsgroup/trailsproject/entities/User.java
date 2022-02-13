@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -108,4 +109,5 @@ public class User implements Serializable {
         }
         return set;
     }
+
 }

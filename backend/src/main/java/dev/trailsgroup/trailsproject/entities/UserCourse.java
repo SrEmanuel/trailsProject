@@ -17,7 +17,7 @@ public class UserCourse implements Serializable {
 
     public UserCourse(){}
 
-    public UserCourse(UserCoursePK id, Course course, User user) {
+    public UserCourse(Course course, User user) {
         id.setCourse(course);
         id.setUser(user);
     }

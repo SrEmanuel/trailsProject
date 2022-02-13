@@ -1,6 +1,9 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.UserCourse;
+import dev.trailsgroup.trailsproject.services.UserCourseService;
 import dev.trailsgroup.trailsproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,10 @@ public class UserResource {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private UserCourseService userCourseService;
+
+
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
         List<User> list = service.findAll();
@@ -38,6 +45,14 @@ public class UserResource {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
+    }
+
+    @PostMapping(value = "/add-course")
+    public ResponseEntity<UserCourseDTO> addCourse(@RequestBody UserCourseDTO obj){
+        userCourseService.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/add-course")
+                .buildAndExpand(obj).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
