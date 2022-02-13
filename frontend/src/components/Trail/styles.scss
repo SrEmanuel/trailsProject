@@ -1,11 +1,13 @@
 .card-container {
   width: 300px;
   height: 175px;
+  margin-bottom: 50px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 
   .card-header {
     height: 120px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    width:100%;
 
     img {
       border-top-left-radius: 10px;
@@ -24,8 +26,13 @@
 
       margin-top: 60px;
       position: absolute;
-      margin-left: -270px;
+      margin-left: 20px;
     }
+  }
+
+  .card-line{
+      width: 298px;
+      border: 1px solid var(--grey);
   }
 
   .card-bottom {
@@ -33,6 +40,7 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
+    width: 290px;
     background: var(--white);
     padding: 5px;
     border-bottom-left-radius: 10px;
