@@ -1,5 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -73,6 +75,7 @@ public class Subject implements Serializable {
         this.htmlContent = htmlContent;
     }
 
+    @JsonIgnore
     public Topic getTopic() {
         return topic;
     }
