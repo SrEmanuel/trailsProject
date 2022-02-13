@@ -1,0 +1,27 @@
+
+
+.waveUp{
+    position: absolute;
+    left: 0;
+    top:0;
+    z-index:-1;
+
+    width: 350px;
+
+    @media(max-width:425px){
+        width: 200px;
+    }
+}
+
+.waveDown{
+    position: absolute;
+    bottom:0;
+    right:0;
+    z-index:-1;
+
+    width: 350px;
+
+    @media(max-width:425px){
+        width: 200px;
+    }
+}

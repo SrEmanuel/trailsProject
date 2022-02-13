@@ -1,0 +1,38 @@
+.login-content{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    margin-top:20px;
+    width:100%;
+    height:90vh;
+    text-align: center;
+
+    img{
+        width: 140px;
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        width:100%;
+      
+        .forgot-password {
+          color: var(--dark-green);
+          font-family: "Roboto", sans-serif;
+          font-size: 16px;
+          line-height: 20px;
+          text-decoration: none;
+          margin-bottom: 25px;
+        }
+      
+        button {
+          width: 370px;
+          gap: 10px;
+        }
+      }
+      
+}
