@@ -20,6 +20,8 @@ public class UserCoursePK implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
+    public UserCoursePK(){}
+
     public User getUser() {
         return user;
     }

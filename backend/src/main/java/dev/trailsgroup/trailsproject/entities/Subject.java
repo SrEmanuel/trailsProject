@@ -1,11 +1,18 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tb_subject")
+@EntityListeners(AuditingEntityListener.class)
 public class Subject implements Serializable {
 
     @Id
@@ -17,6 +24,11 @@ public class Subject implements Serializable {
     private String grade;
     private String htmlContent;
 
+
+    @CreatedDate
+    private Date createdDate;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)
@@ -73,6 +85,7 @@ public class Subject implements Serializable {
         this.htmlContent = htmlContent;
     }
 
+    @JsonIgnore
     public Topic getTopic() {
         return topic;
     }
@@ -92,5 +105,13 @@ public class Subject implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 }

@@ -1,25 +1,33 @@
 package dev.trailsgroup.trailsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_topic")
+@EntityListeners(AuditingEntityListener.class)
 public class Topic implements Serializable {
 
+    //TODO See the implementation of Course ID into a rest endpoint
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
 
-
     private Integer position; //variable to show in witch position this topic really is
 
+
+    @CreatedDate
+    private Date createdDate;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
@@ -62,12 +70,19 @@ public class Topic implements Serializable {
         this.position = position;
     }
 
+    @JsonIgnore
     public Course getCourse() {
         return course;
     }
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+
+    @JsonIgnore
+    public Integer getSubjectsCount(){
+        return subjects.size();
     }
 
     public List<Subject> getSubjects() {
@@ -85,5 +100,13 @@ public class Topic implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 }

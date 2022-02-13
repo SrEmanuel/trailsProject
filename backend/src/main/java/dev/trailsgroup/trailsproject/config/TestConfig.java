@@ -1,8 +1,10 @@
 package dev.trailsgroup.trailsproject.config;
 
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
+import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +21,10 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private TopicRepository topicRepository;
+
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -27,6 +33,10 @@ public class TestConfig implements CommandLineRunner {
 
         Course c1 = new Course(null, "Matemática", "www.google.com");
         courseRepository.save(c1);
+
+        Topic t1 = new Topic(null, "Matemática Aplicada", 1, c1);
+        topicRepository.save(t1);
+
 
     }
 

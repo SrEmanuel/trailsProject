@@ -1,10 +1,12 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
+import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.Subject;
+import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
-import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.repositories.SubjectRepository;
+import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,29 +17,34 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
-public class UserService {
+public class SubjectService {
 
     //TODO implement authentication and password encryption
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
-    private UserRepository repository;
+    private SubjectRepository repository;
 
-    public List<User> findAll(){
+    @Autowired
+    private TopicRepository topicRepository;
+
+
+    public List<Subject> findAll(){
         return repository.findAll();
     }
 
-    public User findById(Integer id){
-        Optional<User> obj =  repository.findById(id);
+    public Subject findById(Integer id){
+        Optional<Subject> obj =  repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
-        return repository.save(obj);
+    public Subject insert(SubjectDTO obj){
+        Topic topic = topicRepository.getById(obj.getTopicId());
+        Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(), topic);
+
+        return repository.save(subject);
     }
 
     public void delete(Integer id){
@@ -50,28 +57,18 @@ public class UserService {
         }
     }
 
-    public User update(Integer id, User obj){
+    public Subject update(Integer id, Subject obj){
         try{
-            User userDatabase = repository.getById(id);
-            userUpdateInformation(userDatabase, obj);
-            return repository.save(userDatabase);
+            Subject SubjectDatabase = repository.getById(id);
+            SubjectUpdateInformation(SubjectDatabase, obj);
+            return repository.save(SubjectDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void userUpdateInformation(User userDataBase, User obj){
-        userDataBase.setName(obj.getName());
-        userDataBase.setEmail(obj.getEmail());
-        userDataBase.setStatus(obj.getStatus());
-        userDataBase.setType(obj.getType());
-        userDataBase.setPassword(obj.getPassword());
+    public void SubjectUpdateInformation(Subject subjectDataBase, Subject obj){
+        subjectDataBase.setName(obj.getName());
     }
-
-    public Set<Course> getCourses(Integer id){
-        Set<Course> courses = repository.getById(id).getCourses();
-        return courses;
-    }
-
 
 }

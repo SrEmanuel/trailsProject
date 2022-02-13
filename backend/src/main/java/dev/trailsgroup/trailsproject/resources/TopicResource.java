@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import dev.trailsgroup.trailsproject.dto.TopicDTO;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class TopicResource {
     }
 
     @PostMapping
-    public ResponseEntity<Topic> insert(@RequestBody Topic obj){
-        obj = service.insert(obj);
+    public ResponseEntity<Topic> insert(@RequestBody TopicDTO topic){
+        Topic obj = service.insert(topic);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);

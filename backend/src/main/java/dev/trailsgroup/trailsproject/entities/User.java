@@ -1,16 +1,27 @@
 package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "tb_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements Serializable {
+
+    @CreatedDate
+    private Date createdDate;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +33,8 @@ public class User implements Serializable {
     private Integer type;
     private Boolean status;
 
-
     @OneToMany(mappedBy = "id.user")
     private Set<UserCourse> items =  new HashSet<>();
-
 
     public User(){}
 
@@ -53,7 +62,6 @@ public class User implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
 
     @JsonIgnore
     public String getPassword() { //TODO Verify that later. We cannot allow the password go out in any case.
@@ -88,6 +96,16 @@ public class User implements Serializable {
         this.status = status;
     }
 
+    @JsonIgnore
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    @JsonIgnore
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,6 +119,7 @@ public class User implements Serializable {
         return Objects.hash(id, email);
     }
 
+    @JsonIgnore
     public Set<Course> getCourses(){
         Set<Course> set = new HashSet<>();
         for(UserCourse x : items){
@@ -108,4 +127,5 @@ public class User implements Serializable {
         }
         return set;
     }
+
 }

@@ -89,9 +89,17 @@ public class Course implements Serializable {
         return set;
     }
 
-
+    @JsonIgnore
     public Set<Topic> getTopics() {
         return topics;
+    }
+
+    public Integer getSubjectsCount(){
+        Integer count = 0;
+        for(Topic x : topics){
+            count += x.getSubjectsCount();
+        }
+        return count;
     }
 
     public Date getCreatedDate() {

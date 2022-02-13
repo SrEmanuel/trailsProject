@@ -1,9 +1,10 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.TopicDTO;
+import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Topic;
-import dev.trailsgroup.trailsproject.entities.topic;
+import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.TopicRepository;
-import dev.trailsgroup.trailsproject.repositories.topicRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,12 @@ public class TopicService {
 
     //TODO implement authentication and password encryption
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
     private TopicRepository repository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public List<Topic> findAll(){
         return repository.findAll();
@@ -34,8 +37,11 @@ public class TopicService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Topic insert(Topic obj){
-        return repository.save(obj);
+    public Topic insert(TopicDTO obj){
+        Course course = courseRepository.findById(obj.getCourseId()).get();
+        Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course);
+
+        return repository.save(topic);
     }
 
     public void delete(Integer id){
@@ -60,7 +66,7 @@ public class TopicService {
 
     public void topicUpdateInformation(Topic topicDataBase, Topic obj){
         topicDataBase.setName(obj.getName());
-        topicDataBase.set
+        topicDataBase.setPosition(obj.getPosition());
     }
 
 }
