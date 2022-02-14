@@ -5,6 +5,10 @@
   align-items: center;
   justify-content: space-between;
 
+  > svg:hover{
+    cursor:pointer;
+  }
+
   > div {
     display: flex;
     flex-direction: row;
