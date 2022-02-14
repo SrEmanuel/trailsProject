@@ -67,15 +67,18 @@ public class SubjectService {
     public Subject update(Integer id, Subject obj){
         try{
             Subject SubjectDatabase = repository.getById(id);
-            SubjectUpdateInformation(SubjectDatabase, obj);
+            subjectUpdateInformation(SubjectDatabase, obj);
             return repository.save(SubjectDatabase);
         }catch(Exception e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void SubjectUpdateInformation(Subject subjectDataBase, Subject obj){
+    public void subjectUpdateInformation(Subject subjectDataBase, Subject obj){
         subjectDataBase.setName(obj.getName());
+        subjectDataBase.setGrade(obj.getGrade());
+        subjectDataBase.setImage(obj.getImage());
+        subjectDataBase.setHtmlContent(obj.getHtmlContent());
     }
 
 }
