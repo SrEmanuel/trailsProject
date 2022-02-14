@@ -54,6 +54,12 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    @DeleteMapping(value = "/{id}/remove-course")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
+        userCourseService.delete(id, courseId);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void>  delete(@PathVariable Integer id){
         service.delete(id);

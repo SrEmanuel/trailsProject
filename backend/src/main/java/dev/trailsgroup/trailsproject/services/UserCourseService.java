@@ -4,6 +4,7 @@ import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.entities.UserCourse;
+import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
@@ -33,6 +34,16 @@ public class UserCourseService {
         response.setUserId(userId);
         response.setCourseId(courseId);
         return response;
+    }
+
+    public void delete(Integer userId, Integer courseId){
+        UserCoursePK pk = new UserCoursePK();
+        pk.setUser(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(userId)));
+        pk.setCourse(courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(userId)));
+
+        UserCourse userCourse = userCourseRepository.findById(pk).orElseThrow(ResourceNotFoundException::new);
+
+        userCourseRepository.delete(userCourse);
     }
 
 }
