@@ -1,0 +1,33 @@
+.subject {
+  a {
+    text-decoration: none;
+    color: var(--white);
+    background: var(--green);
+    padding: 5px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    transition: 0.2s;
+    position: absolute;
+    margin-top: 93px;
+    margin-left: -56px;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+
+  }
+
+  .subject-card-bottom {
+    height: 35px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+    span {
+      color: var(--grey);
+    }
+  }
+}
