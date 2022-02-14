@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
@@ -6,17 +6,20 @@ import { SideNav } from "../SideNav";
 import "./styles.scss";
 
 export function NavBar() {
+
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar">
-      <Logo />
+      <Logo onClick={ ()=> navigate('/') } />
       <div>
-        <Link to="#">Trilhas</Link>
+        <Link to="/cursos">Trilhas</Link>
         <Link to="#">Sobre</Link>
         <Link to="#">Cadastre-se</Link>
-        <button>
+        <Link className="login-btn" to ="/login">
           <FiLogIn color="var(--white)" size={18} />
           Entrar
-        </button>
+        </Link>
         <SideNav />
       </div>
     </nav>

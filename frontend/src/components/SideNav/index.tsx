@@ -20,7 +20,7 @@ export function SideNav() {
       />
 
       <aside className={`menu ${isVisible ? "active" : ""}`}>
-        <Link to="#">
+        <Link to="/cursos">
           <FiBookOpen color="var(--green)" size={24} />
           <span>Trilhas</span>
         </Link>
@@ -32,10 +32,10 @@ export function SideNav() {
           <FiLogIn color="var(--green)" size={24} />
           <span>Cadastre-se</span>
         </Link>
-        <button>
+        <Link className="login-btn" to="/login" >
           <FiLogIn color="var(--white)" size={18} />
           Entrar
-        </button>
+        </Link>
       </aside>
     </>
   );
