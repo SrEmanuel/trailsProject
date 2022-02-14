@@ -66,6 +66,7 @@ public class CourseService {
 
     public Set<Topic> getTopics(Integer id){
         return repository.getById(id).getTopics();
+
     }
 
 }
