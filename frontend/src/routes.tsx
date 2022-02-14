@@ -10,6 +10,7 @@ export function Routes(){
              <Route path="/" element={<Home></Home>}  />
              <Route path="/login" element={<Login></Login>} />
              <Route path="/cursos" element={<ListContent></ListContent>} />
+             <Route path="/cursos/:name" element={<ListContent></ListContent>} />
             </RoutesContainer>
         </BrowserRouter>
     )
