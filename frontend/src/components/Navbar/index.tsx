@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
@@ -6,9 +6,12 @@ import { SideNav } from "../SideNav";
 import "./styles.scss";
 
 export function NavBar() {
+
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar">
-      <Logo />
+      <Logo onClick={ ()=> navigate('/') } />
       <div>
         <Link to="/cursos">Trilhas</Link>
         <Link to="#">Sobre</Link>
