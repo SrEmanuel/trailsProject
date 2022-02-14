@@ -2,11 +2,11 @@ package dev.trailsgroup.trailsproject.services.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
     public ResourceNotFoundException(Object id){
-        super("Resource not found. Id: " + id);
+        super("Recurso não encontrado. Id: " + id);
     }
 
     public ResourceNotFoundException(String msg){
-        super("Resource not found. Error: " + msg);
+        super("Recurso não encontrado. Erro: " + msg);
     }
 
 }
