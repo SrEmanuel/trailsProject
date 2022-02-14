@@ -26,7 +26,7 @@ public class UserCourseService {
 
     public UserCourseDTO insert(Integer userId, Integer courseId){
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(userId));
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(userId));
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
         UserCourse userCourse = new UserCourse(course, user);
 
         userCourseRepository.save(userCourse);
@@ -42,7 +42,7 @@ public class UserCourseService {
         pk.setCourse(courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(userId)));
 
         UserCourse userCourse = userCourseRepository.findById(pk).orElseThrow(()
-                -> new ResourceNotFoundException("The course "+ courseId + " is NOT associated with user " + userId));
+                -> new ResourceNotFoundException("O curso "+ courseId + " não está associado ao usuário " + userId));
 
         userCourseRepository.delete(userCourse);
     }
