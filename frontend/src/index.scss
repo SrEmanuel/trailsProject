@@ -27,14 +27,22 @@ body{
     }
   }
 
-  h1{
+  h1, h2, h3, h4, h5, h6{
     font-family: 'Inter', sans-serif;
     color: var(--dark-purple);
     font-weight: 700;
-    font-size: 34px;
-    line-height: 44px;
     margin: 10px;
     max-width: 500px;
+  }
+
+  h1{
+    font-size: 34px;
+    line-height: 44px;
+  }
+
+  h2{
+    font-size:24px;
+    list-style: 30px;
   }
 
   input{
