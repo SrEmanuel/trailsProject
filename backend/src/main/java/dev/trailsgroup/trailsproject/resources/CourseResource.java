@@ -4,12 +4,13 @@ import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -18,15 +19,12 @@ public class CourseResource {
 
     //TODO IMPLEMENT AUTHENTICATION
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
-
     @Autowired
     private CourseService service;
 
     @GetMapping
-    public ResponseEntity<List<Course>> findAll(){
-        List<Course> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<Course>> findAll(Pageable pageable){
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}")

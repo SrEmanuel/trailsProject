@@ -10,6 +10,8 @@ import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -28,8 +30,8 @@ public class TopicService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public List<Topic> findAll(){
-        return repository.findAll();
+    public Page<Topic> findAll(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public Topic findById(Integer id){
