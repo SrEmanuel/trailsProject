@@ -3,8 +3,6 @@ package dev.trailsgroup.trailsproject.resources;
 import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.entities.UserCourse;
-import dev.trailsgroup.trailsproject.services.CourseService;
 import dev.trailsgroup.trailsproject.services.UserCourseService;
 import dev.trailsgroup.trailsproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +29,7 @@ public class UserResource {
 
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
-        List<User> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(value = "/{id}")

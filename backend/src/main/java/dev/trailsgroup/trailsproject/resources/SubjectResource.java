@@ -4,12 +4,13 @@ import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/subjects")
@@ -21,9 +22,8 @@ public class SubjectResource {
     private SubjectService service;
 
     @GetMapping
-    public ResponseEntity<List<Subject>> findAll(){
-        List<Subject> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<Subject>> findAll(Pageable pageable){
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}")

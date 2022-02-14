@@ -4,12 +4,13 @@ import dev.trailsgroup.trailsproject.dto.TopicDTO;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/topics")
@@ -21,9 +22,8 @@ public class TopicResource {
     private TopicService service;
 
     @GetMapping
-    public ResponseEntity<List<Topic>> findAll(){
-        List<Topic> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<Topic>> findAll(Pageable pageable){
+        return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}")
