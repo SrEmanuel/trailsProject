@@ -1,5 +1,5 @@
 .card-container {
-  width: 300px;
+  width: 25vw;
   height: 175px;
   margin-bottom: 50px;
   border-top-left-radius: 10px;
@@ -31,7 +31,7 @@
   }
 
   .card-line{
-      width: 298px;
+      width: 100% calc(100% -2px);
       border: 1px solid var(--grey);
   }
 
@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
-    width: 290px;
+    max-width: 100%;
     background: var(--white);
     padding: 5px;
     border-bottom-left-radius: 10px;
@@ -58,5 +58,13 @@
       line-height: 20px;
       color: var(--grey);
     }
+  }
+
+  @media(max-width:760px){
+    width: 35vw;
+  }
+
+  @media(max-width:540px){
+    width: 90%;
   }
 }
