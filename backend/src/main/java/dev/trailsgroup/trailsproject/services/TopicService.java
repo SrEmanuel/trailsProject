@@ -40,7 +40,7 @@ public class TopicService {
     }
 
     public Topic insert(TopicDTO obj){
-        Course course = courseRepository.findById(obj.getCourseId()).get();
+        Course course = courseRepository.findById(obj.getCourseId()).orElseThrow(() -> new ResourceNotFoundException(obj.getCourseId()));
         Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course);
 
         return repository.save(topic);
@@ -70,5 +70,6 @@ public class TopicService {
         topicDataBase.setName(obj.getName());
         topicDataBase.setPosition(obj.getPosition());
     }
+
 
 }

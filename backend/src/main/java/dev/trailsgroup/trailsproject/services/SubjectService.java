@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
@@ -39,11 +40,18 @@ public class SubjectService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    //TODO verify that exception treatment
     public Subject insert(SubjectDTO obj){
-        Topic topic = topicRepository.getById(obj.getTopicId());
-        Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(), topic);
+        try {
+            Topic topic = topicRepository.getById(obj.getTopicId());
+            Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(), topic);
 
-        return repository.save(subject);
+            return repository.save(subject);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            throw new ResourceNotFoundException(obj.getTopicId());
+
+        }
     }
 
     public void delete(Integer id){
@@ -59,15 +67,18 @@ public class SubjectService {
     public Subject update(Integer id, Subject obj){
         try{
             Subject SubjectDatabase = repository.getById(id);
-            SubjectUpdateInformation(SubjectDatabase, obj);
+            subjectUpdateInformation(SubjectDatabase, obj);
             return repository.save(SubjectDatabase);
-        }catch(EntityNotFoundException e){
+        }catch(Exception e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void SubjectUpdateInformation(Subject subjectDataBase, Subject obj){
+    public void subjectUpdateInformation(Subject subjectDataBase, Subject obj){
         subjectDataBase.setName(obj.getName());
+        subjectDataBase.setGrade(obj.getGrade());
+        subjectDataBase.setImage(obj.getImage());
+        subjectDataBase.setHtmlContent(obj.getHtmlContent());
     }
 
 }
