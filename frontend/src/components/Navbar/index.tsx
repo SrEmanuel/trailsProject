@@ -10,13 +10,13 @@ export function NavBar() {
     <nav className="navbar">
       <Logo />
       <div>
-        <Link to="#">Trilhas</Link>
+        <Link to="/cursos">Trilhas</Link>
         <Link to="#">Sobre</Link>
         <Link to="#">Cadastre-se</Link>
-        <button>
+        <Link className="login-btn" to ="/login">
           <FiLogIn color="var(--white)" size={18} />
           Entrar
-        </button>
+        </Link>
         <SideNav />
       </div>
     </nav>
