@@ -1,0 +1,34 @@
+.authors {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  line-height: 21px;
+  color: var(--grey);
+  margin-bottom: 20px;
+  align-self: flex-start;
+  max-width: 95%;
+}
+
+.html-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 95%;
+
+  p, li {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 30px;
+    color: #525256;
+  }
+
+  a{
+      text-decoration: none;
+      color: var(--dark-green);
+  }
+
+  img{
+      max-width: 100%;
+      height: auto;
+  }
+}
