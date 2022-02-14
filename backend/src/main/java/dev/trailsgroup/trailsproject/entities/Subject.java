@@ -22,8 +22,10 @@ public class Subject implements Serializable {
     private String name;
     private String image;
     private String grade;
-    private String htmlContent;
 
+    @Column(nullable = true)
+    @Lob
+    private String htmlContent;
 
     @CreatedDate
     private Date createdDate;
