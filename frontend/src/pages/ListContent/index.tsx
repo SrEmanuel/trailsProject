@@ -12,8 +12,8 @@ export function ListContent() {
   return (
     <div className="container">
       <NavBar />
-      <h1>Trilhas disponíveis</h1>
-      <Paginator />
+      <h1>{  location.pathname==="/cursos"? "Trilhas disponíveis" : "História Geral"}</h1>
+      { location.pathname==="/cursos" && <Paginator />}
       <div className="trails-grid-container">
         { location.pathname==="/cursos"?  trails.map((trail, index ) =>(
             <Trail color={index % 3 === 0? 'var(--green)' : index % 3 === 1? 'var(--red)' : 'var(--purple)' } />
