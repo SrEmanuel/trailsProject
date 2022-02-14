@@ -41,7 +41,8 @@ public class UserCourseService {
         pk.setUser(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(userId)));
         pk.setCourse(courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(userId)));
 
-        UserCourse userCourse = userCourseRepository.findById(pk).orElseThrow(ResourceNotFoundException::new);
+        UserCourse userCourse = userCourseRepository.findById(pk).orElseThrow(()
+                -> new ResourceNotFoundException("The course "+ courseId + " is NOT associated with user " + userId));
 
         userCourseRepository.delete(userCourse);
     }
