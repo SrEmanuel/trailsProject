@@ -9,11 +9,11 @@
 <p align="center">
 
   <a href="">
-    <img alt="Made by Edmarcos, Emanunel, Giulian" src="https://img.shields.io/badge/made%20by-Edmarcos, Emanunel, Giulian-%23F8952D">
+    <img alt="Made by Edmarcos, Emanunel, Giulian" src="https://img.shields.io/badge/made%20by-Edmarcos, Emanunel, Giulian-%2FBB86">
   </a>
 
   <a href="LICENSE" >
-    <img alt="License" src="https://img.shields.io/badge/license-MIT-%23F8952D">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-%2FBB86">
   </a>
 
 </p>
