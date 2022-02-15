@@ -22,6 +22,7 @@ public class Subject implements Serializable {
     private String name;
     private String image;
     private String grade;
+    private Integer position;
 
     @Column(nullable = true)
     @Lob
@@ -38,13 +39,14 @@ public class Subject implements Serializable {
 
     public Subject(){}
 
-    public Subject(Integer id, String name, String image, String grade, String htmlContent, Topic topic) {
+    public Subject(Integer id, String name, String image, String grade, String htmlContent, Integer position, Topic topic) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.grade = grade;
         this.htmlContent = htmlContent;
         this.topic = topic;
+        this.position = position;
     }
 
     public Integer getId() {
@@ -96,6 +98,22 @@ public class Subject implements Serializable {
         this.topic = topic;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,11 +127,5 @@ public class Subject implements Serializable {
         return Objects.hash(id);
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
 }

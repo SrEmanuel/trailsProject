@@ -44,7 +44,7 @@ public class SubjectService {
     public Subject insert(SubjectDTO obj){
         try {
             Topic topic = topicRepository.getById(obj.getTopicId());
-            Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(), topic);
+            Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
 
             return repository.save(subject);
         }catch(Exception e){
@@ -79,6 +79,7 @@ public class SubjectService {
         subjectDataBase.setGrade(obj.getGrade());
         subjectDataBase.setImage(obj.getImage());
         subjectDataBase.setHtmlContent(obj.getHtmlContent());
+        subjectDataBase.setPosition(obj.getPosition());
     }
 
 }

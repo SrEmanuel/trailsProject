@@ -7,6 +7,7 @@ public class SubjectDTO {
     private String image;
     private String grade;
     private String htmlContent;
+    private Integer position;
 
     public SubjectDTO(){
     }
@@ -49,5 +50,13 @@ public class SubjectDTO {
 
     public void setHtmlContent(String htmlContent) {
         this.htmlContent = htmlContent;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }
