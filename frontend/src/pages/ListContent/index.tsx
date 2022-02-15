@@ -12,6 +12,7 @@ import "./styles.scss";
 export function ListContent() {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
+  const [courseName, setCourseName] = useState('');
 
   const location = useLocation();
   const params = useParams();
@@ -27,7 +28,13 @@ export function ListContent() {
       setTopics(response.data);
     }
 
+    async function handleLoadSelectedCourse(){
+      const response = await api.get(`/courses/${params.courseid}/`);
+      setCourseName(response.data.name);
+    }
+
     location.pathname ==='/cursos' ? handleLoadCourses() : handleLoadTopics()
+    handleLoadSelectedCourse()
 
   }, [location, params]);
 
@@ -37,7 +44,7 @@ export function ListContent() {
       <h1>
         {location.pathname === "/cursos"
           ? "Trilhas disponíveis"
-          : "História Geral"}
+          : courseName}
       </h1>
       {location.pathname === "/cursos" && <Paginator />}
       <div className="trails-grid-container">
