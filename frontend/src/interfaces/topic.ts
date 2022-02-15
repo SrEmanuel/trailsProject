@@ -1,8 +1,8 @@
-import { Subject } from "./subject";
+import { ISubject } from "./subject";
 
-export interface Topic {
+export interface ITopic {
   id: number;
   name: string;
   position: number;
-  subjects: Subject[];
+  subjects: ISubject[];
 }

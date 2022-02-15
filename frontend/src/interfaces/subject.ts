@@ -1,4 +1,5 @@
-export interface Subject{
+export interface ISubject{
+    position: number;
     id: number,
     name: string,
     image: string,

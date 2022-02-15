@@ -1,4 +1,4 @@
-export interface Trails {
+export interface ITrails {
   id: number;
   name: string;
   image: string;
