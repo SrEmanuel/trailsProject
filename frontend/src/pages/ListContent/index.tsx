@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useLocation,  useParams } from "react-router-dom";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
+import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
-import { Topic } from "../../interfaces/topic";
-import { Trails } from "../../interfaces/Trail";
+import { ITopic } from "../../interfaces/topic";
+import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import "./styles.scss";
 
 export function ListContent() {
-  const [trails, setTrails] = useState<Trails[]>();
-  const [topics, setTopics] = useState<Topic[]>();
+  const [trails, setTrails] = useState<ITrails[]>();
+  const [topics, setTopics] = useState<ITopic[]>();
 
   const location = useLocation();
   const params = useParams();
@@ -56,6 +57,7 @@ export function ListContent() {
           : topics?.map((topic) => (
             <>
             <h2>{topic.name}</h2>
+            {topic.subjects.map((subject) =><Subject subject={subject} />)}
             </>
           ))}
       </div>
