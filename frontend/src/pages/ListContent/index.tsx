@@ -48,8 +48,7 @@ export function ListContent() {
       </h1>
       {location.pathname === "/cursos" && <Paginator />}
       <div className="trails-grid-container">
-        {location.pathname === "/cursos"
-          ? trails?.map((trail, index) => (
+        {location.pathname === "/cursos" && trails?.map((trail, index) => (
               <Trail
               trail={trail}
                 color={
@@ -61,13 +60,18 @@ export function ListContent() {
                 }
               />
             ))
-          : topics?.map((topic) => (
+          }
+      </div>
+      { location.pathname !== '/cursos' && topics?.map((topic) => (
             <>
-            <h2>{topic.name}</h2>
-            {topic.subjects.map((subject) =><Subject courseId={params.courseid as string } subject={subject} />)}
+            <h2 className="topic-title">{topic.name}</h2>
+            <div className="trails-grid-container">
+            {topic.subjects.map((subject) =>(
+                <Subject courseId={params.courseid as string } subject={subject} />
+            ))}
+            </div>
             </>
           ))}
-      </div>
     </div>
   );
 }
