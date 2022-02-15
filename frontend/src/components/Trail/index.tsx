@@ -2,12 +2,12 @@ import "./styles.scss";
 
 import exampleImage from "../../assets/images/subject.png";
 import { FiFileText } from "react-icons/fi";
-import { Trails } from "../../interfaces/Trail";
+import { ITrails } from "../../interfaces/Trail";
 import { useNavigate } from "react-router-dom";
 
 interface Props{
   color: string;
-  trail: Trails;
+  trail: ITrails;
 }
 
 export function Trail({color, trail}: Props) {
