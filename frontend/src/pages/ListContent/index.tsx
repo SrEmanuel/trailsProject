@@ -1,27 +1,34 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,  useParams } from "react-router-dom";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
-import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
+import { Topic } from "../../interfaces/topic";
 import { Trails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import "./styles.scss";
 
 export function ListContent() {
   const [trails, setTrails] = useState<Trails[]>();
+  const [topics, setTopics] = useState<Topic[]>();
 
-  const subjects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const location = useLocation();
+  const params = useParams();
 
   useEffect(() => {
     async function handleLoadCourses() {
-      const response = await api.get("/users/1/courses?size=1&page=0");
-      setTrails(response.data);
+      const response = await api.get("/courses");
+      setTrails(response.data.content);
     }
-    handleLoadCourses()
 
-  }, []);
+    async function handleLoadTopics(){
+      const response = await api.get(`/courses/${params.courseid}/topics`);
+      setTopics(response.data);
+    }
+
+    location.pathname ==='/cursos' ? handleLoadCourses() : handleLoadTopics()
+
+  }, [location, params]);
 
   return (
     <div className="container">
@@ -46,7 +53,11 @@ export function ListContent() {
                 }
               />
             ))
-          : subjects.map((subject) => <Subject />)}
+          : topics?.map((topic) => (
+            <>
+            <h2>{topic.name}</h2>
+            </>
+          ))}
       </div>
     </div>
   );
