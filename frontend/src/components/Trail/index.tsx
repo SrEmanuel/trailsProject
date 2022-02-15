@@ -2,26 +2,29 @@ import "./styles.scss";
 
 import exampleImage from "../../assets/images/subject.png";
 import { FiFileText } from "react-icons/fi";
+import { ITrails } from "../../interfaces/Trail";
+import { useNavigate } from "react-router-dom";
 
 interface Props{
   color: string;
+  trail: ITrails;
 }
 
-export function Trail(props: Props) {
+export function Trail({color, trail}: Props) {
 
-  const image = null;    
-
+  const navigate = useNavigate();
+   
   return (
-    <div className="card-container" style={ {background: props.color} } >
+    <div onClick={()=> navigate(`/cursos/${trail.id}`, {state: { id : trail.id}}) }  className="card-container" style={ {background: color} } >
       <div className="card-header">
-       {image &&  <img src={exampleImage} alt="capa do card" />}
-        <span>Matemática</span>
+       { !trail.image &&  <img src={exampleImage} alt="capa do card" />}
+        <span>{trail.name}</span>
       </div>
       <div className="card-line"></div>
       <div className="card-bottom">
         <span>
           <FiFileText color="var(--purple)" size={24} />
-          34 - artigos
+          {trail.subjectsCount} - artigos
         </span>
         <span>
           <FiFileText color="var(--red)" size={24} />
