@@ -15,7 +15,7 @@ export function Trail({color, trail}: Props) {
   const navigate = useNavigate();
    
   return (
-    <div onClick={()=> navigate(`/cursos/${trail.id}`) }  className="card-container" style={ {background: color} } >
+    <div onClick={()=> navigate(`/cursos/${trail.id}`, {state: { id : trail.id}}) }  className="card-container" style={ {background: color} } >
       <div className="card-header">
        { !trail.image &&  <img src={exampleImage} alt="capa do card" />}
         <span>{trail.name}</span>
