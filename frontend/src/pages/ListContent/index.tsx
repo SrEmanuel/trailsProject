@@ -64,7 +64,7 @@ export function ListContent() {
           : topics?.map((topic) => (
             <>
             <h2>{topic.name}</h2>
-            {topic.subjects.map((subject) =><Subject subject={subject} />)}
+            {topic.subjects.map((subject) =><Subject courseId={params.courseid as string } subject={subject} />)}
             </>
           ))}
       </div>
