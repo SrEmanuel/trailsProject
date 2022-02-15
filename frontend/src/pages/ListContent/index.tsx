@@ -12,6 +12,7 @@ import "./styles.scss";
 export function ListContent() {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
+  const [courseName, setCourseName] = useState('');
 
   const location = useLocation();
   const params = useParams();
@@ -27,7 +28,13 @@ export function ListContent() {
       setTopics(response.data);
     }
 
+    async function handleLoadSelectedCourse(){
+      const response = await api.get(`/courses/${params.courseid}/`);
+      setCourseName(response.data.name);
+    }
+
     location.pathname ==='/cursos' ? handleLoadCourses() : handleLoadTopics()
+    handleLoadSelectedCourse()
 
   }, [location, params]);
 
@@ -37,12 +44,11 @@ export function ListContent() {
       <h1>
         {location.pathname === "/cursos"
           ? "Trilhas disponíveis"
-          : "História Geral"}
+          : courseName}
       </h1>
       {location.pathname === "/cursos" && <Paginator />}
       <div className="trails-grid-container">
-        {location.pathname === "/cursos"
-          ? trails?.map((trail, index) => (
+        {location.pathname === "/cursos" && trails?.map((trail, index) => (
               <Trail
               trail={trail}
                 color={
@@ -54,13 +60,18 @@ export function ListContent() {
                 }
               />
             ))
-          : topics?.map((topic) => (
+          }
+      </div>
+      { location.pathname !== '/cursos' && topics?.map((topic) => (
             <>
-            <h2>{topic.name}</h2>
-            {topic.subjects.map((subject) =><Subject subject={subject} />)}
+            <h2 className="topic-title">{topic.name}</h2>
+            <div className="trails-grid-container">
+            {topic.subjects.map((subject) =>(
+                <Subject courseId={params.courseid as string } subject={subject} />
+            ))}
+            </div>
             </>
           ))}
-      </div>
     </div>
   );
 }
