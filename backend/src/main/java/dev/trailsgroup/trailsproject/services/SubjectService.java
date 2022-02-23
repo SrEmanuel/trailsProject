@@ -45,9 +45,9 @@ public class SubjectService {
         try {
             Topic topic = topicRepository.getById(obj.getTopicId());
             Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
-
+            topic.getId(); //an alternative method to make catch capture the EntityNotFoundException when thrown
             return repository.save(subject);
-        }catch(Exception e){
+        }catch(EntityNotFoundException e){
             System.out.println(e.getMessage());
             throw new ResourceNotFoundException(obj.getTopicId());
 

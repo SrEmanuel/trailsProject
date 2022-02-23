@@ -10,12 +10,13 @@ import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -68,9 +69,15 @@ public class UserService {
         userDataBase.setPassword(obj.getPassword());
     }
 
-    public Set<Course> getCourses(Integer id){
-        Set<Course> courses = repository.getById(id).getCourses();
-        return courses;
+    //Solution:
+    //https://stackoverflow.com/questions/37749559/conversion-of-list-to-page-in-spring
+    public Page<Course> getCourses(Integer id, Pageable pageable){
+        List<Course> courses = new ArrayList<>(repository.getById(id).getCourses());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), courses.size());
+        //This solution doesn't allow Sort with Pageable. Need to see another way.
+        //https://stackoverflow.com/questions/56946999/can-we-sort-listt-from-spring-boot-pageable-or-sort-page-from-pageimpl
+        return new PageImpl<Course>(courses.subList(start, end), pageable, courses.size());
     }
 
 

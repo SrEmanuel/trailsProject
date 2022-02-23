@@ -6,6 +6,8 @@ import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.services.UserCourseService;
 import dev.trailsgroup.trailsproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -73,9 +75,8 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}/courses")
-    public ResponseEntity<Set<Course>> getCourses(@PathVariable Integer id){
-        Set<Course> courses = service.getCourses(id);
-        return ResponseEntity.ok().body(courses);
+    public ResponseEntity<Page<Course>> getCourses(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok().body(service.getCourses(id, pageable));
     }
 
 
