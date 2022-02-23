@@ -1,5 +1,4 @@
 import "./styles.scss";
-import example from '../../assets/images/subject-example.png';
 import { Link, useNavigate } from "react-router-dom";
 import { ISubject } from "../../interfaces/subject";
 
@@ -15,7 +14,7 @@ export function Subject( {subject, courseId}: Props) {
   return (
     <div onClick={()=> navigate(`/cursos/${courseId}/${subject.id}`) } className="card-container subject">
       <div className="card-header">
-        <img src={example} alt="capa do card" />
+        <img src={subject.image} alt="capa do card" />
         <Link to="#" >{subject.grade}</Link>
       </div>
       <div className="card-line"></div>
