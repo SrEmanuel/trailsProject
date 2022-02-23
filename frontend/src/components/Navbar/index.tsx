@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
-import { SideNav } from "../SideNav";
+import { SideMenu } from "../SideMenu";
 import "./styles.scss";
 
 export function NavBar() {
@@ -20,7 +20,7 @@ export function NavBar() {
           <FiLogIn color="var(--white)" size={18} />
           Entrar
         </Link>
-        <SideNav />
+        <SideMenu />
       </div>
     </nav>
   );

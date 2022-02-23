@@ -3,7 +3,7 @@ import { FiMenu, FiBookOpen, FiInfo, FiLogIn } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./styles.scss";
 
-export function SideNav() {
+export function SideMenu() {
   const [isVisible, setIsVisible] = useState(false);
 
   function toggleSidebar() {
