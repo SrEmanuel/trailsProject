@@ -1,8 +1,8 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
+import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CourseService {
@@ -25,6 +24,9 @@ public class CourseService {
 
     @Autowired
     private CourseRepository repository;
+
+    @Autowired
+    private TopicRepository topicRepository;
 
     public Page<Course> findAll(Pageable pageable){
         return repository.findAll(pageable);
@@ -64,9 +66,5 @@ public class CourseService {
         courseDataBase.setImage(obj.getImage());
     }
 
-    public Set<Topic> getTopics(Integer id){
-        return repository.getById(id).getTopics();
-
-    }
 
 }
