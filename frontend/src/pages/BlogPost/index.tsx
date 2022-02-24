@@ -1,6 +1,6 @@
 import { NavBar } from "../../components/Navbar";
 import "./styles.scss";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ISubject } from "../../interfaces/subject";
 import api from "../../services/api";
