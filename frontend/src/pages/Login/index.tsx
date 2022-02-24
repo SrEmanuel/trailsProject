@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 export function Login() {
   return (
     <WaveContainer>
-      <div className="login-content">
+      <main className="login-content">
       <img src={Logo} alt="Projeto Trilhas" />
       <h1>Faça seu login para continuar</h1>
       <form className="login-form">
@@ -23,7 +23,7 @@ export function Login() {
             Entrar
         </button>
       </form>
-      </div>
+      </main>
     </WaveContainer>
   );
 }
