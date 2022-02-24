@@ -86,7 +86,9 @@ public class Topic implements Serializable {
     }
 
     public List<Subject> getSubjects() {
-        return subjects;
+        List<Subject> sortedSubjects = subjects;
+        sortedSubjects.sort(Comparator.comparing(Subject::getPosition));//Returning a sorted list of subjects by its position
+        return sortedSubjects;
     }
 
     @Override
