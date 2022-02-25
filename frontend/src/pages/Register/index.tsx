@@ -1,11 +1,15 @@
 import { WaveContainer } from "../../components/WaveContainer";
 import logo from "../../assets/images/Logo.svg";
 import "./styles.scss";
+import { useNavigate } from "react-router-dom";
 
 export function Register() {
+
+  const navigate = useNavigate();
+
   return (
     <WaveContainer>
-      <img className="left-side-floating-logo" src={logo} alt="Projeto Trilhas" />
+      <img onClick={() => navigate('/')} className="left-side-floating-logo" src={logo} alt="Projeto Trilhas" />
       <main className="register-container">
         <form>
         <h1>Cadastro de professor</h1>
