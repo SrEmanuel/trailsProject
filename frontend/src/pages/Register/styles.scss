@@ -124,4 +124,9 @@
   top: 30px;
   left: 30px;
   max-width: 45%;
+  transition: 0.2s;
+
+  &:hover{
+    cursor: pointer;
+  }
 }
