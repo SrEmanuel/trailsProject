@@ -11,6 +11,11 @@
 
     img{
         width: 140px;
+        transition: 0.2s;
+
+        &:hover{
+          cursor: pointer;
+        }
     }
 
     .login-form {

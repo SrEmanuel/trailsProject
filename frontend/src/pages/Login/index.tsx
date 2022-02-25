@@ -3,13 +3,15 @@ import Logo from "../../assets/images/Logo.svg";
 import { FiLogIn } from 'react-icons/fi';
 
 import "./styles.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Login() {
+  const navigate = useNavigate()
+
   return (
     <WaveContainer>
       <main className="login-content">
-      <img src={Logo} alt="Projeto Trilhas" />
+      <img onClick={()=> navigate('/')} src={Logo} alt="Projeto Trilhas" />
       <h1>Faça seu login para continuar</h1>
       <form className="login-form">
         <input type="email" name="email" placeholder="Email" />

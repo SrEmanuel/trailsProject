@@ -3,6 +3,7 @@ import { NavBar } from "../../components/Navbar";
 import Trails from "../../assets/images/trails.svg";
 
 import "./styles.scss";
+import { Link } from "react-router-dom";
 
 export function Home() {
   return (
@@ -16,7 +17,7 @@ export function Home() {
             <div>
               <FiLogIn color="var(--white)" size={24} />
             </div>
-            <button>Cadastre-se</button>
+            <Link to="/cadastro" >Cadastre-se</Link>
           </div>
         </section>
         <img src={Trails} alt="imagem de homem perdido em trilha" />
