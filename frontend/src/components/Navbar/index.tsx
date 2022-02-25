@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
-import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
+import  Logo  from "../../assets/images/Logo.svg";
 import { SideMenu } from "../SideMenu";
 import "./styles.scss";
 
@@ -11,11 +11,11 @@ export function NavBar() {
 
   return (
     <nav className="navbar">
-      <Logo onClick={ ()=> navigate('/') } />
+      <img src={Logo} onClick={ ()=> navigate('/') } alt="Projeto Trilhas" />
       <div>
         <Link to="/cursos">Trilhas</Link>
         <Link to="#">Sobre</Link>
-        <Link to="#">Cadastre-se</Link>
+        <Link to="/cadastro">Cadastre-se</Link>
         <Link className="login-btn" to ="/login">
           <FiLogIn color="var(--white)" size={18} />
           Entrar
