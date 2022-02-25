@@ -78,8 +78,4 @@ public class UserResource {
     public ResponseEntity<Page<Course>> getCourses(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok().body(service.getCourses(id, pageable));
     }
-
-
-
-
 }

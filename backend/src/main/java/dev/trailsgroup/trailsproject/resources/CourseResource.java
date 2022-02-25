@@ -2,7 +2,9 @@ package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Topic;
+import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.services.CourseService;
+import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,9 @@ public class CourseResource {
 
     @Autowired
     private CourseService service;
+
+    @Autowired
+    private TopicService topicService;
 
     @GetMapping
     public ResponseEntity<Page<Course>> findAll(Pageable pageable){
@@ -54,9 +59,8 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{id}/topics")
-    public ResponseEntity<Set<Topic>> getCourses(@PathVariable Integer id){
-        Set<Topic> courses = service.getTopics(id);
-        return ResponseEntity.ok().body(courses);
+    public ResponseEntity<Page<Topic>> getTopics(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok().body(topicService.getTopicsByCourse(id, pageable));
     }
 
 

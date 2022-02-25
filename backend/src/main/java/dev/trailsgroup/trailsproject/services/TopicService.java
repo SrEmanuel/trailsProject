@@ -10,12 +10,12 @@ import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,6 +69,17 @@ public class TopicService {
     public void topicUpdateInformation(Topic topicDataBase, Topic obj){
         topicDataBase.setName(obj.getName());
         topicDataBase.setPosition(obj.getPosition());
+    }
+
+    public Page<Topic> getTopicsByCourse(Integer courseId, Pageable pageable){
+        //I make an example of a topic with the referred course on it.
+        //I use this Example to make a query in findAll, passing it alongside with pageable.
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
+        Topic topic = new Topic();
+        topic.setCourse(course);
+        Example<Topic> example = Example.of(topic);
+
+        return repository.findAll(example, pageable);
     }
 
 
