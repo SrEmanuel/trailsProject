@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//All Exception handling  code is based on https://github.com/acenelio/workshop-springboot2-jpa/tree/master/src/main/java/com/educandoweb/course/resources/exceptions
 @ControllerAdvice
 public class ArgumentExpectionHandler {
 
