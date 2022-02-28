@@ -6,6 +6,7 @@ import { Home } from './pages/Landing';
 import { ListContent } from './pages/ListContent';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { ResetPassword } from './pages/ResetPassword';
 
 export function Routes(){
     return(
@@ -16,6 +17,7 @@ export function Routes(){
              <Route path="/cadastro" element={<Register></Register>} />
              <Route path="/sobre" element={<About></About>} />
              <Route path="/esqueci-minha-senha" element={<ForgotPassword></ForgotPassword>} />
+             <Route path="/nova-senha" element={<ResetPassword></ResetPassword>} />
              <Route path="/cursos" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogid" element={<BlogPost></BlogPost>} />
