@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -33,7 +34,7 @@ public class TopicResource {
     }
 
     @PostMapping
-    public ResponseEntity<Topic> insert(@RequestBody TopicDTO topic){
+    public ResponseEntity<Topic> insert(@Valid @RequestBody TopicDTO topic){
         Topic obj = service.insert(topic);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
