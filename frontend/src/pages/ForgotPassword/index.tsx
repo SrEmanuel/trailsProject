@@ -10,7 +10,7 @@ export function ForgotPassword() {
   return (
     <WaveContainer>
       <ForestContainer>
-        <main className="forgot-password-container">
+        <main className="password-container">
           <img onClick={() => navigate("/")} src={logo} alt="Projeto trilhas" />
           <h1>Se perdeu? Recupere sua senha</h1>
           <span>
