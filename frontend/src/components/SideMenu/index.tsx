@@ -24,11 +24,11 @@ export function SideMenu() {
           <FiBookOpen color="var(--green)" size={24} />
           <span>Trilhas</span>
         </Link>
-        <Link to="#">
+        <Link to="/sobre">
           <FiInfo color="var(--green)" size={24} />
           <span>Sobre</span>
         </Link>
-        <Link to="#">
+        <Link to="/cadastro">
           <FiLogIn color="var(--green)" size={24} />
           <span>Cadastre-se</span>
         </Link>
