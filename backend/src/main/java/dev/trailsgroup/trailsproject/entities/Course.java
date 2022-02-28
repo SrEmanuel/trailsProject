@@ -29,12 +29,12 @@ public class Course implements Serializable {
     @LastModifiedDate
     private Date lastModifiedDate;
 
-    @OneToMany(mappedBy = "id.course")
+    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCourse> items = new HashSet<>();
 
     public Course(){}
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Topic> topics = new HashSet<>();
 
     public Course(Integer id, String name, String image) {

@@ -33,7 +33,7 @@ public class Topic implements Serializable {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects = new ArrayList<>();
 
     public Topic(Integer id, String name, Integer position, Course course) {

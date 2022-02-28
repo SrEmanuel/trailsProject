@@ -1,9 +1,9 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
+import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.repositories.CourseRepository;
+import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -23,10 +24,12 @@ public class UserService {
 
     //TODO implement authentication and password encryption
 
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
-
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private UserCourseRepository userCourseRepository;
+
 
     public List<User> findAll(){
         return repository.findAll();
@@ -37,8 +40,9 @@ public class UserService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
-        return repository.save(obj);
+    public User insert(UserDTO obj){
+        User user = new User(null, obj.getName(), obj.getPassword(), obj.getEmail(), obj.getType(), obj.getStatus());
+        return repository.save(user);
     }
 
     public void delete(Integer id){
@@ -51,7 +55,7 @@ public class UserService {
         }
     }
 
-    public User update(Integer id, User obj){
+    public User update(Integer id, UserDTO obj){
         try{
             User userDatabase = repository.getById(id);
             userUpdateInformation(userDatabase, obj);
@@ -61,7 +65,7 @@ public class UserService {
         }
     }
 
-    public void userUpdateInformation(User userDataBase, User obj){
+    public void userUpdateInformation(User userDataBase, UserDTO obj){
         userDataBase.setName(obj.getName());
         userDataBase.setEmail(obj.getEmail());
         userDataBase.setStatus(obj.getStatus());
@@ -79,6 +83,4 @@ public class UserService {
         //https://stackoverflow.com/questions/56946999/can-we-sort-listt-from-spring-boot-pageable-or-sort-page-from-pageimpl
         return new PageImpl<Course>(courses.subList(start, end), pageable, courses.size());
     }
-
-
 }

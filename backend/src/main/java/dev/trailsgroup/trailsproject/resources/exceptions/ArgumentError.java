@@ -1,25 +1,21 @@
 package dev.trailsgroup.trailsproject.resources.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
-import java.time.Instant;
 
-public class StandardError implements Serializable {
+
+public class ArgumentError implements Serializable {
     private Integer status;
+    private String field;
     private String message;
-    private String path;
 
-    public StandardError() {
+    public ArgumentError() {
     }
 
-    public StandardError(Integer status, String message, String path) {
-        super();
+    public ArgumentError(Integer status, String field, String message) {
         this.status = status;
+        this.field = field;
         this.message = message;
-        this.path = path;
     }
-
 
     public Integer getStatus() {
         return status;
@@ -29,7 +25,13 @@ public class StandardError implements Serializable {
         this.status = status;
     }
 
+    public String getField() {
+        return field;
+    }
 
+    public void setField(String field) {
+        this.field = field;
+    }
 
     public String getMessage() {
         return message;
@@ -37,13 +39,5 @@ public class StandardError implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 }
