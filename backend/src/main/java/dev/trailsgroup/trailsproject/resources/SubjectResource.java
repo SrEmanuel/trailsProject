@@ -1,15 +1,19 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
+import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
+import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -33,7 +37,7 @@ public class SubjectResource {
     }
 
     @PostMapping
-    public ResponseEntity<Subject> insert(@RequestBody SubjectDTO Subject){
+    public ResponseEntity<Subject> insert(@Validated @RequestBody SubjectDTO Subject){
         Subject obj = service.insert(Subject);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
@@ -47,8 +51,8 @@ public class SubjectResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Subject> update(@PathVariable Integer id, @RequestBody Subject obj){
-        obj = service.update(id, obj);
+    public ResponseEntity<Subject> update(@PathVariable Integer id, @Validated(UpdateInfo.class) @RequestBody SubjectDTO subject){
+        Subject obj = service.update(id, subject);
         return ResponseEntity.ok().body(obj);
     }
 
