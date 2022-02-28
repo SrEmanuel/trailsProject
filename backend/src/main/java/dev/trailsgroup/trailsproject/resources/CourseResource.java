@@ -1,8 +1,8 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Topic;
-import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.services.CourseService;
 import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/courses")
@@ -39,8 +39,8 @@ public class CourseResource {
     }
 
     @PostMapping
-    public ResponseEntity<Course> insert(@RequestBody Course obj){
-        obj = service.insert(obj);
+    public ResponseEntity<Course> insert(@Valid @RequestBody CourseDTO course){
+        Course obj = service.insert(course);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
@@ -53,8 +53,8 @@ public class CourseResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Course> update( @PathVariable Integer id, @RequestBody Course obj){
-        obj = service.update(id, obj);
+    public ResponseEntity<Course> update(@PathVariable Integer id, @Valid @RequestBody CourseDTO course){
+        Course obj = service.update(id, course);
         return ResponseEntity.ok().body(obj);
     }
 
