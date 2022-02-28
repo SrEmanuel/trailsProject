@@ -32,7 +32,7 @@ public class User implements Serializable {
     private Integer type;
     private Boolean status;
 
-    @OneToMany(mappedBy = "id.user")
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCourse> items =  new HashSet<>();
 
     public User(){}
