@@ -9,13 +9,20 @@ public class UserDTO {
     @NotEmpty(message = "O nome é obrigatório!")
     private String name;
 
-    @Pattern(regexp="^[a-zA-Z0-9].*",message="A senha tem que ter pelo menos 8 dígitos")
+    @Size(min=8, message="A senha tem que ter pelo menos 8 dígitos")
+    @Pattern(regexp="^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,64}$",message="A senha informada NÃO atende os padrões de segurança especificados")
+    /*password must contain 1 number (0-9)
+    password must contain 1 uppercase letters
+    password must contain 1 lowercase letters
+    password must contain 1 non-alpha numeric number
+    password must contain 8-64 characters with no space*/
     @NotEmpty(message = "A senha é obrigatória!")
     private String password;
 
     @Email(message = "O endereço de e-mail tem que ser válido")
     @NotEmpty(message = "O email é obrigatório!")
     private String email;
+
 
     @NotNull(message ="O tipo é obrigatório!")
     private Integer type;
