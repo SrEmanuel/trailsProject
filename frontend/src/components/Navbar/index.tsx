@@ -14,7 +14,7 @@ export function NavBar() {
       <img src={Logo} onClick={ ()=> navigate('/') } alt="Projeto Trilhas" />
       <div>
         <Link to="/cursos">Trilhas</Link>
-        <Link to="#">Sobre</Link>
+        <Link to="/sobre">Sobre</Link>
         <Link to="/cadastro">Cadastre-se</Link>
         <Link className="login-btn" to ="/login">
           <FiLogIn color="var(--white)" size={18} />
