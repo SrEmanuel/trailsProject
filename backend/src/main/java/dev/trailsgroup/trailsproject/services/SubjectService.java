@@ -42,13 +42,11 @@ public class SubjectService {
     //TODO verify that exception treatment
     public Subject insert(SubjectDTO obj){
         try {
-            Topic topic = topicRepository.getById(obj.getTopicId());
+            Topic topic = topicRepository.findById(obj.getTopicId()).orElseThrow(() -> new ResourceNotFoundException(obj.getTopicId()));
             Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
-            topic.getId(); //an alternative method to make catch capture the EntityNotFoundException when thrown
             return repository.save(subject);
-        }catch(EntityNotFoundException e){
-            System.out.println(e.getMessage());
-            throw new ResourceNotFoundException(obj.getTopicId());
+        }catch(IllegalArgumentException e){
+            throw new DatabaseException(e.getMessage());
 
         }
     }
@@ -63,7 +61,7 @@ public class SubjectService {
         }
     }
 
-    public Subject update(Integer id, Subject obj){
+    public Subject update(Integer id, SubjectDTO obj){
         try{
             Subject SubjectDatabase = repository.getById(id);
             subjectUpdateInformation(SubjectDatabase, obj);
@@ -73,7 +71,7 @@ public class SubjectService {
         }
     }
 
-    public void subjectUpdateInformation(Subject subjectDataBase, Subject obj){
+    public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj){
         subjectDataBase.setName(obj.getName());
         subjectDataBase.setGrade(obj.getGrade());
         subjectDataBase.setImage(obj.getImage());

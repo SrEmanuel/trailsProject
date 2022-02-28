@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.TopicRepository;
@@ -37,8 +38,8 @@ public class CourseService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Course insert(Course obj){
-        return repository.save(obj);
+    public Course insert(CourseDTO obj){
+        return repository.save(new Course(null, obj.getName(), obj.getImage()));
     }
 
     public void delete(Integer id){
@@ -51,7 +52,7 @@ public class CourseService {
         }
     }
 
-    public Course update(Integer id, Course obj){
+    public Course update(Integer id, CourseDTO obj){
         try{
             Course courseDatabase = repository.getById(id);
             courseUpdateInformation(courseDatabase, obj);
@@ -61,7 +62,7 @@ public class CourseService {
         }
     }
 
-    public void courseUpdateInformation(Course courseDataBase, Course obj){
+    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj){
         courseDataBase.setName(obj.getName());
         courseDataBase.setImage(obj.getImage());
     }

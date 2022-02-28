@@ -56,7 +56,7 @@ public class TopicService {
         }
     }
 
-    public Topic update(Integer id, Topic obj){
+    public Topic update(Integer id, TopicDTO obj){
         try{
             Topic topicDatabase = repository.getById(id);
             topicUpdateInformation(topicDatabase, obj);
@@ -66,7 +66,7 @@ public class TopicService {
         }
     }
 
-    public void topicUpdateInformation(Topic topicDataBase, Topic obj){
+    public void topicUpdateInformation(Topic topicDataBase, TopicDTO obj){
         topicDataBase.setName(obj.getName());
         topicDataBase.setPosition(obj.getPosition());
     }
