@@ -1,5 +1,6 @@
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { Dropzone } from "../../components/Dropzone";
 import { WaveContainer } from "../../components/WaveContainer";
 import "./styles.scss";
 
@@ -15,7 +16,7 @@ export function CreateCourse() {
       <main className="create-course-container">
         <h1>Criar novo curso</h1>
         <form>
-          <input type="file" name="dropzone" />
+          <Dropzone />
           <input type="text" name="name" placeholder="Nome do curso" />
           <div className="buttons-container">
             <button>Cancelar</button>
