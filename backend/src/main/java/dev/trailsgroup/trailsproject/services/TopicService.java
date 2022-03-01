@@ -40,6 +40,8 @@ public class TopicService {
     }
 
     public Topic insert(TopicDTO obj){
+        if(!verifyPosition(obj.getPosition()))
+            throw new DatabaseException("Já existe um topico com essa posição!");
         Course course = courseRepository.findById(obj.getCourseId()).orElseThrow(() -> new ResourceNotFoundException(obj.getCourseId()));
         Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course);
 
@@ -80,6 +82,16 @@ public class TopicService {
         Example<Topic> example = Example.of(topic);
 
         return repository.findAll(example, pageable);
+    }
+
+    public boolean verifyPosition(Integer num){
+        Topic topic = new Topic();
+        topic.setPosition(num);
+
+        Example<Topic> example = Example.of(topic);
+
+        int count = (int) repository.count(example);
+        return count == 0;
     }
 
 
