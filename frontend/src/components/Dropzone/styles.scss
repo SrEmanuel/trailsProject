@@ -1,0 +1,34 @@
+.dropzone-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+
+  #dropzone {
+    opacity: 0;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 350px;
+    max-width: 100%;
+    height: 230px;
+    padding: 10px;
+    border: 1px dashed var(--dark-green);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--dark-green);
+    text-align: center;
+  }
+
+  &:hover {
+    * {
+      cursor: pointer;
+      color: var(--green);
+    }
+  }
+}
