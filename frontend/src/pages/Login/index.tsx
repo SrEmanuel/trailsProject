@@ -17,7 +17,7 @@ export function Login() {
         <input type="email" name="email" placeholder="Email" />
         <input type="password" name="password" placeholder="Senha" />
 
-        <Link to="#" className="forgot-password">
+        <Link to="/esqueci-minha-senha" className="forgot-password">
           Esqueceu sua senha? Clique aqui!
         </Link>
         <button>
