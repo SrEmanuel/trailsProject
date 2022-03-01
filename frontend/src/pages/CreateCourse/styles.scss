@@ -31,10 +31,11 @@
 
   h1 {
     margin-bottom: 100px;
+    text-align: center;
   }
 
   form {
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -48,7 +49,7 @@
       justify-content: space-between;
 
       button {
-        width: 300px;
+        width: 370px;
         max-width: 90%;
 
         &:first-of-type {
@@ -57,6 +58,20 @@
           &:hover {
             background: var(--dark-red);
           }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 800px) {
+    form {
+      .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content:center;
+
+        button:first-of-type{
+          margin-bottom: 20px;
         }
       }
     }
