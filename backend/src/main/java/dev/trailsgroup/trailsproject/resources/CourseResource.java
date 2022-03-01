@@ -4,22 +4,28 @@ import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.CourseService;
+import dev.trailsgroup.trailsproject.services.StaticFileService;
 import dev.trailsgroup.trailsproject.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.nio.file.Path;
 
 @RestController
 @RequestMapping(value = "/courses")
 public class CourseResource {
 
     //TODO IMPLEMENT AUTHENTICATION
+
+    @Autowired
+    private StaticFileService staticFileService;
 
     @Autowired
     private CourseService service;
@@ -39,8 +45,9 @@ public class CourseResource {
     }
 
     @PostMapping
-    public ResponseEntity<Course> insert(@Valid @RequestBody CourseDTO course){
-        Course obj = service.insert(course);
+    public ResponseEntity<Course> insert(@Valid @RequestPart CourseDTO course, @RequestParam("image") MultipartFile imageFile){
+        String imagePath = staticFileService.save(imageFile);
+        Course obj = service.insert(course, imagePath);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
