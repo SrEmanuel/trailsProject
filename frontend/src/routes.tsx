@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes as RoutesContainer } from 'react-router-dom';
 import { About } from './pages/About';
 import { BlogPost } from './pages/BlogPost';
+import { CreateCourse } from './pages/CreateCourse';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { Home } from './pages/Landing';
 import { ListContent } from './pages/ListContent';
@@ -21,6 +22,7 @@ export function Routes(){
              <Route path="/cursos" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogid" element={<BlogPost></BlogPost>} />
+             <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
             </RoutesContainer>
         </BrowserRouter>
     )
