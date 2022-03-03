@@ -13,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -29,6 +30,9 @@ public class SubjectService {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private StaticFileService staticFileService;
+
 
     public Page<Subject> findAll(Pageable pageable){
         return repository.findAll(pageable);
@@ -40,10 +44,11 @@ public class SubjectService {
     }
 
     //TODO verify that exception treatment
-    public Subject insert(SubjectDTO obj){
+    public Subject insert(SubjectDTO obj, MultipartFile imageFile){
         try {
+            String fileName = staticFileService.save(imageFile);
             Topic topic = topicRepository.findById(obj.getTopicId()).orElseThrow(() -> new ResourceNotFoundException(obj.getTopicId()));
-            Subject subject = new Subject(null, obj.getName(), obj.getImage(), obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
+            Subject subject = new Subject(null, obj.getName(), fileName, obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
             return repository.save(subject);
         }catch(IllegalArgumentException e){
             throw new DatabaseException(e.getMessage());
@@ -61,20 +66,24 @@ public class SubjectService {
         }
     }
 
-    public Subject update(Integer id, SubjectDTO obj){
+    public Subject update(Integer id, SubjectDTO obj, MultipartFile image){
         try{
             Subject SubjectDatabase = repository.getById(id);
-            subjectUpdateInformation(SubjectDatabase, obj);
+            subjectUpdateInformation(SubjectDatabase, obj, image);
             return repository.save(SubjectDatabase);
-        }catch(Exception e){
+        }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj){
+    public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj, MultipartFile image){
         subjectDataBase.setName(obj.getName());
         subjectDataBase.setGrade(obj.getGrade());
-        subjectDataBase.setImage(obj.getImage());
+        if(!(image==null)){
+            String oldName = subjectDataBase.getImageName();
+            String newName = staticFileService.update(image, oldName);
+            subjectDataBase.setImage(newName);
+        }
         subjectDataBase.setHtmlContent(obj.getHtmlContent());
         subjectDataBase.setPosition(obj.getPosition());
     }
