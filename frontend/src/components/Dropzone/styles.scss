@@ -1,14 +1,15 @@
 .dropzone-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
     align-items: center;
 
   #dropzone {
-    opacity: 0;
+    position: absolute;
+    height: 230px;
+    opacity:0;
   }
 
-  label {
+  label, .dropzone-preview {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,8 +26,37 @@
     text-align: center;
   }
 
+  .dropzone-preview{
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+
+    img{
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    svg{
+      position: absolute;
+      margin-left: 163px;
+      margin-top: -103px;
+      border-top-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+      background: var(--white);
+      z-index: 2;
+      transition: 0.2s;
+
+      &:hover{
+        color:var(--dark-red);
+        cursor: pointer;
+      }
+      
+    }
+  }
+
   &:hover {
-    * {
+    input, label {
       cursor: pointer;
       color: var(--green);
     }
