@@ -25,9 +25,6 @@ public class CourseResource {
     //TODO IMPLEMENT AUTHENTICATION
 
     @Autowired
-    private StaticFileService staticFileService;
-
-    @Autowired
     private CourseService service;
 
     @Autowired
@@ -45,9 +42,9 @@ public class CourseResource {
     }
 
     @PostMapping
-    public ResponseEntity<Course> insert(@Valid @RequestPart CourseDTO course, @RequestParam("image") MultipartFile imageFile){
-        String imagePath = staticFileService.save(imageFile);
-        Course obj = service.insert(course, imagePath);
+    public ResponseEntity<Course> insert(@Valid @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
+
+        Course obj = service.insert(course, imageFile);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
@@ -60,8 +57,8 @@ public class CourseResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Course> update(@PathVariable Integer id, @Valid @RequestBody CourseDTO course){
-        Course obj = service.update(id, course);
+    public ResponseEntity<Course> update(@PathVariable Integer id, @Valid @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
+        Course obj = service.update(id, course, imageFile);
         return ResponseEntity.ok().body(obj);
     }
 
