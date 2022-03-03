@@ -61,8 +61,13 @@ public class Course implements Serializable {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImagePath() {
         return  StaticFileService.getInstance().getIp() + "/uploads/" + image;
+    }
+
+    @JsonIgnore
+    public String getImageName(){
+        return image;
     }
 
     public void setImage(String image) {
