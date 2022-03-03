@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,8 @@ public class CourseService {
 
     @Autowired
     private CourseRepository repository;
+
+
 
     @Autowired
     private TopicRepository topicRepository;
@@ -38,8 +41,8 @@ public class CourseService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Course insert(CourseDTO obj){
-        return repository.save(new Course(null, obj.getName(), obj.getImage()));
+    public Course insert(CourseDTO obj, String image){
+        return repository.save(new Course(null, obj.getName(), image));
     }
 
     public void delete(Integer id){

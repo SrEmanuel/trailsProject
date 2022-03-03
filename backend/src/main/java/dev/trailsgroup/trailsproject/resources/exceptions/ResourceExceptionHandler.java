@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.resources.exceptions;
 
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
+import dev.trailsgroup.trailsproject.services.exceptions.UploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,6 +23,14 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
         String error = "Database error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(UploadException.class)
+    public ResponseEntity<StandardError> database(UploadException e, HttpServletRequest request) {
+        String error = "Upload error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError(status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);

@@ -1,11 +1,13 @@
 package dev.trailsgroup.trailsproject.entities;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.services.StaticFileService;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -60,7 +62,7 @@ public class Course implements Serializable {
     }
 
     public String getImage() {
-        return image;
+        return  StaticFileService.getInstance().getIp() + "/uploads/" + image;
     }
 
     public void setImage(String image) {
