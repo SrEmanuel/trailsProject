@@ -20,7 +20,6 @@ public class SubjectDTO {
     @Min(value= 1, message = "O id do tópico tem que ser maior que 1", groups = CreateInfo.class)
     private Integer topicId;
 
-    @NotEmpty(message = "A imagem é obrigatória!", groups = UpdateInfo.class)
     private String image;
 
     @NotEmpty(message = "A série é obrigatória!", groups = UpdateInfo.class)
