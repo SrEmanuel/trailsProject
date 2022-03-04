@@ -12,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -27,7 +28,8 @@ public class CourseService {
     @Autowired
     private CourseRepository repository;
 
-
+    @Autowired
+    private StaticFileService staticFileService;
 
     @Autowired
     private TopicRepository topicRepository;
@@ -41,8 +43,11 @@ public class CourseService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Course insert(CourseDTO obj, String image){
-        return repository.save(new Course(null, obj.getName(), image));
+    public Course insert(CourseDTO obj, MultipartFile image){
+        String fileName = "default-course.png";
+        if(!(image==null))
+            fileName = staticFileService.save(image);
+        return repository.save(new Course(null, obj.getName(), fileName));
     }
 
     public void delete(Integer id){
@@ -55,20 +60,22 @@ public class CourseService {
         }
     }
 
-    public Course update(Integer id, CourseDTO obj){
+    public Course update(Integer id, CourseDTO obj, MultipartFile image){
         try{
             Course courseDatabase = repository.getById(id);
-            courseUpdateInformation(courseDatabase, obj);
+            courseUpdateInformation(courseDatabase, obj, image);
             return repository.save(courseDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj){
+    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj, MultipartFile image){
         courseDataBase.setName(obj.getName());
-        courseDataBase.setImage(obj.getImage());
+        if(!(image==null)){
+            String oldName = courseDataBase.getImageName();
+            String newName = staticFileService.update(image, oldName);
+            courseDataBase.setImage(newName);
+        }
     }
-
-
 }

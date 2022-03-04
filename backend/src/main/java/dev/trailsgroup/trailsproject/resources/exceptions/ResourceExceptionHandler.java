@@ -28,11 +28,7 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(UploadException.class)
-    public ResponseEntity<StandardError> database(UploadException e, HttpServletRequest request) {
-        String error = "Upload error";
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        StandardError err = new StandardError(status.value(), e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
+
+
+
 }

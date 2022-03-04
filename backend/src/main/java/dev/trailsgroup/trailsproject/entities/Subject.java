@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.services.StaticFileService;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -67,7 +68,12 @@ public class Subject implements Serializable {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImagePath() {
+        return  StaticFileService.getInstance().getIp() + "/uploads/" + image;
+    }
+
+    @JsonIgnore
+    public String getImageName(){
         return image;
     }
 
