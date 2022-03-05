@@ -1,8 +1,8 @@
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { Dropzone } from "../../components/Dropzone";
-import { WaveContainer } from "../../components/WaveContainer";
-import "./styles.scss";
+import { Dropzone } from "../../../components/Dropzone";
+import { WaveContainer } from "../../../components/WaveContainer";
+import "../styles.scss";
 
 export function CreateCourse() {
 
@@ -13,7 +13,7 @@ export function CreateCourse() {
       <span className="goBack" onClick={()=> navigate(-1)}>
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>
-      <main className="create-course-container">
+      <main className="create-container">
         <h1>Criar novo curso</h1>
         <form>
           <Dropzone />
