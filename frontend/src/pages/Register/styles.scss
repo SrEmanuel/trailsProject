@@ -100,10 +100,15 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        
-        button:last-of-type{
-          margin-top: 10px;
+
+        button{
+          max-width: 90%;
+          
+          &:last-of-type{
+            margin-top: 10px;
+          }
         }
+        
       }
     }
 
