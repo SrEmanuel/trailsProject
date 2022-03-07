@@ -14,7 +14,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +45,19 @@ public class UserService {
     }
 
     public User insert(UserDTO obj){
-        User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), UserType.toEnum(obj.getType()), obj.getStatus());
-        return repository.save(user);
+        try {
+            if(!verifyEmailAvailability(obj.getEmail()))
+                throw new DatabaseException("O email já foi cadastrado no sistema! Informe outro email.");
+
+            User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), UserType.toEnum(obj.getType()), obj.getStatus());
+            return repository.save(user);
+        }catch (DataIntegrityViolationException e ){
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public boolean verifyEmailAvailability(String email){
+        return repository.findByEmail(email) == null;
     }
 
     public void delete(Integer id){
