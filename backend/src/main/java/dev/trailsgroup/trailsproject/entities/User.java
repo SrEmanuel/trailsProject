@@ -34,7 +34,9 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
+    @Column(unique=true)
     private String email;
+
     private Integer type;
     private Boolean status;
 
@@ -78,7 +80,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getPassword() { //TODO Verify that later. We cannot allow the password go out in any case.
+    public String getPassword() {
         return password;
     }
 
