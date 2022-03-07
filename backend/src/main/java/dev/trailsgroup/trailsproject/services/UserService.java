@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,7 +27,7 @@ public class UserService {
     //TODO implement authentication and password encryption
 
     @Autowired
-    private BCryptPasswordEncoder pe;
+    private Pbkdf2PasswordEncoder pe;
 
     @Autowired
     private UserRepository repository;
