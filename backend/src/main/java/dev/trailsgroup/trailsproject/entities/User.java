@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,7 +28,11 @@ public class User implements Serializable {
     private Integer id;
 
     private String name;
+
+    @JsonIgnore
     private String password;
+
+
     private String email;
     private Integer type;
     private Boolean status;
@@ -37,13 +42,13 @@ public class User implements Serializable {
 
     public User(){}
 
-    public User(Integer id, String name, String password, String email, Integer type, Boolean status) {
+    public User(Integer id, String name, String password, String email, UserType type, Boolean status) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
-        this.type = type;
-        this.status = status;
+        this.type = (type == null) ? UserType.PROFESSOR.getCod() : type.getCod();
+        this.status = status == null || status;
     }
 
     public Integer getId() {
@@ -62,7 +67,6 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    @JsonIgnore
     public String getPassword() { //TODO Verify that later. We cannot allow the password go out in any case.
         return password;
     }
