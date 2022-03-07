@@ -47,7 +47,7 @@ public class TestConfig implements CommandLineRunner {
         User u5 = new User(null, "Tatiane", pe.encode("123"), "Tatiane@gmail.com", UserType.PROFESSOR, true);
 
         u1.addProfile(UserProfiles.ADMIN);
-
+        u2.removeProfile(UserProfiles.PROFESSOR);
         userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5));
 
         Course c1 = new Course(null, "Matemática", "www.google.com");
