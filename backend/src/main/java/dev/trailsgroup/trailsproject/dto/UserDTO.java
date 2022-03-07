@@ -23,11 +23,8 @@ public class UserDTO {
     @NotEmpty(message = "O email é obrigatório!")
     private String email;
 
-
-    @NotNull(message ="O tipo é obrigatório!")
     private Integer type;
 
-    @NotNull(message = "O status é obrigatório!")
     private Boolean status;
 
     public UserDTO(){
