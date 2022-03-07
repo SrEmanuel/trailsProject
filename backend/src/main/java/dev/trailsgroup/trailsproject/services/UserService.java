@@ -3,6 +3,7 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
@@ -13,6 +14,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +24,9 @@ import java.util.*;
 public class UserService {
 
     //TODO implement authentication and password encryption
+
+    @Autowired
+    private BCryptPasswordEncoder pe;
 
     @Autowired
     private UserRepository repository;
@@ -40,7 +45,7 @@ public class UserService {
     }
 
     public User insert(UserDTO obj){
-        User user = new User(null, obj.getName(), obj.getPassword(), obj.getEmail(), obj.getType(), obj.getStatus());
+        User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), UserType.toEnum(obj.getType()), obj.getStatus());
         return repository.save(user);
     }
 
@@ -69,7 +74,7 @@ public class UserService {
         userDataBase.setEmail(obj.getEmail());
         userDataBase.setStatus(obj.getStatus());
         userDataBase.setType(obj.getType());
-        userDataBase.setPassword(obj.getPassword());
+        userDataBase.setPassword(pe.encode(obj.getPassword()));
     }
 
     //Solution:
