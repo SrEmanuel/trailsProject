@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,6 +32,7 @@ public class UserResource {
     private UserCourseService userCourseService;
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
@@ -50,6 +52,7 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(value = "/{id}/add-course")
     public ResponseEntity<UserCourseDTO> addCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
         UserCourseDTO obj = userCourseService.insert(id, courseId);
@@ -58,6 +61,7 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}/remove-course")
     public ResponseEntity<Void> deleteCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
         userCourseService.delete(id, courseId);
