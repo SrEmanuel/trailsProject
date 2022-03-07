@@ -95,6 +95,9 @@ public class User implements Serializable {
     public void addProfile(UserProfiles profile){
         profiles.add(profile.getCod());
     }
+    public void removeProfile(UserProfiles profile){
+        profiles.remove(profile.getCod());
+    }
 
     public String getEmail() {
         return email;
