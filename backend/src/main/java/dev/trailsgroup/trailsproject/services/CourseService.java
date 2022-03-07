@@ -21,9 +21,6 @@ import java.util.Optional;
 @Service
 public class CourseService {
 
-    //TODO implement authentication and password encryption
-
-    //TODO IMPLEMENT ADD COURSE ENDPOINT
 
     @Autowired
     private CourseRepository repository;

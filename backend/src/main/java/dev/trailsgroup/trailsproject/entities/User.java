@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_user")
@@ -32,7 +34,6 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
-
     private String email;
     private Integer type;
     private Boolean status;
@@ -40,7 +41,15 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCourse> items =  new HashSet<>();
 
-    public User(){}
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name="tb_profiles")
+    private Set<Integer> profiles =  new HashSet<>();
+
+
+    public User(){
+        addProfile(UserProfiles.USER);
+        addProfile(UserProfiles.PROFESSOR);
+    }
 
     public User(Integer id, String name, String password, String email, UserType type, Boolean status) {
         this.id = id;
@@ -49,6 +58,8 @@ public class User implements Serializable {
         this.email = email;
         this.type = (type == null) ? UserType.PROFESSOR.getCod() : type.getCod();
         this.status = status == null || status;
+        addProfile(UserProfiles.USER);
+        addProfile(UserProfiles.PROFESSOR);
     }
 
     public Integer getId() {
@@ -73,6 +84,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<UserProfiles> getProfiles(){
+        return profiles.stream().map(x -> UserProfiles.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addProfile(UserProfiles profile){
+        profiles.add(profile.getCod());
     }
 
     public String getEmail() {
