@@ -80,6 +80,17 @@ body{
     margin:5px;
   }
 
+  .error{
+    color: var(--red);
+    margin-top: -20px;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    width: 350px;
+    max-width: 90%;
+    font-size: 12px;
+  }
+
   .container{
     display: flex;
     flex-direction: column;
