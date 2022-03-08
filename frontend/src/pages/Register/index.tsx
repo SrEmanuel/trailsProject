@@ -1,10 +1,14 @@
-import { WaveContainer } from "../../components/WaveContainer";
-import logo from "../../assets/images/Logo.svg";
-import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { WaveContainer } from "../../components/WaveContainer";
+import logo from "../../assets/images/Logo.svg";
 import { RegisterSchema } from "../../schemas/register.schema";
 import api from "../../services/api";
+
+import "./styles.scss";
 
 interface IRegisterSchema {
   name: string;
@@ -17,16 +21,16 @@ export function Register() {
   const navigate = useNavigate();
 
   async function handleSubmitUserData(data: IRegisterSchema) {
-    console.log(data)
     try {
       await api.post("/users", data);
     } catch (error: any) {
-      console.log(error[0].message);
+      toast.error(error.response.data.message || error.response.data[0].message);
     }
   }
 
   return (
     <WaveContainer>
+      <ToastContainer />
       <img
         onClick={() => navigate("/")}
         className="left-side-floating-logo"
@@ -46,7 +50,7 @@ export function Register() {
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form>
-              <h1>Cadastro de professor</h1>
+              <h1>Cadastro de usuário</h1>
               <h2>Dados</h2>
               <div className="input-container">
                 <div className="input-group">
