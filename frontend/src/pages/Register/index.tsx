@@ -23,6 +23,8 @@ export function Register() {
   async function handleSubmitUserData(data: IRegisterSchema) {
     try {
       await api.post("/users", data);
+      toast.success('Cadastro realizado com sucesso!');
+      setTimeout(() => navigate('/login'), 2000)
     } catch (error: any) {
       toast.error(error.response.data.message || error.response.data[0].message);
     }
