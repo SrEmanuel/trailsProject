@@ -40,7 +40,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User u1 = new User(null, "Emanuel", pe.encode("123"), "emanuelmartins@gmail.com", UserType.PROFESSOR, true);
+        User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins@gmail.com", UserType.PROFESSOR, true);
         User u2 = new User(null, "João", pe.encode("123"), "joao@gmail.com", UserType.PROFESSOR, true);
         User u3 = new User(null, "Edmarcos", pe.encode("123"), "edmarcos@gmail.com", UserType.PROFESSOR, true);
         User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com", UserType.PROFESSOR, true);
