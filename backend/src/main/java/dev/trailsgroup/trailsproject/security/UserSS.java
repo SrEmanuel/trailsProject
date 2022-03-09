@@ -13,24 +13,31 @@ public class UserSS implements UserDetails {
 
     private Integer id;
     private String email;
+    private String name;
     private String password;
+    private Boolean status;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserSS(){
 
     }
 
-    public UserSS(Integer id, String email, String password, Set<UserProfiles> profiles) {
+    public UserSS(Integer id, String email, String name, String password, Set<UserProfiles> profiles, Boolean status) {
         this.id = id;
         this.email = email;
+        this.name = name;
         this.password = password;
         this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
+        this.status = status;
     }
 
     public Integer getId(){
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,4 +73,14 @@ public class UserSS implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "{\"id\": " + id + ", "
+                + "\"nome\": \""+ name+"\", "
+                + "\"email\": \""+ email +"\", "
+                + "\"profiles\": \""+ authorities.toString() +"\", "
+                + "\"status\": "+ status+" }";
+    }
+
 }
