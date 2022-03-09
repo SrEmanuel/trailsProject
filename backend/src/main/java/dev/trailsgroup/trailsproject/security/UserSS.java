@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,7 +15,10 @@ public class UserSS implements UserDetails {
     private Integer id;
     private String email;
     private String name;
+
+    @JsonIgnore
     private String password;
+
     private Boolean status;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -54,16 +58,19 @@ public class UserSS implements UserDetails {
         return email;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -71,16 +78,8 @@ public class UserSS implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return status;
     }
 
-    @Override
-    public String toString() {
-        return "{\"id\": " + id + ", "
-                + "\"nome\": \""+ name+"\", "
-                + "\"email\": \""+ email +"\", "
-                + "\"profiles\": \""+ authorities.toString() +"\", "
-                + "\"status\": "+ status+" }";
-    }
 
 }

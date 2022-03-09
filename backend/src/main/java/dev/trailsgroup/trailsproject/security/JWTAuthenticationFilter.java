@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import dev.trailsgroup.trailsproject.dto.CredentialsDTO;
 import dev.trailsgroup.trailsproject.resources.exceptions.JWTAuthenticationFailureHandler;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,7 +54,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = jwtUtil.generateToken(username);
         res.addHeader("Authorization", "Bearer " + token);
         res.addHeader("Content-Type", "application/json");
-        res.getWriter().write(user.toString());
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        res.getWriter().write(ow.writeValueAsString(user));
     }
 
 
