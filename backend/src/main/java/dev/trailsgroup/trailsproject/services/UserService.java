@@ -3,9 +3,11 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
-import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.security.UserSS;
+import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +34,6 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private UserCourseRepository userCourseRepository;
 
 
     public List<User> findAll(){
@@ -40,12 +41,22 @@ public class UserService {
     }
 
     public User findById(Integer id){
+
+        UserSS user = UserService.authenticated();
+        if(user==null || !user.hasRole(UserProfiles.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Acesso negado!");
+        }
+
         Optional<User> obj =  repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User findByEmail(String email){
-        return repository.findByEmail(email);
+    public static UserSS authenticated(){
+        try {
+            return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }catch(Exception e){
+            return null;
+        }
     }
 
     public User insert(UserDTO obj){
@@ -95,6 +106,11 @@ public class UserService {
     //Solution:
     //https://stackoverflow.com/questions/37749559/conversion-of-list-to-page-in-spring
     public Page<Course> getCourses(Integer id, Pageable pageable){
+        UserSS user = UserService.authenticated();
+
+        if(user == null || !Objects.equals(user.getId(), id) && !user.hasRole(UserProfiles.ADMIN)){
+            throw new AuthorizationException("Acesso negado!");
+        }
         List<Course> courses = new ArrayList<>(repository.getById(id).getCourses());
         int start = (int)pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), courses.size());
