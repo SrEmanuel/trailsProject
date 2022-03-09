@@ -8,6 +8,7 @@ import api from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 import { LoginSchema } from "../../schemas/login.schema";
+import { useAuth } from "../../hooks/useAuth";
 
 interface ICredentials {
   email: string;
@@ -16,11 +17,14 @@ interface ICredentials {
 
 export function Login() {
   const navigate = useNavigate();
+  const { handleSavaUserDataToStorage } = useAuth();
 
   async function handleLogin(credentials: ICredentials) {
     try {
-      await api.post("/login", credentials);
+      const response =  await api.post("/login", credentials);
+      await handleSavaUserDataToStorage(response.data);
       toast.success("Login realizado com sucesso!");
+      setTimeout(() => navigate('/cursos') , 2000)
     } catch (error: any) {
       toast.error(
         error.response.data.message || error.response.data[0].message
