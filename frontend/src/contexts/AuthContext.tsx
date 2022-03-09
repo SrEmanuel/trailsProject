@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface IUser {
   name: string;
@@ -20,10 +20,14 @@ interface IAuthContextProviderProps {
   children: ReactNode;
 }
 
-const AuthContext = createContext({} as IAuthContextProps);
+export const AuthContext = createContext({} as IAuthContextProps);
 
 export function AuthContextProvider(props: IAuthContextProviderProps) {
   const [user, setUser] = useState<IUser>();
+
+  useEffect(() => {
+    handleLoadUserDataFromStorage()
+  }, []);
 
   async function getUser(): Promise<IUser | undefined> {
     return user;
@@ -36,6 +40,7 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
 
   async function handleLoadUserDataFromStorage(): Promise<void> {
     const userData = localStorage.getItem("user");
+    console.log('user loading...')
     if (userData) {
       setUser(JSON.parse(userData));
     }
