@@ -14,7 +14,6 @@ import java.util.*;
 @EntityListeners(AuditingEntityListener.class)
 public class Topic implements Serializable {
 
-    //TODO See the implementation of Course ID into a rest endpoint
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

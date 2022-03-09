@@ -1,9 +1,7 @@
 package dev.trailsgroup.trailsproject.resources.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 public class StandardError implements Serializable {
     private Integer status;

@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-// TODO -> Implementar autores
 
 @Entity
 @Table(name = "tb_subject")
@@ -27,7 +26,6 @@ public class Subject implements Serializable {
     private String grade;
     private Integer position;
 
-    @Column(nullable = true)
     @Lob
     private String htmlContent;
 
