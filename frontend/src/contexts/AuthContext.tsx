@@ -4,8 +4,8 @@ interface IUser {
   name: string;
   email: string;
   id: string;
-  status: boolean;
-  profiles: string[];
+  enabled: boolean;
+  authorities: string[];
   token: string;
 }
 
