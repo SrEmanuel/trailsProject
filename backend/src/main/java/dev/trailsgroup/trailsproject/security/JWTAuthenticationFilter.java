@@ -53,7 +53,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserSS user = (UserSS) auth.getPrincipal();
         String token = jwtUtil.generateToken(username);
         res.addHeader("Authorization", "Bearer " + token);
-        res.addHeader("Content-Type", "application/json");
+        res.setContentType("application/json;charset=UTF-8");
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         res.getWriter().write(ow.writeValueAsString(user));
     }
