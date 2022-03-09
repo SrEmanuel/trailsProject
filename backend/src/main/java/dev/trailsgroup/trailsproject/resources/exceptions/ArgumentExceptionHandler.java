@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @ControllerAdvice
-public class ArgumentExpectionHandler {
+public class ArgumentExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ArgumentError>> methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
