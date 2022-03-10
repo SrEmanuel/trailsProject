@@ -51,6 +51,12 @@ public class UserService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public User findBySession(){
+        return repository.findById(authenticated().getId()).orElseThrow(() -> new ResourceNotFoundException("Houve" +
+                "um problema!"));
+
+    }
+
     public static UserSS authenticated(){
         try {
             return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

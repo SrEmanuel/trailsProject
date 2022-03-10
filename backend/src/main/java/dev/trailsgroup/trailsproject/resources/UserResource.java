@@ -83,4 +83,10 @@ public class UserResource {
     public ResponseEntity<Page<Course>> getCourses(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok().body(service.getCourses(id, pageable));
     }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(value = "/me")
+    public ResponseEntity<User> getCurrentUser(){
+        return ResponseEntity.ok().body(service.findBySession());
+    }
 }
