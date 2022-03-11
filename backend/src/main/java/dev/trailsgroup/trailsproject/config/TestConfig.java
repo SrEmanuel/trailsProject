@@ -4,8 +4,12 @@ import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import dev.trailsgroup.trailsproject.repositories.*;
+import dev.trailsgroup.trailsproject.services.EmailService;
+import dev.trailsgroup.trailsproject.services.MockEmailService;
+import dev.trailsgroup.trailsproject.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -39,7 +43,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins@gmail.com", UserType.PROFESSOR, true);
+        User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins284@gmail.com", UserType.PROFESSOR, true);
         User u2 = new User(null, "João", pe.encode("123"), "joao@gmail.com", UserType.PROFESSOR, true);
         User u3 = new User(null, "Edmarcos", pe.encode("123"), "edmarcos@gmail.com", UserType.PROFESSOR, true);
         User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com", UserType.PROFESSOR, true);
