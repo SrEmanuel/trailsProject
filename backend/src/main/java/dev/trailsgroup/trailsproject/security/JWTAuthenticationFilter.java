@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -39,21 +38,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>());
 
-            Authentication auth = authenticationManager.authenticate(authToken);
-            return auth;
+            return authenticationManager.authenticate(authToken);
         }catch(IOException e){
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException{
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException{
 
         String username = ((UserSS) auth.getPrincipal()).getUsername();
         UserSS user = (UserSS) auth.getPrincipal();
         String token = jwtUtil.generateToken(username);
         res.addHeader("Authorization", "Bearer " + token);
-        res.addHeader("Content-Type", "application/json");
+        res.setContentType("application/json;charset=UTF-8");
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         res.getWriter().write(ow.writeValueAsString(user));
     }

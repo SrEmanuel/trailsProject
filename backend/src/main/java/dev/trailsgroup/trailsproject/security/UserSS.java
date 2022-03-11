@@ -43,6 +43,10 @@ public class UserSS implements UserDetails {
         return name;
     }
 
+    public boolean hasRole(UserProfiles profile){
+        return  getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
        return authorities;

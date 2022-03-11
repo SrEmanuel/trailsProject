@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -83,5 +82,11 @@ public class UserResource {
     @GetMapping(value = "/{id}/courses")
     public ResponseEntity<Page<Course>> getCourses(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok().body(service.getCourses(id, pageable));
+    }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(value = "/me")
+    public ResponseEntity<User> getCurrentUser(){
+        return ResponseEntity.ok().body(service.findBySession());
     }
 }
