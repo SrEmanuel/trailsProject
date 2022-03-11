@@ -66,7 +66,7 @@ public class AuthService {
                 throw new AuthorizationException("As senhas informadas NÃO são iguais.");
             }
 
-        }catch (ArrayIndexOutOfBoundsException e){
+        }catch (Exception e){
             throw new AuthorizationException("Token não reconhecido!");
         }
     }

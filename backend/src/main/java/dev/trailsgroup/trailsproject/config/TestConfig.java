@@ -39,7 +39,6 @@ public class TestConfig implements CommandLineRunner {
     private Pbkdf2PasswordEncoder pe;
 
 
-
     @Override
     public void run(String... args) throws Exception {
 
