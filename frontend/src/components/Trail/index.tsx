@@ -1,12 +1,10 @@
 import "./styles.scss";
-
-import exampleImage from "../../assets/images/subject.png";
 import { FiFileText } from "react-icons/fi";
 import { ITrails } from "../../interfaces/Trail";
 import { useNavigate } from "react-router-dom";
 
 interface Props{
-  color: string;
+  color?: string;
   trail: ITrails;
 }
 
@@ -17,7 +15,7 @@ export function Trail({color, trail}: Props) {
   return (
     <div onClick={()=> navigate(`/cursos/${trail.id}`, {state: { id : trail.id}}) }  className="card-container" style={ {background: color} } >
       <div className="card-header">
-       { !trail.image &&  <img src={exampleImage} alt="capa do card" />}
+      <img src={trail.imagePath} alt="capa do card" />
         <span>{trail.name}</span>
       </div>
       <div className="card-line"></div>

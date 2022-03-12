@@ -52,13 +52,13 @@ public class TestConfig implements CommandLineRunner {
         u2.removeProfile(UserProfiles.PROFESSOR);
         userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5));
 
-        Course c1 = new Course(null, "Matemática", "www.google.com");
-        Course c2 = new Course(null, "Português", "www.google.com");
-        Course c3 = new Course(null, "História", "www.google.com");
-        Course c4 = new Course(null, "Geografia", "www.google.com");
-        Course c5 = new Course(null, "Química", "www.google.com");
-        Course c6 = new Course(null, "Física", "www.google.com");
-        Course c7 = new Course(null, "Banco de Dados", "www.google.com");
+        Course c1 = new Course(null, "Matemática", "default-course.png");
+        Course c2 = new Course(null, "Português", "default-course.png");
+        Course c3 = new Course(null, "História", "default-course.png");
+        Course c4 = new Course(null, "Geografia", "default-course.png");
+        Course c5 = new Course(null, "Química", "default-course.png");
+        Course c6 = new Course(null, "Física", "default-course.png");
+        Course c7 = new Course(null, "Banco de Dados", "default-course.png");
 
         courseRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6));
 
