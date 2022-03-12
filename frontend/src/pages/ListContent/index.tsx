@@ -25,7 +25,7 @@ export function ListContent() {
 
     async function handleLoadTopics() {
       const response = await api.get(`/courses/${params.courseid}/topics`);
-      setTopics(response.data);
+      setTopics(response.data.content);
     }
 
     async function handleLoadSelectedCourse() {
