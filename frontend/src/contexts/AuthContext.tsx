@@ -1,16 +1,9 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-
-interface IUser {
-  name: string;
-  email: string;
-  id: string;
-  enabled: boolean;
-  authorities: string[];
-  token: string;
-}
+import { IUser } from "../interfaces/user";
 
 interface IAuthContextProps {
-  getUser: () => Promise<IUser | undefined>;
+  user: IUser | undefined,
+  getUser: () => IUser | undefined;
   handleSavaUserDataToStorage: (user: IUser) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
@@ -29,7 +22,7 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     handleLoadUserDataFromStorage()
   }, []);
 
-  async function getUser(): Promise<IUser | undefined> {
+  function getUser(): IUser | undefined {
     return user;
   }
 
@@ -48,11 +41,13 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
 
   async function handleClearUserDataFromStorage(): Promise<void> {
     localStorage.removeItem("user");
+    setUser(undefined);
   }
 
   return (
     <AuthContext.Provider
       value={{
+        user,
         getUser,
         handleSavaUserDataToStorage,
         handleLoadUserDataFromStorage,
