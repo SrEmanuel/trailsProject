@@ -2,7 +2,7 @@ export interface ISubject{
     position: number;
     id: number,
     name: string,
-    image: string,
+    imagePath: string,
     grade: string,
     htmlContent: string
 }

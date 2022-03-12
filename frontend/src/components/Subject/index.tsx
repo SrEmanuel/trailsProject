@@ -14,7 +14,7 @@ export function Subject( {subject, courseId}: Props) {
   return (
     <div onClick={()=> navigate(`/cursos/${courseId}/${subject.id}`) } className="card-container subject">
       <div className="card-header">
-        <img src={subject.image} alt="capa do card" />
+        <img src={subject.imagePath} alt="capa do card" />
         <Link to="#" >{subject.grade}</Link>
       </div>
       <div className="card-line"></div>
