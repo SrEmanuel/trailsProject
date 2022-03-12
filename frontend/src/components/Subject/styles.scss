@@ -7,9 +7,10 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     transition: 0.2s;
+    align-self: flex-end;
+    margin-top: 90px;
     position: absolute;
-    margin-top: 93px;
-    margin-left: -56px;
+    
 
     &:hover {
       filter: brightness(1.2);
