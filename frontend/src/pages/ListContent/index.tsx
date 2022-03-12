@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
@@ -59,7 +59,7 @@ export function ListContent() {
       </div>
       {location.pathname !== "/cursos" &&
         topics?.map((topic) => (
-          <>
+          <Fragment key={topic.id}>
             <h2 className="topic-title">{topic.name}</h2>
             <div className="trails-grid-container">
               {topic.subjects.map((subject) => (
@@ -70,7 +70,7 @@ export function ListContent() {
                 />
               ))}
             </div>
-          </>
+          </Fragment>
         ))}
     </div>
   );
