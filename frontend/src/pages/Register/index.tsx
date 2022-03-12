@@ -93,7 +93,7 @@ export function Register() {
                 </div>
               </div>
               <div className="buttons-container">
-                <button>Cancelar</button>
+                <button type="button" onClick={()=> navigate(-1)} >Cancelar</button>
                 <button type="button" onClick={() => handleSubmit()}>
                   Enviar
                 </button>
