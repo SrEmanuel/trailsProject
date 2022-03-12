@@ -42,7 +42,7 @@ export function NavBar() {
             Sair
           </Link>
         )}
-        <SideMenu />
+        <SideMenu hasLoggedUser={hasLoggedUser} />
       </div>
     </nav>
   );
