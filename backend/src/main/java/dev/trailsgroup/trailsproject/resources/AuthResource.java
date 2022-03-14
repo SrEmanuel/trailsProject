@@ -1,8 +1,10 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.trailsgroup.trailsproject.dto.EmailDTO;
 import dev.trailsgroup.trailsproject.dto.PasswordDTO;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.resources.utils.StandardMessage;
 import dev.trailsgroup.trailsproject.security.JWTUtil;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.AuthService;
@@ -37,9 +39,9 @@ public class AuthResource {
     }
 
     @PostMapping(value = "/forgot")
-    public ResponseEntity<Void> refreshToken(@Valid @RequestBody EmailDTO email){
+    public ResponseEntity<StandardMessage> forgot(@Valid @RequestBody EmailDTO email){
         service.sendNewToken(email.getEmail());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(new StandardMessage(200, "Token criado e envaido para o email cadastrado com sucesso!", "/auth/forgot"));
     }
 
     @PostMapping(value = "/change-password")

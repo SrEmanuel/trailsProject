@@ -30,8 +30,12 @@ public class AuthService {
     @Autowired
     private Pbkdf2PasswordEncoder pe;
 
+    @Autowired
+    private EmailService emailService;
+
     @Value("${recover-token.expiration}")
     private Long expiration;
+
 
 
     public void sendNewToken (String email){
@@ -46,7 +50,7 @@ public class AuthService {
             String token = email + "-ft-" + rawUUID;
             String secureToken = Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8));
 
-            throw new AuthorizationException(secureToken);
+            emailService.sendNewTokenEmail(user, secureToken);
         }catch (DataIntegrityViolationException e){
             RecoverToken rt = recoverTokenRepository.findByUser(user);
             if(Instant.now().isAfter(rt.getExpirationDate())){
