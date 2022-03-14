@@ -54,8 +54,15 @@ public class AuthService {
                 sendNewToken(email);
             }
             ZonedDateTime instant = Instant.ofEpochMilli((rt.getExpirationDate().toEpochMilli() - Instant.now().toEpochMilli())).atZone(ZoneId.of("UTC-3"));
-            throw new DatabaseException("Já existe um pedido de recuperação de senha para essa conta! Você poderá pedir outro token em: "
-            + instant.getMinute()+" minutos e "+instant.getSecond() +" segundos");
+            String counter;
+            int minute = instant.getMinute();
+            int second = instant.getSecond();
+            if(minute > 0)
+                counter = minute +" minutos e "+second +" segundos";
+            else
+                counter = second +" segundos";
+            throw new AuthorizationException("Já existe um pedido de recuperação de senha para essa conta! Você poderá pedir outro token em: "
+            + counter);
         }
 
     }
