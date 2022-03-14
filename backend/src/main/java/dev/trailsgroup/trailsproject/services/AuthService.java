@@ -51,6 +51,7 @@ public class AuthService {
             RecoverToken rt = recoverTokenRepository.findByUser(user);
             if(Instant.now().isAfter(rt.getExpirationDate())){
                 recoverTokenRepository.delete(rt);
+                sendNewToken(email);
             }
             ZonedDateTime instant = Instant.ofEpochMilli((rt.getExpirationDate().toEpochMilli() - Instant.now().toEpochMilli())).atZone(ZoneId.of("UTC-3"));
             throw new DatabaseException("Já existe um pedido de recuperação de senha para essa conta! Você poderá pedir outro token em: "
