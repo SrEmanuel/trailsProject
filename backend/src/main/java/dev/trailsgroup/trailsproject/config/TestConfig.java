@@ -40,7 +40,7 @@ public class TestConfig implements CommandLineRunner {
 
         User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins284@gmail.com", UserType.PROFESSOR, true);
         User u2 = new User(null, "João", pe.encode("123"), "joao@gmail.com", UserType.PROFESSOR, true);
-        User u3 = new User(null, "Edmarcos", pe.encode("123"), "edmarcos@gmail.com", UserType.PROFESSOR, true);
+        User u3 = new User(null, "Edmarcos", pe.encode("Aa1234567+"), "edmarcosfilho2015@gmail.com", UserType.PROFESSOR, true);
         User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com", UserType.PROFESSOR, true);
         User u5 = new User(null, "Tatiane", pe.encode("123"), "Tatiane@gmail.com", UserType.PROFESSOR, true);
 
