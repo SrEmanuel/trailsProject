@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.*;
 import java.util.*;
 
 @Service
@@ -29,22 +30,31 @@ public class AuthService {
     @Autowired
     private Pbkdf2PasswordEncoder pe;
 
+    @Value("${recover-token.expiration}")
+    private Long expiration;
+
 
     public void sendNewToken (String email){
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResourceNotFoundException("Usuário não encontrado!");
+        }
         try {
-            User user = userRepository.findByEmail(email);
-            if (user == null) {
-                throw new ResourceNotFoundException("Usuário não encontrado!");
-            }
             String rawUUID = UUID.randomUUID().toString().replace("-", "");
-            recoverTokenRepository.save(new RecoverToken(null, rawUUID, user));
+            recoverTokenRepository.save(new RecoverToken(null, rawUUID, user, expiration));
 
             String token = email + "-ft-" + rawUUID;
             String secureToken = Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8));
 
             throw new AuthorizationException(secureToken);
         }catch (DataIntegrityViolationException e){
-            throw new DatabaseException("Já existe um pedido de recuperação de senha para essa conta!");
+            RecoverToken rt = recoverTokenRepository.findByUser(user);
+            if(Instant.now().isAfter(rt.getExpirationDate())){
+                recoverTokenRepository.delete(rt);
+            }
+            ZonedDateTime instant = Instant.ofEpochMilli((rt.getExpirationDate().toEpochMilli() - Instant.now().toEpochMilli())).atZone(ZoneId.of("UTC-3"));
+            throw new DatabaseException("Já existe um pedido de recuperação de senha para essa conta! Você poderá pedir outro token em: "
+            + instant.getMinute()+" minutos e "+instant.getSecond() +" segundos");
         }
 
     }
@@ -66,7 +76,7 @@ public class AuthService {
                 throw new AuthorizationException("As senhas informadas NÃO são iguais.");
             }
 
-        }catch (Exception e){
+        }catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e){
             throw new AuthorizationException("Token não reconhecido!");
         }
     }
@@ -75,7 +85,7 @@ public class AuthService {
         RecoverToken recoverToken = recoverTokenRepository.findByUser(user);
 
         if(recoverToken != null && tokenS.equals(recoverToken.getAccessToken())){
-            if(recoverToken.getCreatedDate().before(new Date(System.currentTimeMillis() + 60000))){
+            if(Instant.now().isBefore(recoverToken.getExpirationDate())){
                 recoverTokenRepository.delete(recoverToken);
                 return true;
             }
