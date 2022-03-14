@@ -17,8 +17,8 @@ export function ForgotPassword() {
 
   async function handleSubmitEmail(value: { email: string }) {
     try {
-      console.log(value);
-      await api.post("/auth/forgot", value);
+      const response = await api.post("/auth/forgot", value);
+      toast.success(response.data.message);
     } catch (error: any) {
       toast.error(error.message);
     }
