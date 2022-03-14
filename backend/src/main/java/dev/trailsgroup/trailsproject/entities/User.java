@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 public class User implements Serializable {
 
     @CreatedDate
-    private Date createdDate;
+    private Instant createdDate;
     @LastModifiedDate
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,12 +124,12 @@ public class User implements Serializable {
     }
 
     @JsonIgnore
-    public Date getCreatedDate() {
+    public Instant getCreatedDate() {
         return createdDate;
     }
 
     @JsonIgnore
-    public Date getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 

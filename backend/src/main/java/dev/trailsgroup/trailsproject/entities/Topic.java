@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.*;
 
 @Entity
@@ -24,9 +25,9 @@ public class Topic implements Serializable {
 
 
     @CreatedDate
-    private Date createdDate;
+    private Instant createdDate;
     @LastModifiedDate
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
@@ -103,11 +104,11 @@ public class Topic implements Serializable {
         return Objects.hash(id);
     }
 
-    public Date getCreatedDate() {
+    public Instant getCreatedDate() {
         return createdDate;
     }
 
-    public Date getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 }
