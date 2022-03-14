@@ -81,7 +81,7 @@ public class Topic implements Serializable {
 
 
     @JsonIgnore
-    public Integer getSubjectsCount(){
+    public Integer getSubjectsCount() {
         return subjects.size();
     }
 
@@ -90,6 +90,15 @@ public class Topic implements Serializable {
         sortedSubjects.sort(Comparator.comparing(Subject::getPosition));//Returning a sorted list of subjects by its position
         return sortedSubjects;
     }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -103,12 +112,5 @@ public class Topic implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
 }
+

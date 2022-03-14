@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.*;
 
 
 @Entity
@@ -37,6 +37,9 @@ public class Subject implements Serializable {
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserSubject> professors = new HashSet<>();
 
     public Subject(){}
 
@@ -118,6 +121,10 @@ public class Subject implements Serializable {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public Set<UserSubject> getProfessors(){
+        return professors;
     }
 
     @Override
