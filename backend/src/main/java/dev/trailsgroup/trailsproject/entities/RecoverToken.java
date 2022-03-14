@@ -2,11 +2,10 @@ package dev.trailsgroup.trailsproject.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tb_recovertoken")
@@ -19,8 +18,7 @@ public class RecoverToken {
 
     private String accessToken;
 
-    @CreatedDate
-    private Date createdDate;
+    private Instant expirationDate;
 
     @JoinColumn(unique=true)
     @OneToOne()
@@ -30,10 +28,11 @@ public class RecoverToken {
     public RecoverToken(){
     }
 
-    public RecoverToken(Integer id, String accessTokenUser, User user) {
+    public RecoverToken(Integer id, String accessTokenUser, User user, long expirationTime) {
         this.id = id;
         this.accessToken = accessTokenUser;
         this.user = user;
+        this.expirationDate = Instant.ofEpochMilli(System.currentTimeMillis()+expirationTime);
     }
 
 
@@ -49,14 +48,13 @@ public class RecoverToken {
         this.accessToken = accessToken;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Instant getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setExpirationDate(Instant expirationDate) {
+        this.expirationDate = expirationDate;
     }
-
 
     public User getUser() {
         return user;
