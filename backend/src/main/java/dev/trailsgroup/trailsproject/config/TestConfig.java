@@ -4,11 +4,8 @@ import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import dev.trailsgroup.trailsproject.repositories.*;
-import dev.trailsgroup.trailsproject.services.EmailService;
-import dev.trailsgroup.trailsproject.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -35,22 +32,15 @@ public class TestConfig implements CommandLineRunner {
     private UserCourseRepository userCourseRepository;
 
     @Autowired
-    private UserSubjectRepository userSubjectRepository;
-
-    @Autowired
     private Pbkdf2PasswordEncoder pe;
 
-    @Bean
-    public EmailService emailService() {
-        return new SmtpEmailService();
-    }
 
     @Override
     public void run(String... args) throws Exception {
 
         User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins284@gmail.com", UserType.PROFESSOR, true);
         User u2 = new User(null, "João", pe.encode("123"), "joao@gmail.com", UserType.PROFESSOR, true);
-        User u3 = new User(null, "Edmarcos", pe.encode("123"), "edmarcosfilho2015@gmail.com", UserType.PROFESSOR, true);
+        User u3 = new User(null, "Edmarcos", pe.encode("Aa1234567+"), "edmarcosfilho2015@gmail.com", UserType.PROFESSOR, true);
         User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com", UserType.PROFESSOR, true);
         User u5 = new User(null, "Tatiane", pe.encode("123"), "Tatiane@gmail.com", UserType.PROFESSOR, true);
 
@@ -95,14 +85,7 @@ public class TestConfig implements CommandLineRunner {
                 "1º Ano", "<img src='https://www.todoestudo.com.br/wp-content/uploads/2016/10/feudalismo.jpg' alt='' /> <h2>Introdução</h2> <p> O feudalismo foi um <strong> sistema político, econômico e social </strong> que vigorou durante parte da Idade Média em diversos territórios da Europa. </p> <p> Seu nome deriva de “feudo”, terras que estavam sob poder dos senhores feudais, concentravam a produção agrícola no período, e onde vivia a maior parte da população. </p> <h2>Quais são as características do feudalismo?</h2> <p> O feudalismo viveu seu <strong>auge durante a Alta Idade Média</strong>, entre os séculos IX e XI, e se caracterizou pela descentralização política, por isso se manifestou de forma diferente em cada região. </p> <p> Dessa forma, quando estudamos esse sistema, é necessário destacar que os conceitos apresentados são generalizações para facilitar a compreensão, e que cada caso possui especificidades. </p> <p> Com o declínio do Império Romano do Ocidente e as invasões bárbaras que o levaram ao fim em 476 d.C., diversos povos de origem germânica se instalaram na Europa. Com o aumento dos conflitos e as dificuldades da vida nas cidades, parte da população passou a procurar abrigo e recursos para subsistência nas áreas rurais.o de um líder, o “pater”, que possuía diversas funções comunitárias. </p> <p> Em decorrência desse processo, a partir do século IX, onde hoje está localizada a França, teve início um sistema de organização política, econômica e social que posteriormente seria denominado feudalismo. </p> <p> Suas características principais foram a descentralização política, ruralização, ou seja, concentração da população e da produção nas áreas rurais, estabelecimento de uma rígida hierarquia social, e o fortalecimento do cristianismo, com o aumento de sua influência na esfera política e social. </p> <h2>O que eram os feudos?</h2> <p> Os feudos eram unidades produtivas, geralmente fortificadas, onde viviam o senhor feudal, sua família e os servos. O regime de servidão foi o principal tipo de mão de obra utilizado durante a Idade Média e se diferenciava da escravidão pelo fato de os servos não serem considerados mercadorias. </p> <p> Contudo, os servos tampouco eram trabalhadores assalariados. Eles se dedicavam quase integralmente à produção agrícola e estavam “presos” aos feudos, pois não possuíam terras próprias. </p> <p> Dessa forma, os senhores cediam parte de suas terras para uso dos servos, que, por sua vez, pagavam diversos tributos ao senhor feudal. Assim, o feudalismo se constituiu em um regime em que parte do trabalho do servo era destinado a sua subsistência, e parte ficava para o senhor feudal. </p> <p> Entre os principais impostos devidos pelos servos, estavam a corveia, destinação de até três dias de trabalho por semana nas terras do senhor; a mão morta, cobrada para que os filhos de servos que morriam continuassem utilizando as terras ocupadas por seus pais; e as banalidades, imposto cobrado para uso das ferramentas do senhor, como os moinhos. </p>",1, t6);
         Subject s9 = new Subject(null, "Roma Antiga", "default-course.png",
                 "1º Ano", "<img src='https://s3-sa-east-1.amazonaws.com/manual-do-enem-test/a1c1b23d8c83405aa8384d62475558c4-panorama-2154463_1920.jpg' alt='' /><h2>Introdução</h2><p> Hoje capital da Itália, Roma já foi o coração de um dos maiores impérios da antiguidade. Situada no centro da península italiana, a cidade detém dentro do seu território muita história. É conhecida como a cidade eterna, por ter resistido a tantos períodos da história, sempre mantendo sua importância religiosa, política e cultural.</p><p> Já sabemos que Roma possui uma grande imponência histórica, mas assim como tudo neste mundo, ela teve seu início e seu desenvolvimento. Assim fica a pergunta: Como e quando surgiu a Cidade de Roma?</p><h2>Origem da cidade de Roma</h2><p> Tudo começou com o processo de ocupação e povoamento da península Itálica, mais especificamente, de uma planície encontrada na região centro-ocidental da península, conhecida como Lácio.</p><p> Acredita-se que os povos que habitavam o Lácio, previamente a formação da cidade de Roma, eram fruto de invasões indo-europeias e das diásporas gregas, o que explica a forte influência grega na formação de Roma. Com o povoamento de Lácio, houve a necessidade dos povos de se defenderem das invasões dos povos do nordeste da península Itálica. Assim, às margens do Rio Tibre forma-se uma fortificação militar e dentro dela um núcleo urbano, que, por fim, veio ser a cidade de Roma.</p><p> Além da origem histórica de Roma que vimos acima, existe a origem lendária, contada por Virgílio na sua obra Eneida. Segunda a Lenda, Roma teria sido fundado pelos irmãos Rômulo e Remo, que eram descendentes do deus Marte e de Enéas, herói de Troia.</p><p> A lenda diz que a mãe de Rómulo e Remo era sobrinha do Rei de Alba, que os atirou nas correntezas do rio Tibre. Por um milagre, o cesto onde os bebês estavam, atolou em uma das margens do Rio, onde foram salvos por uma Loba que os amamentou em uma caverna. Remo e Rômulo cresceram e se tornaram líderes, erguendo juntos a cidade de Roma. Contudo, os irmãos entraram em uma disputa pelo poder, o que levou a Rômulo matar o seu irmão, Remo, tornando-se assim, o primeiro rei de Roma.</p><p> Formada Roma, ela se desenrolou por milhares de anos em um dos maiores impérios da história, ocupando quase todo o território da Europa e norte da África, sendo a cidade eterna o símbolo e a capital do império romano. Posteriormente, com a divisão do império em dois, a cidade tornou-se capital do império romano do Ocidente.</p><h2>Características de Roma</h2><h3>Sobre o local onde foi construída</h3><ul> <li> Roma foi construída às margens do Rio Tibre, mais especificamente na jusante e montante; </li> <li> Roma foi erguida primeiramente no monte Palatino e depois se expandiu em todas as sete colinas de Roma: Aventino, Capitólio, Célio, Esquilino, Palatino, Quirinal e Viminal. </li></ul><h3>Sobre o seu plano</h3><ul> <li> A antiga Cidade de Roma era dividida em 22 distritos no seu centro e 35 setores urbanos. Essas divisões foram absorvidas apenas em 1911; </li> <li> Uma muralha envolve o centro da cidade de Roma. Muito dela ainda se mantém erguida; </li> <li> Dentro do centro de Roma, se encontram hoje as grande atrações da cidade eterna, como as suas lindas basílicas, o Coliseu, o Pantheon e o Circo Máximo; </li> <li> Dentro das dependências de Roma, também se encontra o Vaticano, que é um estado soberano (o menor do mundo), portanto, independente da Itália. O Vaticano é a sede da Igreja Católica Apostólica Romana. </li></ul><h3>Sobre suas dimensões</h3><ul> <li>Roma possui uma área de 1285 km²;</li> <li> Roma possui uma população de 2,8 milhões de pessoas. Ela é a quarta cidade mais populosa da União Europeia. </li></ul><img src='https://s3-sa-east-1.amazonaws.com/manual-do-enem-test/4eef1610d4ca479d916bf522a9afa309-Imagem2.png' alt=''/><h3>Curiosidades</h3><ul> <li> Roma nem sempre foi a capital da Itália. Até 1870, a capital Italiana era Florença; </li> <li> Roma é a única cidade do mundo que engloba um Estado soberano. O Vaticano é um país independente; </li> <li> Roma foi a primeira cidade a alcançar a população de um milhão de pessoas. Isso Ocorreu no ano de 133 a.c (antes de cristo). </li></ul>",2, t5);
-
         subjectRepository.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9));
-
-        UserSubject users1 = new UserSubject(s1, u1.getName(), u1.getEmail());
-        UserSubject users2 = new UserSubject(s1, u2.getName(), u2.getEmail());
-        UserSubject users3 = new UserSubject(s1, u3.getName(), u3.getEmail());
-
-        userSubjectRepository.saveAll(Arrays.asList(users1, users2, users3));
 
 
         UserCourse us1 = new UserCourse(c1, u1);
