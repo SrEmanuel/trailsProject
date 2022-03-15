@@ -4,6 +4,7 @@ import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
+import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
@@ -18,6 +19,7 @@ export function ListContent() {
 
   const location = useLocation();
   const params = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function handleLoadCourses() {
@@ -48,7 +50,7 @@ export function ListContent() {
     <div className="container">
       <NavBar />
       <h1>
-        {location.pathname === "/cursos" ? "Trilhas disponíveis" : courseName}
+        { user?.authorities.find(item => item.authority.includes('PROFESSOR')) ? `Bem vindo, ${user.name}` : location.pathname === "/cursos" ? "Trilhas disponíveis" : courseName}
       </h1>
       {location.pathname === "/cursos" && <Paginator page={page} totalPages={totalPages} setPage={setPage} />}
       <div className="trails-grid-container">
