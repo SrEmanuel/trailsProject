@@ -71,7 +71,7 @@ public class AuthService {
 
     }
 
-    public User changePassword(String encodedToken, PasswordDTO pa){
+    public void changePassword(String encodedToken, PasswordDTO pa){
         try {
             String[] rawToken = decodeToken(encodedToken);
             User user = userRepository.findByEmail(rawToken[0]);
@@ -80,7 +80,6 @@ public class AuthService {
                 if (validateToken(rawToken[1], user)) {
                     user.setPassword(pe.encode(pa.getPassword()));
                     userRepository.save(user);
-                    return user;
                 }else{
                     throw new AuthorizationException("Token inválido! Reinicie o processo de recuperação de senha.");
                 }

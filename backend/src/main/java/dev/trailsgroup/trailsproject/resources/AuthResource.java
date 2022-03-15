@@ -41,16 +41,19 @@ public class AuthResource {
     @PostMapping(value = "/forgot")
     public ResponseEntity<StandardMessage> forgot(@Valid @RequestBody EmailDTO email){
         service.sendNewToken(email.getEmail());
-        return ResponseEntity.ok().body(new StandardMessage(200, "Token criado e envaido para o email cadastrado com sucesso!", "/auth/forgot"));
+        StandardMessage sm = new StandardMessage(201, "Token criado e envaido para o email cadastrado com sucesso!", "/auth/forgot");
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/forgot")
+                .buildAndExpand(sm).toUri();
+        return ResponseEntity.created(uri).body(sm);
     }
 
     @PostMapping(value = "/change-password")
-    public ResponseEntity<User> changePassword(@Valid @RequestBody PasswordDTO password, @RequestParam(name = "token") String token){
-        User user = service.changePassword(token, password);
-
+    public ResponseEntity<StandardMessage> changePassword(@Valid @RequestBody PasswordDTO password, @RequestParam(name = "token") String token){
+        service.changePassword(token, password);
+        StandardMessage sm =  new StandardMessage(201, "Senha alterada com sucesso!", "/auth/change-password");
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/change-password")
-                .buildAndExpand(user).toUri();
-        return ResponseEntity.created(uri).body(user);
+                .buildAndExpand(sm).toUri();
+        return ResponseEntity.created(uri).body(sm);
     }
 
 
