@@ -3,6 +3,6 @@ export interface IUser {
   email: string;
   id: string;
   enabled: boolean;
-  authorities: string[];
+  authorities: { authority: string }[];
   token: string;
 }

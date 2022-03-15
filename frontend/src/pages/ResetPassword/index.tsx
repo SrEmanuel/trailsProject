@@ -20,6 +20,7 @@ export function ResetPassword() {
     try {
       const response = await api.post(`/auth/change-password${token}`, values);
       toast.success(response.data.message);
+      setTimeout(()=> navigate('/login'), 2000)
     } catch (error: any) {
       toast.error(error.data.message);
     }

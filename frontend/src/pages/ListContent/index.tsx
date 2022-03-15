@@ -4,6 +4,7 @@ import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
+import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
@@ -13,14 +14,18 @@ export function ListContent() {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
   const [courseName, setCourseName] = useState("");
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   const location = useLocation();
   const params = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function handleLoadCourses() {
-      const response = await api.get("/courses");
+      const response = await api.get(`/courses?size=12&page=${page-1}`);
       setTrails(response.data.content);
+      setTotalPages(response.data.totalPages);
     }
 
     async function handleLoadTopics() {
@@ -39,15 +44,15 @@ export function ListContent() {
       handleLoadTopics();
       handleLoadSelectedCourse();
     }
-  }, [location, params]);
+  }, [location, params, page]);
 
   return (
     <div className="container">
       <NavBar />
       <h1>
-        {location.pathname === "/cursos" ? "Trilhas disponíveis" : courseName}
+        { user?.authorities.find(item => item.authority.includes('PROFESSOR')) ? `Bem vindo, ${user.name}` : location.pathname === "/cursos" ? "Trilhas disponíveis" : courseName}
       </h1>
-      {location.pathname === "/cursos" && <Paginator />}
+      {location.pathname === "/cursos" && <Paginator page={page} totalPages={totalPages} setPage={setPage} />}
       <div className="trails-grid-container">
         {location.pathname === "/cursos" &&
           trails?.map((trail, index) => (
