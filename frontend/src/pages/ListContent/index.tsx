@@ -85,7 +85,7 @@ export function ListContent() {
       )}
       <div className="trails-grid-container">
         {location.pathname === "/cursos" &&
-          trails?.map((trail, index) => <Trail key={trail.id} trail={trail} />)}
+          trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
       </div>
       {location.pathname !== "/cursos" &&
         topics?.map((topic) => (
