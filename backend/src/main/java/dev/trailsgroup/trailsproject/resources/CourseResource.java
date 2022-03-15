@@ -40,7 +40,7 @@ public class CourseResource {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Course> insert(@Valid @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
 

@@ -3,8 +3,11 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.UserCourse;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
+import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
+import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
@@ -33,6 +36,9 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private UserCourseRepository userCourseRepository;
 
 
 
@@ -63,6 +69,14 @@ public class UserService {
         }catch(Exception e){
             return null;
         }
+    }
+
+    public boolean verifyPermission(Course course){
+        User user = repository.findByEmail(authenticated().getUsername());
+        UserCoursePK userCoursePK = new UserCoursePK();
+        userCoursePK.setCourse(course);
+        userCoursePK.setUser(user);
+        return userCourseRepository.findById(userCoursePK).isPresent();
     }
 
     public User insert(UserDTO obj){
