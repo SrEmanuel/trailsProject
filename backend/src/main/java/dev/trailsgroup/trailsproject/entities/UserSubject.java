@@ -28,6 +28,8 @@ public class UserSubject implements Serializable {
 
     private String professorEmail;
 
+    private Integer contributions;
+
     @CreatedDate
     private Instant creationDate;
 
@@ -40,6 +42,7 @@ public class UserSubject implements Serializable {
         this.subject = subject;
         this.professorName = professorName;
         this.professorEmail = professorEmail;
+        this.contributions = 1;
     }
 
     public Subject getSubject() {
@@ -64,5 +67,24 @@ public class UserSubject implements Serializable {
 
     public Instant getLastModificationDate() {
         return modificationDate;
+    }
+
+    public Integer getContributions() {
+        return contributions;
+    }
+
+    public void addCounter() {
+        if(this.contributions == null){
+            this.contributions = 0;
+        }
+        this.contributions = this.contributions + 1;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
     }
 }
