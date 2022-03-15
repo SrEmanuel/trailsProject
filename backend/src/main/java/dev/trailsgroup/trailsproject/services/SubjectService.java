@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
+import dev.trailsgroup.trailsproject.dto.UserSubjectDTO;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.entities.UserSubject;
@@ -14,14 +15,13 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.constraints.Null;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -113,7 +113,20 @@ public class SubjectService {
         }
         String name = Objects.requireNonNull(userss).getName();
         String email = Objects.requireNonNull(userss).getUsername();
-        userSubjectRepository.save(new UserSubject(obj,name, email));
+        UserSubject userSubject = new UserSubject();
+        userSubject.setProfessorEmail(email);
+        userSubject.setProfessorName(name);
+        userSubject.setSubject(obj);
+
+        Example<UserSubject> example = Example.of(userSubject);
+        if(userSubjectRepository.exists(example)){
+           UserSubject userSubject1 = userSubjectRepository.findOne(example).get();
+           userSubject1.addCounter();
+           userSubjectRepository.save(userSubject1);
+        }else {
+            userSubject.addCounter();
+            userSubjectRepository.save(userSubject);
+        }
     }
 
 }

@@ -39,7 +39,7 @@ public class Subject implements Serializable {
     private Topic topic;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserSubject> professors = new HashSet<>();
+    private List<UserSubject> authors = new ArrayList<>();
 
     public Subject(){}
 
@@ -123,8 +123,10 @@ public class Subject implements Serializable {
         this.position = position;
     }
 
-    public Set<UserSubject> getProfessors(){
-        return professors;
+    public List<UserSubject> getAuthors(){
+        List<UserSubject> sortedUserSubject = authors;
+        sortedUserSubject.sort(Comparator.comparing(UserSubject::getLastModificationDate).reversed());
+        return sortedUserSubject;
     }
 
     @Override
