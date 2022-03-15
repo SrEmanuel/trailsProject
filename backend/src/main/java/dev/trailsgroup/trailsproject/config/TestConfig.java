@@ -115,7 +115,6 @@ public class TestConfig implements CommandLineRunner {
                                 2, t5);
                 subjectRepository.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9));
 
-                UserCourse us1 = new UserCourse(c1, u1);
                 UserCourse us2 = new UserCourse(c2, u1);
                 UserCourse us3 = new UserCourse(c3, u1);
                 UserCourse us4 = new UserCourse(c2, u2);
@@ -126,7 +125,7 @@ public class TestConfig implements CommandLineRunner {
                 UserCourse us9 = new UserCourse(c6, u4);
                 UserCourse us10 = new UserCourse(c6, u5);
 
-                userCourseRepository.saveAll(Arrays.asList(us1, us2, us3, us4, us5, us6, us7, us8, us9, us10));
+                userCourseRepository.saveAll(Arrays.asList(us2, us3, us4, us5, us6, us7, us8, us9, us10));
         }
 
 }
