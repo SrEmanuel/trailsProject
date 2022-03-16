@@ -5,7 +5,7 @@ import javax.validation.constraints.*;
 public class UserDTO {
 
     @Size(min=2, message="O nome não pode ser menor que 2 caracteres")
-    @Pattern(regexp="^[a-zA-Z]*",message="O nome não pode ter caracteres numéricos")
+    @Pattern(regexp="^[a-zA-Z ]*",message="O nome não pode ter caracteres números ou especiais")
     @NotEmpty(message = "O nome é obrigatório!")
     private String name;
 
