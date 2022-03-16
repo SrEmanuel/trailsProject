@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
+import { PlusButton } from "../../components/PlusButton";
 import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
 import { useAuth } from "../../hooks/useAuth";
@@ -99,9 +100,16 @@ export function ListContent() {
                   subject={subject}
                 />
               ))}
+              {roles?.find((role) => role === "ROLE_PROFESSOR") && (
+                <PlusButton type="content" text="Novo conteúdo" color="var(--dark-green)" />
+              )}
             </div>
           </Fragment>
         ))}
+
+      {roles?.find((role) => role === "ROLE_PROFESSOR") && (
+         <PlusButton type="section" text="Nova sessão" color="var(--purple)" />
+      )}
     </div>
   );
 }
