@@ -1,0 +1,19 @@
+.plus-btn{
+  background: var(--white);
+  align-self: center;
+  justify-self: center;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 200px;
+  max-width: 100%;
+  border: 1px dashed;
+  margin-bottom: 20px;
+
+  &:hover{
+    filter: brightness(1.2);
+    background: var(--white);
+  }
+}
