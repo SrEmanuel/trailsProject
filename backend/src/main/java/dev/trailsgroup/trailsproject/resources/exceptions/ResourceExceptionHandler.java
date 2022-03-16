@@ -1,17 +1,16 @@
 package dev.trailsgroup.trailsproject.resources.exceptions;
 
+import dev.trailsgroup.trailsproject.resources.utils.StandardError;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.UnknownHostException;
