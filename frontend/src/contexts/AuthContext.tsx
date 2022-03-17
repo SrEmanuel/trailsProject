@@ -2,9 +2,11 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { IUser } from "../interfaces/user";
 
 interface IAuthContextProps {
-  user: IUser | undefined,
+  user: IUser | undefined;
+  roles: string[];
   getUser: () => IUser | undefined;
-  handleSavaUserDataToStorage: (user: IUser) => Promise<void>;
+  saveRoles: (user: IUser) => Promise<void>;
+  handleSavaUserDataToStorage: (user: IUser, token: string) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
 }
@@ -17,25 +19,31 @@ export const AuthContext = createContext({} as IAuthContextProps);
 
 export function AuthContextProvider(props: IAuthContextProviderProps) {
   const [user, setUser] = useState<IUser>();
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
-    handleLoadUserDataFromStorage()
+    handleLoadUserDataFromStorage();
   }, []);
 
   function getUser(): IUser | undefined {
     return user;
   }
 
-  async function handleSavaUserDataToStorage(user: IUser): Promise<void> {
+  async function saveRoles(user: IUser): Promise<void> {
+    setRoles(user.authorities.map((role) => role.authority));
+  }
+
+  async function handleSavaUserDataToStorage(user: IUser, token: string): Promise<void> {
+    user.token = token;
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
   }
 
   async function handleLoadUserDataFromStorage(): Promise<void> {
     const userData = localStorage.getItem("user");
-    console.log('user loading...')
     if (userData) {
       setUser(JSON.parse(userData));
+      await saveRoles(JSON.parse(userData));
     }
   }
 
@@ -48,7 +56,9 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     <AuthContext.Provider
       value={{
         user,
+        roles,
         getUser,
+        saveRoles,
         handleSavaUserDataToStorage,
         handleLoadUserDataFromStorage,
         handleClearUserDataFromStorage,

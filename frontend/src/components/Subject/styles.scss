@@ -10,12 +10,10 @@
     align-self: flex-end;
     margin-top: 90px;
     position: absolute;
-    
 
     &:hover {
       filter: brightness(1.2);
     }
-
   }
 
   .subject-card-bottom {
@@ -23,12 +21,21 @@
     background: var(--white);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 5px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 
     span {
       color: var(--grey);
+    }
+
+    svg {
+      transition: 0.2s;
+      &:hover {
+        filter: brightness(2);
+        cursor: pointer;
+      }
     }
   }
 }

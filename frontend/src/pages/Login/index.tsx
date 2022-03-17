@@ -22,7 +22,7 @@ export function Login() {
   async function handleLogin(credentials: ICredentials) {
     try {
       const response =  await api.post("/login", credentials);
-      await handleSavaUserDataToStorage(response.data);
+      await handleSavaUserDataToStorage(response.data, response.headers.authorization);
       toast.success("Login realizado com sucesso!");
       setTimeout(() => navigate('/cursos') , 2000)
     } catch (error: any) {
