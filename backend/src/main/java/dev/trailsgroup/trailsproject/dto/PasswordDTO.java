@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class PasswordDTO {
 
     @Size(min=8, message="A senha tem que ter pelo menos 8 dígitos")
-    @Pattern(regexp="^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,64}$",message="A senha informada NÃO atende os padrões de segurança especificados")
+    @Pattern(regexp="^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,64}$",message="A senha informada NÃO atende os padrões de segurança especificados.")
     @NotEmpty(message = "A senha é obrigatória!")
     private String password;
 

@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.resources.exceptions;
 
 
+import dev.trailsgroup.trailsproject.resources.utils.StandardError;
 import dev.trailsgroup.trailsproject.services.exceptions.UploadException;
 import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;

@@ -1,4 +1,4 @@
-package dev.trailsgroup.trailsproject.resources.exceptions;
+package dev.trailsgroup.trailsproject.resources.utils;
 
 
 import java.io.Serializable;

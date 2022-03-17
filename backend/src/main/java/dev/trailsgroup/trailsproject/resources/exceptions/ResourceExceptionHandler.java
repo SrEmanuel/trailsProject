@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.resources.exceptions;
 
+import dev.trailsgroup.trailsproject.resources.utils.StandardError;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,12 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(errors);
     }
 
+    @ExceptionHandler(UnknownHostException.class)
+    public ResponseEntity<StandardError> unknownHostException(UnknownHostException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+        StandardError err = new StandardError(status.value(), "Não foi possível conectar aos servidores. Tente novamente mais tarde.", request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 
 
 
