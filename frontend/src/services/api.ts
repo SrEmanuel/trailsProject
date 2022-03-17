@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-const axios = require("axios");
+import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://10.0.0.104:8080",
@@ -35,8 +35,11 @@ api.interceptors.response.use(
 
 api.interceptors.request.use(
   (config: any) => {
-    const token = localStorage.getItem("token");
-    if (token) config.headers.authorization = token;
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const token = JSON.parse(userData).token;
+      config.headers.authorization = token;
+    }
     return Promise.resolve(config);
   },
 
