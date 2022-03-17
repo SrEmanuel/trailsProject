@@ -6,7 +6,7 @@ interface IAuthContextProps {
   roles: string[];
   getUser: () => IUser | undefined;
   saveRoles: (user: IUser) => Promise<void>;
-  handleSavaUserDataToStorage: (user: IUser) => Promise<void>;
+  handleSavaUserDataToStorage: (user: IUser, token: string) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
 }
@@ -33,7 +33,8 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     setRoles(user.authorities.map((role) => role.authority));
   }
 
-  async function handleSavaUserDataToStorage(user: IUser): Promise<void> {
+  async function handleSavaUserDataToStorage(user: IUser, token: string): Promise<void> {
+    user.token = token;
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
   }
