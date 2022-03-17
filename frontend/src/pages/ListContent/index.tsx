@@ -37,8 +37,8 @@ export function ListContent() {
         console.log(error.response);
         toast.error(error.response.data.message);
         if (error.response.data.status === 403) {
-          //handleClearUserDataFromStorage();
-          //navigate("/login");
+          handleClearUserDataFromStorage();
+          navigate("/login");
         }
       }
     }
@@ -89,27 +89,41 @@ export function ListContent() {
           trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
       </div>
       {location.pathname !== "/cursos" &&
-        topics?.map((topic) => (
+        topics?.map((topic, index) => (
           <Fragment key={topic.id}>
             <h2 className="topic-title">{topic.name}</h2>
             <div className="trails-grid-container">
               {topic.subjects.map((subject) => (
                 <Subject
+                  showOptions={
+                    roles?.find((role) => role === "ROLE_PROFESSOR")
+                      ? true
+                      : false
+                  }
                   key={subject.id}
                   courseId={params.courseid as string}
                   subject={subject}
                 />
               ))}
               {roles?.find((role) => role === "ROLE_PROFESSOR") && (
-                <PlusButton type="content" text="Novo conteúdo" color="var(--dark-green)" />
+                <PlusButton
+                  type="content"
+                  text="Novo conteúdo"
+                  color="var(--dark-green)"
+                />
               )}
             </div>
+
+            {index === topics.length - 1 &&
+              roles?.find((role) => role === "ROLE_PROFESSOR") && (
+                <PlusButton
+                  type="section"
+                  text="Nova sessão"
+                  color="var(--purple)"
+                />
+              )}
           </Fragment>
         ))}
-
-      {roles?.find((role) => role === "ROLE_PROFESSOR") && (
-         <PlusButton type="section" text="Nova sessão" color="var(--purple)" />
-      )}
     </div>
   );
 }
