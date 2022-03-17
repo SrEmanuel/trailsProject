@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class UserSS implements UserDetails {
     private Boolean status;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSS(){
+    public UserSS() {
 
     }
 
@@ -35,7 +36,7 @@ public class UserSS implements UserDetails {
         this.status = status;
     }
 
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
 
@@ -43,13 +44,14 @@ public class UserSS implements UserDetails {
         return name;
     }
 
-    public boolean hasRole(UserProfiles profile){
-        return  getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+    public boolean hasRole(UserProfiles profile) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return authorities;
+        return authorities;
     }
 
     @Override
@@ -85,5 +87,12 @@ public class UserSS implements UserDetails {
         return status;
     }
 
-
+    @Override
+    public String toString() {
+        return "{\"id\": " + id + ", "
+                + "\"name\": \"" + name + "\", "
+                + "\"username\": \"" + email + "\", "
+                + "\"authorities\": \"" + authorities.toString() + "\", "
+                + "\"enabled\": " + status + " }";
+    }
 }
