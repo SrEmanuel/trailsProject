@@ -54,6 +54,10 @@ public class UserSS implements UserDetails {
         return authorities;
     }
 
+    public String getRoles(){
+        return authorities.toString();
+    }
+
     @Override
     public String getPassword() {
         return password;
@@ -85,14 +89,5 @@ public class UserSS implements UserDetails {
     @Override
     public boolean isEnabled() {
         return status;
-    }
-
-    @Override
-    public String toString() {
-        return "{\"id\": " + id + ", "
-                + "\"name\": \"" + name + "\", "
-                + "\"username\": \"" + email + "\", "
-                + "\"authorities\": \"" + authorities.toString() + "\", "
-                + "\"enabled\": " + status + " }";
     }
 }
