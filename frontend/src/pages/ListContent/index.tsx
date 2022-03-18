@@ -18,16 +18,19 @@ export function ListContent() {
   const [courseName, setCourseName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isTeacher, setIsTeacher] = useState(false);
   const location = useLocation();
-  const { user, getUser, roles, handleClearUserDataFromStorage } = useAuth();
+  const { user, handleClearUserDataFromStorage } = useAuth();
 
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     async function handleLoadCourses() {
-      const url = roles?.find((role) => role === "ROLE_PROFESSOR")
-        ? `/users/${getUser()?.id}/courses?sort=name,asc`
+      console.log(isTeacher)
+      console.log(user);
+      const url = isTeacher
+        ? `/users/${user?.id}/courses?sort=name,asc`
         : `/courses?size=12&page=${page - 1}`;
       try {
         const response = await api.get(url);
@@ -37,7 +40,7 @@ export function ListContent() {
         console.log(error.response);
         toast.error(error.response.data.message);
         if (error.response.data.status === 403) {
-          handleClearUserDataFromStorage();
+          await handleClearUserDataFromStorage();
           navigate("/login");
         }
       }
@@ -53,29 +56,22 @@ export function ListContent() {
       setCourseName(response.data.name);
     }
 
+    setIsTeacher(user?.roles.includes('ROLE_PROFESSOR') as boolean)
+
     if (location.pathname === "/cursos") {
       handleLoadCourses();
     } else {
       handleLoadTopics();
       handleLoadSelectedCourse();
     }
-  }, [
-    location,
-    params,
-    page,
-    user,
-    roles,
-    getUser,
-    navigate,
-    handleClearUserDataFromStorage,
-  ]);
+  }, [location, params, page, user, navigate, handleClearUserDataFromStorage, isTeacher]);
 
   return (
     <div className="container">
       <ToastContainer />
       <NavBar />
       <h1>
-        {roles?.find((role) => role === "ROLE_PROFESSOR")
+        {isTeacher
           ? `Bem vindo, ${user?.name}`
           : location.pathname === "/cursos"
           ? "Trilhas disponíveis"
@@ -96,7 +92,7 @@ export function ListContent() {
               {topic.subjects.map((subject) => (
                 <Subject
                   showOptions={
-                    roles?.find((role) => role === "ROLE_PROFESSOR")
+                    isTeacher
                       ? true
                       : false
                   }
@@ -105,7 +101,7 @@ export function ListContent() {
                   subject={subject}
                 />
               ))}
-              {roles?.find((role) => role === "ROLE_PROFESSOR") && (
+              {isTeacher && (
                 <PlusButton
                   type="content"
                   text="Novo conteúdo"
@@ -115,7 +111,7 @@ export function ListContent() {
             </div>
 
             {index === topics.length - 1 &&
-              roles?.find((role) => role === "ROLE_PROFESSOR") && (
+              isTeacher && (
                 <PlusButton
                   type="section"
                   text="Nova sessão"
