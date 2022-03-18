@@ -25,46 +25,49 @@ export function ListContent() {
   const params = useParams();
   const navigate = useNavigate();
 
+  async function handleLoadCourses() {
+    const url = isTeacher
+      ? `/users/${user?.id}/courses?sort=name,asc`
+      : `/courses?size=12&page=${page - 1}`;
+    try {
+      const response = await api.get(url);
+      setTrails(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      if (error.response.data.status === 403) {
+        await handleClearUserDataFromStorage();
+        navigate("/login");
+      }
+    }
+  }
+
+  async function handleLoadTopics() {
+    const response = await api.get(`/courses/${params.courseid}/topics`);
+    setTopics(response.data.content);
+  }
+
+  async function handleLoadSelectedCourse() {
+    const response = await api.get(`/courses/${params.courseid}/`);
+    setCourseName(response.data.name);
+  }
+
   useEffect(() => {
-    async function handleLoadCourses() {
-      console.log(isTeacher)
-      console.log(user);
-      const url = isTeacher
-        ? `/users/${user?.id}/courses?sort=name,asc`
-        : `/courses?size=12&page=${page - 1}`;
-      try {
-        const response = await api.get(url);
-        setTrails(response.data.content);
-        setTotalPages(response.data.totalPages);
-      } catch (error: any) {
-        console.log(error.response);
-        toast.error(error.response.data.message);
-        if (error.response.data.status === 403) {
-          await handleClearUserDataFromStorage();
-          navigate("/login");
-        }
+    setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
+  }, [isTeacher, user]);
+
+  useEffect(() => {
+    async function loadData() {
+      if (location.pathname === "/cursos") {
+        await handleLoadCourses();
+      } else {
+        await handleLoadTopics();
+        await handleLoadSelectedCourse();
       }
     }
 
-    async function handleLoadTopics() {
-      const response = await api.get(`/courses/${params.courseid}/topics`);
-      setTopics(response.data.content);
-    }
-
-    async function handleLoadSelectedCourse() {
-      const response = await api.get(`/courses/${params.courseid}/`);
-      setCourseName(response.data.name);
-    }
-
-    setIsTeacher(user?.roles.includes('ROLE_PROFESSOR') as boolean)
-
-    if (location.pathname === "/cursos") {
-      handleLoadCourses();
-    } else {
-      handleLoadTopics();
-      handleLoadSelectedCourse();
-    }
-  }, [location, params, page, user, navigate, handleClearUserDataFromStorage, isTeacher]);
+    user && loadData()
+  });
 
   return (
     <div className="container">
@@ -91,11 +94,7 @@ export function ListContent() {
             <div className="trails-grid-container">
               {topic.subjects.map((subject) => (
                 <Subject
-                  showOptions={
-                    isTeacher
-                      ? true
-                      : false
-                  }
+                  showOptions={isTeacher ? true : false}
                   key={subject.id}
                   courseId={params.courseid as string}
                   subject={subject}
@@ -110,14 +109,13 @@ export function ListContent() {
               )}
             </div>
 
-            {index === topics.length - 1 &&
-              isTeacher && (
-                <PlusButton
-                  type="section"
-                  text="Nova sessão"
-                  color="var(--purple)"
-                />
-              )}
+            {index === topics.length - 1 && isTeacher && (
+              <PlusButton
+                type="section"
+                text="Nova sessão"
+                color="var(--purple)"
+              />
+            )}
           </Fragment>
         ))}
     </div>
