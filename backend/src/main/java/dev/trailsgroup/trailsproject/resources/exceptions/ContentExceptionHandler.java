@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.resources.exceptions;
 
 
 import dev.trailsgroup.trailsproject.resources.utils.StandardError;
+import dev.trailsgroup.trailsproject.services.exceptions.ClientUploadException;
 import dev.trailsgroup.trailsproject.services.exceptions.UploadException;
 import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
@@ -26,6 +27,15 @@ public class ContentExceptionHandler {
 
     @ExceptionHandler(UploadException.class)
     public ResponseEntity<StandardError> database(UploadException e, HttpServletRequest request) {
+        String error = "Upload error";
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+
+    @ExceptionHandler(ClientUploadException.class)
+    public ResponseEntity<StandardError> database(ClientUploadException e, HttpServletRequest request) {
         String error = "Upload error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError(status.value(), e.getMessage(), request.getRequestURI());

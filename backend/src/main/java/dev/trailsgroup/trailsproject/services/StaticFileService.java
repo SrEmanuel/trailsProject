@@ -1,4 +1,5 @@
 package dev.trailsgroup.trailsproject.services;
+import dev.trailsgroup.trailsproject.services.exceptions.ClientUploadException;
 import dev.trailsgroup.trailsproject.services.exceptions.UploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,9 +44,8 @@ public class StaticFileService {
         return absolutePath + "/src/main/resources/static/uploads/";
     }
 
-    public String save(MultipartFile file){
+    public String save(MultipartFile file) {
         try {
-
             String path = getPath();
             byte[] bytes = file.getBytes();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmssS");
@@ -59,11 +60,18 @@ public class StaticFileService {
             Path finalPath = Paths.get(path + newFileName);
             Files.write(finalPath, bytes);
             return newFileName;
-        }catch(IOException e){
+        } catch(NoSuchFileException e){
+            try {
+                Files.createDirectories(Path.of(getPath()));
+                throw new UploadException("O problema foi corrigido automaticamente pelo sistema, tente novamente!");
+            }catch (IOException x){
+                throw new UploadException("Não foi possível criar o diretório para o envio de imagens. Comunique o responsável pelo sistema");
+            }
+        } catch(IOException e){
             e.printStackTrace();
             throw new UploadException("Houve um problema durante o envio do arquivo");
         }catch(AssertionError e){
-            throw new UploadException("O nome do arquivo é nulo");
+            throw new ClientUploadException("O nome do arquivo é nulo. Envie um arquivo que contenha um nome!");
         }
     }
 
