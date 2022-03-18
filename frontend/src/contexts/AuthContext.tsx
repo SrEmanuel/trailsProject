@@ -3,9 +3,7 @@ import { IUser } from "../interfaces/user";
 
 interface IAuthContextProps {
   user: IUser | undefined;
-  roles: string[];
   getUser: () => IUser | undefined;
-  saveRoles: (user: IUser) => Promise<void>;
   handleSavaUserDataToStorage: (user: IUser, token: string) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
@@ -19,7 +17,6 @@ export const AuthContext = createContext({} as IAuthContextProps);
 
 export function AuthContextProvider(props: IAuthContextProviderProps) {
   const [user, setUser] = useState<IUser>();
-  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     handleLoadUserDataFromStorage();
@@ -27,10 +24,6 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
 
   function getUser(): IUser | undefined {
     return user;
-  }
-
-  async function saveRoles(user: IUser): Promise<void> {
-    setRoles(user.authorities.map((role) => role.authority));
   }
 
   async function handleSavaUserDataToStorage(user: IUser, token: string): Promise<void> {
@@ -43,7 +36,6 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     const userData = localStorage.getItem("user");
     if (userData) {
       setUser(JSON.parse(userData));
-      await saveRoles(JSON.parse(userData));
     }
   }
 
@@ -56,9 +48,7 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     <AuthContext.Provider
       value={{
         user,
-        roles,
         getUser,
-        saveRoles,
         handleSavaUserDataToStorage,
         handleLoadUserDataFromStorage,
         handleClearUserDataFromStorage,
