@@ -18,7 +18,7 @@ export function ListContent() {
   const [courseName, setCourseName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isTeacher, setIsTeacher] = useState(false);
+  const [isTeacher, setIsTeacher] = useState<boolean>();
   const location = useLocation();
   const { user, handleClearUserDataFromStorage } = useAuth();
 
@@ -54,6 +54,7 @@ export function ListContent() {
 
   useEffect(() => {
     setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
+   
   }, [isTeacher, user]);
 
   useEffect(() => {
@@ -65,9 +66,8 @@ export function ListContent() {
         await handleLoadSelectedCourse();
       }
     }
-
-    user && loadData()
-  });
+    isTeacher !== undefined && loadData()
+  }, [isTeacher]);
 
   return (
     <div className="container">
