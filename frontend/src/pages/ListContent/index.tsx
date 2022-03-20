@@ -21,6 +21,7 @@ export function ListContent() {
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const location = useLocation();
   const { user, handleClearUserDataFromStorage } = useAuth();
+  
 
   const params = useParams();
   const navigate = useNavigate();
@@ -53,12 +54,12 @@ export function ListContent() {
   }
 
   useEffect(() => {
-    setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
+        setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
    
   }, [isTeacher, user]);
 
   useEffect(() => {
-    async function loadData() {
+        async function loadData() {
       if (location.pathname === "/cursos") {
         await handleLoadCourses();
       } else {
@@ -66,7 +67,7 @@ export function ListContent() {
         await handleLoadSelectedCourse();
       }
     }
-    isTeacher !== undefined && loadData()
+    loadData()
   }, [isTeacher]);
 
   return (
