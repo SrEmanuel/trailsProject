@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
@@ -12,13 +12,13 @@ import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import "./styles.scss";
 
-export function ListContent() {
+export const ListContent = memo(() => {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
   const [courseName, setCourseName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isTeacher, setIsTeacher] = useState<boolean>();
+  const [isTeacher, setIsTeacher] = useState<boolean>(false);
   const location = useLocation();
   const { user, handleClearUserDataFromStorage } = useAuth();
   
@@ -67,8 +67,10 @@ export function ListContent() {
         await handleLoadSelectedCourse();
       }
     }
+    console.log('aaaa')
     loadData()
-  }, [isTeacher]);
+    
+  });
 
   return (
     <div className="container">
@@ -122,3 +124,4 @@ export function ListContent() {
     </div>
   );
 }
+)
