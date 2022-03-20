@@ -19,14 +19,21 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
   const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
-    handleLoadUserDataFromStorage();
+    async function execute() {
+      await handleLoadUserDataFromStorage();
+    }
+
+    execute();
   }, []);
 
   function getUser(): IUser | undefined {
     return user;
   }
 
-  async function handleSavaUserDataToStorage(user: IUser, token: string): Promise<void> {
+  async function handleSavaUserDataToStorage(
+    user: IUser,
+    token: string
+  ): Promise<void> {
     user.token = token;
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
