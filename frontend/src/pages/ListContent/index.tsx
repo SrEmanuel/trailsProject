@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
@@ -18,15 +18,16 @@ export const ListContent = memo(() => {
   const [courseName, setCourseName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isTeacher, setIsTeacher] = useState<boolean>(false);
-  const location = useLocation();
   const { user, handleClearUserDataFromStorage } = useAuth();
-  
+  const [isTeacher, setIsTeacher] = useState(
+    user?.roles.includes("ROLE_PROFESSOR")
+  );
+  const location = useLocation();
 
   const params = useParams();
   const navigate = useNavigate();
 
-  async function handleLoadCourses() {
+  const handleLoadCourses = useCallback(async() => {
     const url = isTeacher
       ? `/users/${user?.id}/courses?sort=name,asc`
       : `/courses?size=12&page=${page - 1}`;
@@ -41,25 +42,20 @@ export const ListContent = memo(() => {
         navigate("/login");
       }
     }
-  }
+  }, [handleClearUserDataFromStorage, isTeacher, navigate, page, user?.id])
 
-  async function handleLoadTopics() {
+  const handleLoadTopics = useCallback(async() => {
     const response = await api.get(`/courses/${params.courseid}/topics`);
     setTopics(response.data.content);
-  }
+  } , [params.courseid])
 
-  async function handleLoadSelectedCourse() {
+  const handleLoadSelectedCourse = useCallback(async() => {
     const response = await api.get(`/courses/${params.courseid}/`);
     setCourseName(response.data.name);
-  }
+  },[params.courseid])
 
   useEffect(() => {
-        setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
-   
-  }, [isTeacher, user]);
-
-  useEffect(() => {
-        async function loadData() {
+    async function loadData() {
       if (location.pathname === "/cursos") {
         await handleLoadCourses();
       } else {
@@ -67,10 +63,10 @@ export const ListContent = memo(() => {
         await handleLoadSelectedCourse();
       }
     }
-    console.log('aaaa')
-    loadData()
-    
-  });
+
+    setIsTeacher(user?.roles.includes("ROLE_PROFESSOR"));
+    loadData();
+  }, [location, isTeacher, user, handleLoadCourses, handleLoadTopics, handleLoadSelectedCourse]);
 
   return (
     <div className="container">
@@ -123,5 +119,4 @@ export const ListContent = memo(() => {
         ))}
     </div>
   );
-}
-)
+})
