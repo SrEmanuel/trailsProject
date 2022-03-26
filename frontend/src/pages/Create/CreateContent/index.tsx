@@ -14,7 +14,7 @@ import api from "../../../services/api";
 interface PostData {
   title: string;
   grade: string;
-  image?: string;
+  image?: File | string;
   htmlContent?: string;
 }
 
@@ -24,19 +24,22 @@ export function CreateContent() {
   const formikRef = useRef() as any;
 
   async function handleSubmit(values: PostData) {
+    console.log(values);
     if (step === 1) {
       setStep(2);
     } else {
       try {
-        const img = values.image;
+        const file = values.image as File;
+        const formatedFileName =
+          file.name.toLowerCase().replaceAll(" ", "-") + "." + file.type;
         delete values.image;
-        
+
         const data = new FormData();
         data.append("subject", JSON.stringify(values));
         data.append("image", {
-          name: `${values.title}.jpg`,
-          type: "image/jpg",
-          uri: img,
+          name: formatedFileName,
+          type: file.type,
+          uri: URL.createObjectURL(file),
         } as any);
 
         await api.post("/subjects", data);
@@ -45,8 +48,13 @@ export function CreateContent() {
       }
     }
   }
+
   function inputHandler(event: any, editor: any) {
     formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
+  }
+
+  function imgHandler(event: any) {
+    formikRef.current.setFieldValue("image", event.target.files[0]);
   }
 
   return (
@@ -66,7 +74,7 @@ export function CreateContent() {
             <form>
               {step === 1 ? (
                 <>
-                  <Dropzone onChange={handleChange} />
+                  <Dropzone onChange={imgHandler} />
                   {errors.image && touched.image && (
                     <span className="error text">{errors.image}</span>
                   )}
