@@ -43,6 +43,10 @@
     max-height: 500px;
     width: 90%;
 
+    .error{
+      align-self: center;
+    }
+
     .buttons-container {
       display: flex;
       flex-direction: row;
