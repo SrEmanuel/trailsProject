@@ -28,13 +28,14 @@ export function CreateContent() {
         <h1>Criar nova postagem</h1>
         {step === 1 ? (
           <Formik
-            initialValues={{ grade: "", title: "" }}
+            initialValues={{ grade: "", title: "", image:"" }}
             validationSchema={NewContentSchema}
             onSubmit={(values) => handleSubmitStepOne(values)}
           >
             {({ handleSubmit, handleChange, errors, touched }) => (
               <form>
-                <Dropzone />
+                <Dropzone onChange={handleChange} />
+                {errors.image && touched.image && <span className="error text">{errors.image}</span>}
                 <input
                   onChange={handleChange}
                   type="text"
