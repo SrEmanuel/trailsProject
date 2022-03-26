@@ -49,6 +49,7 @@ export function Dropzone({ onChange }: Props) {
         ref={inputRef}
         id="dropzone"
         type="file"
+        accept="image/*"
       />
     </div>
   );
