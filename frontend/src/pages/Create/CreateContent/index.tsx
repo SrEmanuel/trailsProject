@@ -6,14 +6,15 @@ import { Dropzone } from "../../../components/Dropzone";
 import { WaveContainer } from "../../../components/WaveContainer";
 import "../styles.scss";
 import "./styles.scss";
-import { Formik} from "formik";
+import { Formik } from "formik";
 import { NewContentSchema } from "../../../schemas/newcontent.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import api from "../../../services/api";
 
 interface PostData {
   title: string;
   grade: string;
-  image: string;
+  image?: string;
   htmlContent?: string;
 }
 
@@ -22,9 +23,27 @@ export function CreateContent() {
   const navigate = useNavigate();
   const formikRef = useRef() as any;
 
-  function handleSubmitStepOne(values: PostData) {
-    setStep(2);
-    console.log(values);
+  async function handleSubmit(values: PostData) {
+    if (step === 1) {
+      setStep(2);
+    } else {
+      try {
+        const img = values.image;
+        delete values.image;
+        
+        const data = new FormData();
+        data.append("subject", JSON.stringify(values));
+        data.append("image", {
+          name: `${values.title}.jpg`,
+          type: "image/jpg",
+          uri: img,
+        } as any);
+
+        await api.post("/subjects", data);
+      } catch (error: any) {
+        console.log(error.data);
+      }
+    }
   }
   function inputHandler(event: any, editor: any) {
     formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
@@ -41,7 +60,7 @@ export function CreateContent() {
           innerRef={formikRef}
           initialValues={{ grade: "", title: "", image: "", htmlContent: "" }}
           validationSchema={NewContentSchema}
-          onSubmit={(values) => handleSubmitStepOne(values)}
+          onSubmit={(values) => handleSubmit(values)}
         >
           {({ handleSubmit, handleChange, errors, touched }) => (
             <form>
