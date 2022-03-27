@@ -107,6 +107,8 @@ export const ListContent = memo(() => {
                   type="content"
                   text="Novo conteúdo"
                   color="var(--dark-green)"
+                  topicId={topic.id}
+                  courseId={params.courseId as unknown as number}
                 />
               )}
             </div>
@@ -116,6 +118,8 @@ export const ListContent = memo(() => {
                 type="section"
                 text="Nova sessão"
                 color="var(--purple)"
+                topicId={topic.id}
+                courseId={params.courseid as unknown as number}
               />
             )}
           </Fragment>
