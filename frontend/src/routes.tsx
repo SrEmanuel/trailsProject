@@ -24,7 +24,7 @@ export function Routes(){
              <Route path="/cursos/:courseid" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogid" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
-             <Route path="/novo-conteudo" element={<CreateContent></CreateContent>} />
+             <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
             </RoutesContainer>
         </BrowserRouter>
     )
