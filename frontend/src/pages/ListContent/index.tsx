@@ -1,4 +1,10 @@
-import { Fragment, useEffect, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
@@ -12,21 +18,21 @@ import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import "./styles.scss";
 
-export function ListContent() {
+export const ListContent = memo(() => {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
   const [courseName, setCourseName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isTeacher, setIsTeacher] = useState(false);
+  const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
+  const [isTeacher, setIsTeacher] = useState<boolean>();
   const location = useLocation();
-  const { user, handleClearUserDataFromStorage } = useAuth();
 
   const params = useParams();
   const navigate = useNavigate();
 
-  async function handleLoadCourses() {
-    const url = isTeacher
+  const handleLoadCourses = useCallback(async () => {
+    const url = await getIsTeacher()
       ? `/users/${user?.id}/courses?sort=name,asc`
       : `/courses?size=12&page=${page - 1}`;
     try {
@@ -40,24 +46,21 @@ export function ListContent() {
         navigate("/login");
       }
     }
-  }
+  }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user?.id]);
 
-  async function handleLoadTopics() {
+  const handleLoadTopics = useCallback(async () => {
     const response = await api.get(`/courses/${params.courseid}/topics`);
     setTopics(response.data.content);
-  }
+  }, [params.courseid]);
 
-  async function handleLoadSelectedCourse() {
+  const handleLoadSelectedCourse = useCallback(async () => {
     const response = await api.get(`/courses/${params.courseid}/`);
     setCourseName(response.data.name);
-  }
-
-  useEffect(() => {
-    setIsTeacher(user?.roles.includes("ROLE_PROFESSOR") as boolean);
-  }, [isTeacher, user]);
+  }, [params.courseid]);
 
   useEffect(() => {
     async function loadData() {
+      setIsTeacher( await getIsTeacher() );
       if (location.pathname === "/cursos") {
         await handleLoadCourses();
       } else {
@@ -65,9 +68,8 @@ export function ListContent() {
         await handleLoadSelectedCourse();
       }
     }
-
-    user && loadData()
-  });
+      loadData();
+  }, [location, isTeacher, user, handleLoadCourses, handleLoadTopics, handleLoadSelectedCourse, getIsTeacher]);
 
   return (
     <div className="container">
@@ -120,4 +122,4 @@ export function ListContent() {
         ))}
     </div>
   );
-}
+});

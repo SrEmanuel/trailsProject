@@ -4,6 +4,7 @@ import { IUser } from "../interfaces/user";
 interface IAuthContextProps {
   user: IUser | undefined;
   getUser: () => IUser | undefined;
+  getIsTeacher: () => Promise<boolean>;
   handleSavaUserDataToStorage: (user: IUser, token: string) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
@@ -19,14 +20,29 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
   const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
-    handleLoadUserDataFromStorage();
+    async function execute() {
+      await handleLoadUserDataFromStorage();
+    }
+
+    execute();
   }, []);
 
   function getUser(): IUser | undefined {
     return user;
   }
 
-  async function handleSavaUserDataToStorage(user: IUser, token: string): Promise<void> {
+  async function getIsTeacher(): Promise<any> {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user?.roles.includes("ROLE_PROFESSOR");
+    }
+  }
+
+  async function handleSavaUserDataToStorage(
+    user: IUser,
+    token: string
+  ): Promise<void> {
     user.token = token;
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
@@ -49,6 +65,7 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
       value={{
         user,
         getUser,
+        getIsTeacher,
         handleSavaUserDataToStorage,
         handleLoadUserDataFromStorage,
         handleClearUserDataFromStorage,

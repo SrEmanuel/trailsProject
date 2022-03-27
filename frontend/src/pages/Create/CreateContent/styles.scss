@@ -1,0 +1,46 @@
+#cke_editor1 {
+  #cke_1_contents {
+    background: var(--green);
+    height: 50vh !important;
+  }
+
+  @media(max-width:400px){
+    max-height: 400px;
+    overflow-y: scroll;
+  }
+
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  margin-top: 30px;
+
+  button {
+    width: 370px;
+    max-width: 90%;
+
+    &:first-of-type {
+      background: var(--red);
+
+      &:hover {
+        background: var(--dark-red);
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .buttons-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    button:first-of-type {
+      margin-bottom: 20px;
+    }
+  }
+}

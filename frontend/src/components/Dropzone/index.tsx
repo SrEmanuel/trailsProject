@@ -1,31 +1,40 @@
-import { ChangeEvent, useState, createRef, } from "react";
+import { ChangeEvent, useState, createRef } from "react";
 import { FiUploadCloud, FiX } from "react-icons/fi";
 import "./styles.scss";
 
-export function Dropzone() {
+interface Props {
+  onChange?: (...args: any) => any;
+}
+
+export function Dropzone({ onChange }: Props) {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [selectedFilePreview, setSelectedFilePreview] = useState<string>();
   const inputRef = createRef<HTMLInputElement>();
 
   function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
+      onChange && onChange(e);
       setSelectedFile(e.target.files[0]);
       setSelectedFilePreview(URL.createObjectURL(e.target.files[0]));
-      console.log(selectedFilePreview? true: false);
+      console.log(selectedFilePreview ? true : false);
     }
   }
 
-  function handleClearFileSelection(){
+  function handleClearFileSelection() {
     setSelectedFile(undefined);
     setSelectedFilePreview(undefined);
-    (inputRef.current as any ).value = '';
+    (inputRef.current as any).value = "";
   }
 
   return (
     <div className="dropzone-container">
       {selectedFilePreview ? (
         <div className="dropzone-preview">
-          <FiX size={24} color="var(--red)" onClick={handleClearFileSelection} />
+          <FiX
+            size={24}
+            color="var(--red)"
+            onClick={handleClearFileSelection}
+          />
           <img src={selectedFilePreview} alt={selectedFile?.name} />
         </div>
       ) : (
@@ -36,10 +45,11 @@ export function Dropzone() {
       )}
       <input
         onChange={(e) => handleFileUpload(e)}
-        name="dropzone"
+        name="image"
         ref={inputRef}
         id="dropzone"
         type="file"
+        accept="image/*"
       />
     </div>
   );
