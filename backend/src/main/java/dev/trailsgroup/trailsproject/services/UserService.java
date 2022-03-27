@@ -29,8 +29,6 @@ import java.util.*;
 @Service
 public class UserService {
 
-    //TODO implement authentication and password encryption
-
     @Autowired
     private Pbkdf2PasswordEncoder pe;
 
@@ -72,7 +70,7 @@ public class UserService {
     }
 
     public boolean verifyPermission(Course course){
-        User user = repository.findByEmail(authenticated().getUsername());
+        User user = repository.findByEmail(authenticated().getUsername()).get();
         UserCoursePK userCoursePK = new UserCoursePK();
         userCoursePK.setCourse(course);
         userCoursePK.setUser(user);

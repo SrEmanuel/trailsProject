@@ -39,10 +39,7 @@ public class AuthService {
 
 
     public void sendNewToken (String email){
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new ResourceNotFoundException("Usuário não encontrado!");
-        }
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         try {
             String rawUUID = UUID.randomUUID().toString().replace("-", "");
             recoverTokenRepository.save(new RecoverToken(null, rawUUID, user, expiration));
@@ -74,7 +71,7 @@ public class AuthService {
     public void changePassword(String encodedToken, PasswordDTO pa){
         try {
             String[] rawToken = decodeToken(encodedToken);
-            User user = userRepository.findByEmail(rawToken[0]);
+            User user = userRepository.findByEmail(rawToken[0]).get();
 
             if (pa.getPassword().equals(pa.getConfirmPassword())) {
                 if (validateToken(rawToken[1], user)) {
