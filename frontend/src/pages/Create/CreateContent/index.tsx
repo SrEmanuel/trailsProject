@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "ckeditor4-react";
 import { Dropzone } from "../../../components/Dropzone";
 import { WaveContainer } from "../../../components/WaveContainer";
@@ -12,7 +12,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
 
 interface PostData {
-  title: string;
+  name: string;
   grade: string;
   image?: File | string;
   htmlContent?: string;
@@ -22,6 +22,7 @@ export function CreateContent() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const formikRef = useRef() as any;
+  const params = useParams();
 
   async function handleSubmit(values: PostData) {
     console.log(values);
@@ -29,19 +30,17 @@ export function CreateContent() {
       setStep(2);
     } else {
       try {
-        const file = values.image as File;
-        const formatedFileName =
-          file.name.toLowerCase().replaceAll(" ", "-") + "." + file.type;
+        const image = values.image as File;
         delete values.image;
+        const subject = { ...values, topicId: params.topicId };
+        console.log(subject);
+        /*const formatedFileName =
+          file.name.toLowerCase().replaceAll(" ", "-") + "." + file.type;*/
 
         const data = new FormData();
-        data.append("subject", JSON.stringify(values));
-        data.append("image", {
-          name: formatedFileName,
-          type: file.type,
-          uri: URL.createObjectURL(file),
-        } as any);
-
+        data.append("subject", JSON.stringify(subject));
+        data.append("image", image);
+        console.log(JSON.parse(String(data)));
         await api.post("/subjects", data);
       } catch (error: any) {
         console.log(error.data);
@@ -66,7 +65,7 @@ export function CreateContent() {
         <h1>Criar nova postagem</h1>
         <Formik
           innerRef={formikRef}
-          initialValues={{ grade: "", title: "", image: "", htmlContent: "" }}
+          initialValues={{ grade: "", name: "", image: "", htmlContent: "" }}
           validationSchema={NewContentSchema}
           onSubmit={(values) => handleSubmit(values)}
         >
@@ -81,11 +80,11 @@ export function CreateContent() {
                   <input
                     onChange={handleChange}
                     type="text"
-                    name="title"
+                    name="name"
                     placeholder="Título"
                   />
-                  {errors.title && touched.title && (
-                    <span className="error text">{errors.title}</span>
+                  {errors.name && touched.name && (
+                    <span className="error text">{errors.name}</span>
                   )}
 
                   <select
