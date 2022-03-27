@@ -28,8 +28,6 @@ import java.util.Optional;
 @Service
 public class SubjectService {
 
-    //TODO implement authentication and password encryption
-
 
     @Autowired
     private SubjectRepository repository;

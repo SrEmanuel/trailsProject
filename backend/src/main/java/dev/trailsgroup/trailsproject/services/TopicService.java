@@ -27,8 +27,6 @@ import java.util.Optional;
 @Service
 public class TopicService {
 
-    //TODO implement authentication and password encryption
-
     @Autowired
     private UserService userService;
 

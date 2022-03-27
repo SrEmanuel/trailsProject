@@ -18,9 +18,6 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/topics")
 public class TopicResource {
-
-    //TODO IMPLEMENT AUTHENTICATION
-
     @Autowired
     private TopicService service;
 

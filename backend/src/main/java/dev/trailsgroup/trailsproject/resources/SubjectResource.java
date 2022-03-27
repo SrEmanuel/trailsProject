@@ -20,8 +20,6 @@ import java.net.URI;
 @RequestMapping(value = "/subjects")
 public class SubjectResource {
 
-    //TODO IMPLEMENT AUTHENTICATION
-
     @Autowired
     private SubjectService service;
 

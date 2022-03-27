@@ -21,7 +21,6 @@ import java.net.URI;
 @RequestMapping(value = "/courses")
 public class CourseResource {
 
-    //TODO IMPLEMENT AUTHENTICATION
 
     @Autowired
     private CourseService service;

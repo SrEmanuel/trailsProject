@@ -22,8 +22,6 @@ import java.util.List;
 @RequestMapping(value = "/users")
 public class UserResource {
 
-    //TODO IMPLEMENT AUTHENTICATION
-
     @Autowired
     private UserService service;
 
