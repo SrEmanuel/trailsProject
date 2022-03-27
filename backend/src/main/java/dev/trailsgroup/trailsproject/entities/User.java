@@ -57,7 +57,7 @@ public class User implements Serializable {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.email = email;
+        this.email = email.toLowerCase();
         this.type = (type == null) ? UserType.PROFESSOR.getCod() : type.getCod();
         this.status = status == null || status;
         addProfile(UserProfiles.USER);
