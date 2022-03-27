@@ -78,7 +78,9 @@ public class StaticFileService {
     public String update(MultipartFile file, String oldName){
         String path = getPath();
         try {
-            Files.deleteIfExists(Path.of(path + oldName));
+            if(!oldName.substring(0, oldName.indexOf("-")).contains("default")) {
+                Files.deleteIfExists(Path.of(path + oldName));
+            }
             return save(file);
         } catch (IOException e) {
             throw new UploadException("Houve um erro durante a atualização do arquivo");
