@@ -23,7 +23,12 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique=true)
     private String name;
+
+    @Column(unique=true)
+    private String linkName;
+
     private String image;
 
     @CreatedDate
@@ -39,10 +44,11 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Topic> topics = new HashSet<>();
 
-    public Course(Integer id, String name, String image) {
+    public Course(Integer id, String name, String image, String linkName) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.linkName = linkName;
     }
 
     public Integer getId() {
@@ -72,6 +78,14 @@ public class Course implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
     }
 
     @Override
@@ -108,6 +122,7 @@ public class Course implements Serializable {
         }
         return count;
     }
+
 
     public Instant getCreatedDate() {
         return createdDate;

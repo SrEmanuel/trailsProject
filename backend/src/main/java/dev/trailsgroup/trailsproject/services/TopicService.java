@@ -83,10 +83,10 @@ public class TopicService {
         topicDataBase.setPosition(obj.getPosition());
     }
 
-    public Page<Topic> getTopicsByCourse(Integer courseId, Pageable pageable){
+    public Page<Topic> getTopicsByCourse(String linkName, Pageable pageable){
         //I make an example of a topic with the referred course on it.
         //I use this Example to make a query in findAll, passing it alongside with pageable.
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
+        Course course = courseRepository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
         Topic topic = new Topic();
         topic.setCourse(course);
         Example<Topic> example = Example.of(topic);

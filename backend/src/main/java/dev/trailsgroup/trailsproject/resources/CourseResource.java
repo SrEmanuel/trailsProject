@@ -33,9 +33,9 @@ public class CourseResource {
         return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Course> findById(@PathVariable Integer id){
-        Course obj = service.findById(id);
+    @GetMapping(value = "/{linkName}")
+    public ResponseEntity<Course> findById(@PathVariable String linkName){
+        Course obj = service.findByName(linkName);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -50,22 +50,22 @@ public class CourseResource {
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void>  delete(@PathVariable Integer id){
-        service.delete(id);
+    @DeleteMapping(value = "/{linkName}")
+    public ResponseEntity<Void>  delete(@PathVariable String linkName){
+        service.delete(linkName);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Course> update(@PathVariable Integer id, @Valid @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
-        Course obj = service.update(id, course, imageFile);
+    @PutMapping(value = "/{linkName}")
+    public ResponseEntity<Course> update(@PathVariable String linkName, @Valid @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
+        Course obj = service.update(linkName, course, imageFile);
         return ResponseEntity.ok().body(obj);
     }
 
-    @GetMapping(value = "/{id}/topics")
-    public ResponseEntity<Page<Topic>> getTopics(@PathVariable Integer id, Pageable pageable){
-        return ResponseEntity.ok().body(topicService.getTopicsByCourse(id, pageable));
+    @GetMapping(value = "/{linkName}/topics")
+    public ResponseEntity<Page<Topic>> getTopics(@PathVariable String linkName, Pageable pageable){
+        return ResponseEntity.ok().body(topicService.getTopicsByCourse(linkName, pageable));
     }
 
 
