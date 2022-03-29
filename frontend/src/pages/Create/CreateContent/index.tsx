@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import { NewContentSchema } from "../../../schemas/newcontent.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
+import { toast, ToastContainer } from "react-toastify";
 
 interface PostData {
   name: string;
@@ -33,15 +34,16 @@ export function CreateContent() {
         const image = values.image as File;
         delete values.image;
         const subject = { ...values, topicId: params.topicId };
-        console.log(subject);
         /*const formatedFileName =
           file.name.toLowerCase().replaceAll(" ", "-") + "." + file.type;*/
 
-        const data = new FormData();
-        data.append("subject", JSON.stringify(subject));
-        data.append("image", image);
-        console.log(JSON.parse(String(data)));
-        await api.post("/subjects", data);
+          const data = new FormData();
+          data.append('image', image);
+
+        const response = await api.post("/subjects", subject);
+        const subjectId = response.data.id;
+        await api.post(`/subjects/${subjectId}/add-image`, data);
+        toast.success('Conteúdo criado com sucesso!');
       } catch (error: any) {
         console.log(error.data);
       }
@@ -58,6 +60,7 @@ export function CreateContent() {
 
   return (
     <WaveContainer>
+      <ToastContainer />
       <span className="goBack" onClick={() => navigate(-1)}>
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>
