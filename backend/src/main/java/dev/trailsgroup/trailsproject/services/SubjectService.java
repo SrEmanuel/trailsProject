@@ -53,11 +53,10 @@ public class SubjectService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Subject insert(SubjectDTO obj, MultipartFile imageFile){
-        try {
-            String fileName = staticFileService.save(imageFile);
+    public Subject insert(SubjectDTO obj){
+        try {;
             Topic topic = topicRepository.findById(obj.getTopicId()).orElseThrow(() -> new ResourceNotFoundException(obj.getTopicId()));
-            Subject subject = new Subject(null, obj.getName(), fileName, obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
+            Subject subject = new Subject(null, obj.getName(), "default-subject.png", obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
             Subject savedSubject = repository.save(subject);
             verifyUserPermission(savedSubject);
             return savedSubject;
@@ -65,6 +64,13 @@ public class SubjectService {
             throw new DatabaseException(e.getMessage());
 
         }
+    }
+
+    public Subject insertImage(MultipartFile multipartFile, Integer id){
+        Subject subject = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
+        subject.setImage(staticFileService.save(multipartFile));
+        repository.save(subject);
+        return subject;
     }
 
 

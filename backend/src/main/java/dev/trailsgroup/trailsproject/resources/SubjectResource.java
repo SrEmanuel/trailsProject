@@ -36,12 +36,22 @@ public class SubjectResource {
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PostMapping
-    public ResponseEntity<Subject> insert(@Validated @RequestPart SubjectDTO subject, @RequestParam(value = "image") MultipartFile imageFile){
-        Subject obj = service.insert(subject, imageFile);
+    public ResponseEntity<Subject> insert(@Validated @RequestBody SubjectDTO subject){
+        Subject obj = service.insert(subject);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PostMapping(value = "/{id}/add-image")
+    public ResponseEntity<Subject> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
+        Subject obj = service.insertImage(file, id);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
+    }
+
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @DeleteMapping(value = "/{id}")
