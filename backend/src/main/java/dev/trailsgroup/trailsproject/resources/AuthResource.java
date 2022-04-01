@@ -1,9 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.trailsgroup.trailsproject.dto.EmailDTO;
 import dev.trailsgroup.trailsproject.dto.PasswordDTO;
-import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.resources.utils.StandardMessage;
 import dev.trailsgroup.trailsproject.security.JWTUtil;
 import dev.trailsgroup.trailsproject.security.UserSS;
@@ -30,7 +28,7 @@ public class AuthResource {
     private AuthService service;
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping(value = "/refresh_token")
+    @PostMapping(value = "/refresh-token")
     public ResponseEntity<Void> refreshToken(HttpServletResponse response){
         UserSS user = UserService.authenticated();
         String token = jwtUtil.generateToken(user.getUsername());
@@ -48,7 +46,7 @@ public class AuthResource {
     @PostMapping(value = "/forgot")
     public ResponseEntity<StandardMessage> forgot(@Valid @RequestBody EmailDTO email){
         service.sendNewToken(email.getEmail());
-        StandardMessage sm = new StandardMessage(201, "Token criado e envaido para o email cadastrado com sucesso!", "/auth/forgot");
+        StandardMessage sm = new StandardMessage(201, "Token criado e envaido para o email cadastrado com sucesso.", "/auth/forgot");
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/forgot")
                 .buildAndExpand(sm).toUri();
         return ResponseEntity.created(uri).body(sm);
