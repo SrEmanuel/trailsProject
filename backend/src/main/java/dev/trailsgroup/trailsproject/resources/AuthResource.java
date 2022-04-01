@@ -38,6 +38,13 @@ public class AuthResource {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(value = "/verify-token")
+    public ResponseEntity<StandardMessage> verifyToken(@RequestHeader("Authorization") String token){
+        service.verifyJwtToken(token);
+        StandardMessage sm = new StandardMessage(200, "O token informado é valido e está dentro do tempo de expiração!", "/auth/verify-token");
+        return ResponseEntity.ok().body(sm);
+    }
+
     @PostMapping(value = "/forgot")
     public ResponseEntity<StandardMessage> forgot(@Valid @RequestBody EmailDTO email){
         service.sendNewToken(email.getEmail());

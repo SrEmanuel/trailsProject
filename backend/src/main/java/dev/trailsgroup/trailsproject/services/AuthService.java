@@ -5,8 +5,9 @@ import dev.trailsgroup.trailsproject.entities.RecoverToken;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.RecoverTokenRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.security.JWTUtil;
+import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
-import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,10 @@ public class AuthService {
 
     @Autowired
     private Pbkdf2PasswordEncoder pe;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+
 
     @Autowired
     private EmailService emailService;
@@ -74,7 +79,7 @@ public class AuthService {
             User user = userRepository.findByEmail(rawToken[0]).get();
 
             if (pa.getPassword().equals(pa.getConfirmPassword())) {
-                if (validateToken(rawToken[1], user)) {
+                if (validateRecoverToken(rawToken[1], user)) {
                     user.setPassword(pe.encode(pa.getPassword()));
                     userRepository.save(user);
                 }else{
@@ -89,7 +94,7 @@ public class AuthService {
         }
     }
 
-    protected boolean validateToken(String tokenS,  User user){
+    protected boolean validateRecoverToken(String tokenS,  User user){
         RecoverToken recoverToken = recoverTokenRepository.findByUser(user);
 
         if(recoverToken != null && tokenS.equals(recoverToken.getAccessToken())){
@@ -109,5 +114,13 @@ public class AuthService {
     protected String[] decodeToken(String token){
         String decodedToken = new String(Base64.getDecoder().decode(token));
         return decodedToken.split("-ft-");
+    }
+
+    public UserSS verifyJwtToken(String token) {
+        if(jwtUtil.isValid(token.substring(7))){
+            return UserService.authenticated();
+        }else{
+            throw new AuthorizationException("Token inválido!");
+        }
     }
 }
