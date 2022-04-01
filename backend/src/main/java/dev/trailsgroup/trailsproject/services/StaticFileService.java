@@ -75,18 +75,21 @@ public class StaticFileService {
         }
     }
 
-    public String update(MultipartFile file, String oldName){
+    public void delete(String name){
         String path = getPath();
-        try {
-            if(!oldName.substring(0, oldName.indexOf("-")).contains("default")) {
-                Files.deleteIfExists(Path.of(path + oldName));
+        try{
+            if(!name.substring(0, name.indexOf("-")).contains("default")) {
+                Files.deleteIfExists(Path.of(path + name));
             }
-            return save(file);
-        } catch (IOException e) {
-            throw new UploadException("Houve um erro durante a atualização do arquivo");
+        }catch(IOException e){
+            throw new UploadException(("Houve um erro durante a operação com o arquivo!"));
         }
     }
 
+    public String update(MultipartFile file, String oldName){
+        delete(oldName);
+        return save(file);
+    }
 
 
 
