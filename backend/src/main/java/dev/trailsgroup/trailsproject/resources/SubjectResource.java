@@ -62,8 +62,8 @@ public class SubjectResource {
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Subject> update(@PathVariable Integer id, @Validated(UpdateInfo.class) @RequestPart SubjectDTO subject,  @RequestParam(value = "image") MultipartFile imageFile){
-        Subject obj = service.update(id, subject, imageFile);
+    public ResponseEntity<Subject> update(@PathVariable Integer id, @Validated(UpdateInfo.class) @RequestPart SubjectDTO subject){
+        Subject obj = service.update(id, subject);
         return ResponseEntity.ok().body(obj);
     }
 
