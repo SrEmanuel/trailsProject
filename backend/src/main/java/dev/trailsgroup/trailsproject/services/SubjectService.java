@@ -59,6 +59,7 @@ public class SubjectService {
             Subject subject = new Subject(null, obj.getName(), "default-subject.png", obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
             Subject savedSubject = repository.save(subject);
             verifyUserPermission(savedSubject);
+            addProfessorName(savedSubject);
             return savedSubject;
         }catch(IllegalArgumentException | NullPointerException e){
             throw new DatabaseException(e.getMessage());
@@ -68,7 +69,7 @@ public class SubjectService {
 
     public Subject insertImage(MultipartFile multipartFile, Integer id){
         Subject subject = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
-        subject.setImage(staticFileService.save(multipartFile));
+        subject.setImage(staticFileService.update(multipartFile, subject.getImageName()));
         repository.save(subject);
         return subject;
     }
@@ -86,25 +87,21 @@ public class SubjectService {
         }
     }
 
-    public Subject update(Integer id, SubjectDTO obj, MultipartFile image){
+    public Subject update(Integer id, SubjectDTO obj){
         try{
             Subject SubjectDatabase = repository.getById(id);
             verifyUserPermission(SubjectDatabase);
-            subjectUpdateInformation(SubjectDatabase, obj, image);
+            addProfessorName(SubjectDatabase);
+            subjectUpdateInformation(SubjectDatabase, obj);
             return repository.save(SubjectDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj, MultipartFile image){
+    public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj){
         subjectDataBase.setName(obj.getName());
         subjectDataBase.setGrade(obj.getGrade());
-        if(!(image==null)){
-            String oldName = subjectDataBase.getImageName();
-            String newName = staticFileService.update(image, oldName);
-            subjectDataBase.setImage(newName);
-        }
         subjectDataBase.setHtmlContent(obj.getHtmlContent());
         subjectDataBase.setPosition(obj.getPosition());
     }
@@ -115,6 +112,12 @@ public class SubjectService {
         if(!userService.verifyPermission(obj.getTopic().getCourse()) && !userss.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Você não é professor do curso relacionado a este tópico para realizar essa ação");
         }
+
+    }
+
+    private void addProfessorName(Subject obj){
+        UserSS userss = UserService.authenticated();
+
         String name = Objects.requireNonNull(userss).getName();
         String email = Objects.requireNonNull(userss).getUsername();
         UserSubject userSubject = new UserSubject();
@@ -124,9 +127,9 @@ public class SubjectService {
 
         Example<UserSubject> example = Example.of(userSubject);
         if(userSubjectRepository.exists(example)){
-           UserSubject userSubject1 = userSubjectRepository.findOne(example).get();
-           userSubject1.addCounter();
-           userSubjectRepository.save(userSubject1);
+            UserSubject userSubject1 = userSubjectRepository.findOne(example).get();
+            userSubject1.addCounter();
+            userSubjectRepository.save(userSubject1);
         }else {
             userSubject.addCounter();
             userSubjectRepository.save(userSubject);
