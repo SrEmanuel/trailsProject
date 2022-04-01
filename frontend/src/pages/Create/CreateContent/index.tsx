@@ -11,8 +11,8 @@ import { NewContentSchema } from "../../../schemas/newcontent.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { useError } from "../../../hooks/useError";
 import { useAuth } from "../../../hooks/useAuth";
+import { handleNotifyError } from "../../../utils/handleNotifyError";
 
 interface PostData {
   name: string;
@@ -48,8 +48,7 @@ export function CreateContent() {
         await api.post(`/subjects/${subjectId}/add-image`, data);
         toast.success('Conteúdo criado com sucesso!');
       } catch (error: any) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useError(error, navigate, handleClearUserDataFromStorage);
+        handleNotifyError(error, navigate, handleClearUserDataFromStorage);
       }
     }
   }
