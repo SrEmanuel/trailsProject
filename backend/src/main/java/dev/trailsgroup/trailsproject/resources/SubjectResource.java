@@ -28,9 +28,9 @@ public class SubjectResource {
         return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Subject> findById(@PathVariable Integer id){
-        Subject obj = service.findById(id);
+    @GetMapping(value = "/{linkName}")
+    public ResponseEntity<Subject> findByName(@PathVariable String linkName){
+        Subject obj = service.findByName(linkName);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -44,9 +44,9 @@ public class SubjectResource {
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @PostMapping(value = "/{id}/add-image")
-    public ResponseEntity<Subject> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
-        Subject obj = service.insertImage(file, id);
+    @PostMapping(value = "/{linkName}/add-image")
+    public ResponseEntity<Subject> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable String linkName) {
+        Subject obj = service.insertImage(file, linkName);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
@@ -54,16 +54,16 @@ public class SubjectResource {
 
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void>  delete(@PathVariable Integer id){
-        service.delete(id);
+    @DeleteMapping(value = "/{linkName}")
+    public ResponseEntity<Void>  delete(@PathVariable String linkName){
+        service.delete(linkName);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Subject> update(@PathVariable Integer id, @Validated(UpdateInfo.class) @RequestPart SubjectDTO subject){
-        Subject obj = service.update(id, subject);
+    @PutMapping(value = "/{linkName}")
+    public ResponseEntity<Subject> update(@PathVariable String linkName, @Validated(UpdateInfo.class) @RequestPart SubjectDTO subject){
+        Subject obj = service.update(linkName, subject);
         return ResponseEntity.ok().body(obj);
     }
 

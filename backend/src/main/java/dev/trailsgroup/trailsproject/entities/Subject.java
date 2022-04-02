@@ -41,12 +41,16 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSubject> authors = new ArrayList<>();
 
+    @Column(unique=true)
+    private String linkName;
+
     public Subject(){}
 
-    public Subject(Integer id, String name, String image, String grade, String htmlContent, Integer position, Topic topic) {
+    public Subject(Integer id, String name, String image, String linkName, String grade, String htmlContent, Integer position, Topic topic) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.linkName = linkName;
         this.grade = grade;
         this.htmlContent = htmlContent;
         this.topic = topic;
@@ -80,6 +84,14 @@ public class Subject implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
     }
 
     public String getGrade() {

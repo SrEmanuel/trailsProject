@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.dto.UserSubjectDTO;
+import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.entities.UserSubject;
@@ -13,6 +14,7 @@ import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
+import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
@@ -48,15 +50,18 @@ public class SubjectService {
         return repository.findAll(pageable);
     }
 
-    public Subject findById(Integer id){
-        Optional<Subject> obj =  repository.findById(id);
-        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+    public Subject findByName(String linkName){
+        Optional<Subject> obj = repository.findByLinkName(linkName);
+        return obj.orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
     }
 
     public Subject insert(SubjectDTO obj){
-        try {;
+        try {
+            String linkName = ClassUtils.createLinkName(obj.getName());
+            if(verifyLinkNameAvailability(linkName))
+                throw new DatabaseException("O nome de assunto '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
             Topic topic = topicRepository.findById(obj.getTopicId()).orElseThrow(() -> new ResourceNotFoundException(obj.getTopicId()));
-            Subject subject = new Subject(null, obj.getName(), "default-subject.png", obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
+            Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
             Subject savedSubject = repository.save(subject);
             verifyUserPermission(savedSubject);
             addProfessorName(savedSubject);
@@ -67,39 +72,42 @@ public class SubjectService {
         }
     }
 
-    public Subject insertImage(MultipartFile multipartFile, Integer id){
-        Subject subject = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
+    public boolean verifyLinkNameAvailability(String name){
+        return repository.findByLinkName(name).isPresent();
+    }
+
+    public Subject insertImage(MultipartFile multipartFile, String linkName){
+        Subject subject = repository.findByLinkName(linkName).orElseThrow(()-> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
         subject.setImage(staticFileService.update(multipartFile, subject.getImageName()));
         repository.save(subject);
         return subject;
     }
 
 
-    public void delete(Integer id){
+    public void delete(String linkName){
         try{
-            Subject subject = repository.getById(id);
+            Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(subject);
             repository.delete(subject);
-        }catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
     }
 
-    public Subject update(Integer id, SubjectDTO obj){
-        try{
-            Subject SubjectDatabase = repository.getById(id);
-            verifyUserPermission(SubjectDatabase);
-            addProfessorName(SubjectDatabase);
-            subjectUpdateInformation(SubjectDatabase, obj);
-            return repository.save(SubjectDatabase);
-        }catch(EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
-        }
+    public Subject update(String linkName, SubjectDTO obj){
+        Subject SubjectDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        verifyUserPermission(SubjectDatabase);
+        addProfessorName(SubjectDatabase);
+        subjectUpdateInformation(SubjectDatabase, obj);
+        return repository.save(SubjectDatabase);
     }
 
     public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj){
+        String linkName = ClassUtils.createLinkName(obj.getName());
+        if(verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, subjectDataBase.getLinkName()))
+            throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
+
+        subjectDataBase.setLinkName(linkName);
         subjectDataBase.setName(obj.getName());
         subjectDataBase.setGrade(obj.getGrade());
         subjectDataBase.setHtmlContent(obj.getHtmlContent());
