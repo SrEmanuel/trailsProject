@@ -26,9 +26,9 @@ public class TopicResource {
         return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Topic> findById(@PathVariable Integer id){
-        Topic obj = service.findById(id);
+    @GetMapping(value = "/{linkName}")
+    public ResponseEntity<Topic> findById(@PathVariable String linkName){
+        Topic obj = service.findByName(linkName);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -42,16 +42,16 @@ public class TopicResource {
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void>  delete(@PathVariable Integer id){
-        service.delete(id);
+    @DeleteMapping(value = "/{linkName}")
+    public ResponseEntity<Void>  delete(@PathVariable String linkName){
+        service.delete(linkName);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Topic> update( @PathVariable Integer id,  @Validated(UpdateInfo.class) @RequestBody TopicDTO topic){
-        Topic obj = service.update(id, topic);
+    @PutMapping(value = "/{linkName}")
+    public ResponseEntity<Topic> update( @PathVariable String linkName,  @Validated(UpdateInfo.class) @RequestBody TopicDTO topic){
+        Topic obj = service.update(linkName, topic);
         return ResponseEntity.ok().body(obj);
     }
 

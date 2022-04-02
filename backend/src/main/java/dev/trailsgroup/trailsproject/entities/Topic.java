@@ -23,6 +23,8 @@ public class Topic implements Serializable {
 
     private Integer position; //variable to show in witch position this topic really is
 
+    @Column(unique=true)
+    private String linkName;
 
     @CreatedDate
     private Instant createdDate;
@@ -36,11 +38,14 @@ public class Topic implements Serializable {
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects = new ArrayList<>();
 
-    public Topic(Integer id, String name, Integer position, Course course) {
+
+
+    public Topic(Integer id, String name, Integer position, Course course, String linkName) {
         this.id = id;
         this.name = name;
         this.position = position;
         this.course = course;
+        this.linkName = linkName;
     }
 
     public Topic() {
@@ -79,6 +84,13 @@ public class Topic implements Serializable {
         this.course = course;
     }
 
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
 
     @JsonIgnore
     public Integer getSubjectsCount() {

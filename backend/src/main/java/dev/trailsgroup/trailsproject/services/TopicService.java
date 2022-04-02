@@ -12,6 +12,7 @@ import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
+import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,45 +41,47 @@ public class TopicService {
         return repository.findAll(pageable);
     }
 
-    public Topic findById(Integer id){
-        Optional<Topic> obj =  repository.findById(id);
-        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+    public Topic findByName(String linkName){
+        Optional<Topic> obj =  repository.findByLinkName(linkName);
+        return obj.orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
     }
 
     public Topic insert(TopicDTO obj){
+        String linkName = ClassUtils.createLinkName(obj.getName());
+        if(verifyLinkNameAvailability(linkName))
+            throw new DatabaseException("O nome de tópico '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
         if(!verifyPosition(obj.getPosition()))
             throw new DatabaseException("Já existe um topico com essa posição!");
         Course course = courseRepository.findById(obj.getCourseId()).orElseThrow(() -> new ResourceNotFoundException(obj.getCourseId()));
-        Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course);
+        Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course, linkName);
         verifyUserPermission(topic);
 
         return repository.save(topic);
     }
 
-    public void delete(Integer id){
+    public void delete(String linkName){
         try{
-            Topic topic = repository.getById(id);
+            Topic topic = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(topic);
             repository.delete(topic);
-        }catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
     }
 
-    public Topic update(Integer id, TopicDTO obj){
-        try{
-            Topic topicDatabase = repository.getById(id);
-            verifyUserPermission(topicDatabase);
-            topicUpdateInformation(topicDatabase, obj);
-            return repository.save(topicDatabase);
-        }catch(EntityNotFoundException e){
-            throw new ResourceNotFoundException(id);
-        }
+    public Topic update(String linkName, TopicDTO obj){
+        Topic topicDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        verifyUserPermission(topicDatabase);
+        topicUpdateInformation(topicDatabase, obj);
+        return repository.save(topicDatabase);
     }
 
     public void topicUpdateInformation(Topic topicDataBase, TopicDTO obj){
+        String linkName = ClassUtils.createLinkName(obj.getName());
+        if(verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, topicDataBase.getLinkName()))
+            throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
+
+        topicDataBase.setLinkName(linkName);
         topicDataBase.setName(obj.getName());
         topicDataBase.setPosition(obj.getPosition());
     }
@@ -111,5 +114,7 @@ public class TopicService {
         }
     }
 
-
+    public boolean verifyLinkNameAvailability(String name){
+        return repository.findByLinkName(name).isPresent();
+    }
 }
