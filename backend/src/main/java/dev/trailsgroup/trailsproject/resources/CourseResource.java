@@ -34,7 +34,7 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{linkName}")
-    public ResponseEntity<Course> findById(@PathVariable String linkName){
+    public ResponseEntity<Course> findByName(@PathVariable String linkName){
         Course obj = service.findByName(linkName);
         return ResponseEntity.ok().body(obj);
     }

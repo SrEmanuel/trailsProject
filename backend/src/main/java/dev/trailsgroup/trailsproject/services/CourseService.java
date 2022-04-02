@@ -4,11 +4,11 @@ import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
-import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
+import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 
-import java.text.Normalizer;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class CourseService {
     }
 
     public boolean verifyLinkNameAvailability(String name){
-        return repository.findByLinkName(name).isEmpty();
+        return repository.findByLinkName(name).isPresent();
     }
 
 
@@ -90,9 +89,9 @@ public class CourseService {
     }
 
     public void courseUpdateInformation(Course courseDataBase, CourseDTO obj, MultipartFile image){
-        String linkName = createLinkName(obj.getName());
-        if(!verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, courseDataBase.getLinkName()))
-            throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe outro nome diferente.");
+        String linkName = ClassUtils.createLinkName(obj.getName());
+        if(verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, courseDataBase.getLinkName()))
+            throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
 
         courseDataBase.setName(obj.getName());
         courseDataBase.setLinkName(linkName);
