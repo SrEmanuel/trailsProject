@@ -46,13 +46,13 @@ public class CourseService {
 
     public Course insert(CourseDTO obj, MultipartFile image){
         try {
-            String linkName = createLinkName(obj.getName());
-            if(!verifyLinkNameAvailability(linkName))
+            String linkName = ClassUtils.createLinkName(obj.getName());
+            if(verifyLinkNameAvailability(linkName))
                 throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe outro nome diferente.");
             String fileName = "default-course.png";
             if (!(image == null))
                 fileName = staticFileService.save(image);
-            return repository.save(new Course(null, obj.getName(), fileName, createLinkName(obj.getName())));
+            return repository.save(new Course(null, obj.getName(), fileName, linkName));
         }catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
@@ -62,9 +62,6 @@ public class CourseService {
         return repository.findByLinkName(name).isEmpty();
     }
 
-    protected String createLinkName(String name){
-        return Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll("[^a-zA-Z0-9_.-]+", "-").toLowerCase();
-    }
 
     public void delete(String linkName) {
         try {
