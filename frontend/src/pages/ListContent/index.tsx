@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { PlusButton } from "../../components/PlusButton";
@@ -16,6 +16,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
+import { handleNotifyError } from "../../utils/handleNotifyError";
 import "./styles.scss";
 
 export const ListContent = memo(() => {
@@ -40,11 +41,7 @@ export const ListContent = memo(() => {
       setTrails(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error: any) {
-      toast.error(error.response.data.message);
-      if (error.response.data.status === 403) {
-        await handleClearUserDataFromStorage();
-        navigate("/login");
-      }
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
   }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user?.id]);
 
