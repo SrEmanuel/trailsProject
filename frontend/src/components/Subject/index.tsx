@@ -5,16 +5,16 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 interface Props {
   subject: ISubject;
-  courseId: string;
+  coursename: string;
   showOptions: boolean;
 }
 
-export function Subject({ subject, courseId, showOptions }: Props) {
+export function Subject({ subject, coursename, showOptions }: Props) {
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate(`/cursos/${courseId}/${subject.id}`)}
+      onClick={() => navigate(`/cursos/${coursename}/${subject.id}`)}
       className="card-container subject"
     >
       <div className="card-header">

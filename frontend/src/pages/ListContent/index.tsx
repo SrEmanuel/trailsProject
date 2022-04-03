@@ -46,14 +46,14 @@ export const ListContent = memo(() => {
   }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user?.id]);
 
   const handleLoadTopics = useCallback(async () => {
-    const response = await api.get(`/courses/${params.courseid}/topics`);
+    const response = await api.get(`/courses/${params.coursename}/topics`);
     setTopics(response.data.content);
-  }, [params.courseid]);
+  }, [params.coursename]);
 
   const handleLoadSelectedCourse = useCallback(async () => {
-    const response = await api.get(`/courses/${params.courseid}/`);
+    const response = await api.get(`/courses/${params.coursename}/`);
     setCourseName(response.data.name);
-  }, [params.courseid]);
+  }, [params.coursename]);
 
   useEffect(() => {
     async function loadData() {
@@ -95,7 +95,7 @@ export const ListContent = memo(() => {
                 <Subject
                   showOptions={isTeacher ? true : false}
                   key={subject.id}
-                  courseId={params.courseid as string}
+                  coursename={params.coursename as string}
                   subject={subject}
                 />
               ))}
@@ -105,7 +105,7 @@ export const ListContent = memo(() => {
                   text="Novo conteúdo"
                   color="var(--dark-green)"
                   topicId={topic.id}
-                  courseId={params.courseId as unknown as number}
+                  coursename={params.coursename as unknown as number}
                 />
               )}
             </div>
@@ -116,7 +116,7 @@ export const ListContent = memo(() => {
                 text="Nova sessão"
                 color="var(--purple)"
                 topicId={topic.id}
-                courseId={params.courseid as unknown as number}
+                coursename={params.coursename as unknown as number}
               />
             )}
           </Fragment>
