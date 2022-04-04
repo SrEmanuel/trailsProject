@@ -4,5 +4,6 @@ export interface ISubject{
     name: string,
     imagePath: string,
     grade: string,
-    htmlContent: string
+    htmlContent: string,
+    linkName: string;
 }
