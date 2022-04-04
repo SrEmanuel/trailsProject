@@ -14,7 +14,7 @@ export function Subject({ subject, coursename, showOptions }: Props) {
 
   return (
     <div
-      onClick={() => navigate(`/cursos/${coursename}/${subject.id}`)}
+      onClick={() => navigate(`/cursos/${coursename}/${subject.linkName}`)}
       className="card-container subject"
     >
       <div className="card-header">
