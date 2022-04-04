@@ -29,7 +29,6 @@ export function CreateContent() {
   const params = useParams();
 
   async function handleSubmit(values: PostData) {
-    console.log(values);
     if (step === 1) {
       setStep(2);
     } else {
@@ -44,8 +43,9 @@ export function CreateContent() {
           data.append('image', image);
 
         const response = await api.post("/subjects", subject);
-        const subjectId = response.data.id;
-        await api.post(`/subjects/${subjectId}/add-image`, data);
+        console.log(response);
+        const subjectLinkName = response.data.linkName;
+        await api.post(`/subjects/${subjectLinkName}/add-image`, data);
         toast.success('Conteúdo criado com sucesso!');
       } catch (error: any) {
         handleNotifyError(error, navigate, handleClearUserDataFromStorage);
