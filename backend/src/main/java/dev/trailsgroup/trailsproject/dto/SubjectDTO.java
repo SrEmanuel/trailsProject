@@ -28,8 +28,8 @@ public class SubjectDTO {
     @NotEmpty(message = "O conteúdo HTML é obrigatório!", groups = UpdateInfo.class)
     private String htmlContent;
 
-    @NotNull(message = "A posição é obrigatória!", groups = UpdateInfo.class)
-    @Min(value= 1, message = "A posição tem que ser maior que 1", groups = UpdateInfo.class)
+    @NotNull(message = "A posição é obrigatória!", groups = CreateInfo.class)
+    @Min(value= 1, message = "A posição tem que ser maior que 1", groups = CreateInfo.class)
     private Integer position;
 
     public SubjectDTO(){

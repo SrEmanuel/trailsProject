@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
+import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.services.SubjectService;
@@ -36,7 +37,7 @@ public class SubjectResource {
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PostMapping
-    public ResponseEntity<Subject> insert(@Validated @RequestBody SubjectDTO subject){
+    public ResponseEntity<Subject> insert(@Validated(CreateInfo.class) @RequestBody SubjectDTO subject){
         Subject obj = service.insert(subject);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
