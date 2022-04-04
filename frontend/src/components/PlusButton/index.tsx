@@ -8,14 +8,14 @@ interface Props {
   color: string;
   type: 'content' | 'section';
   topicId: number;
-  courseId: number;
+  coursename: number;
 }
 
-export function PlusButton({ text, color, type, courseId, topicId }: Props) {
+export function PlusButton({ text, color, type, coursename, topicId }: Props) {
   const navigate = useNavigate();
 
   function handleNavigateToCreatePage(){
-    type === 'content'? navigate(`/cursos/${courseId}/${topicId}/novo-conteudo`) : navigate('/novo-curso')
+    type === 'content'? navigate(`/cursos/${coursename}/${topicId}/novo-conteudo`) : navigate('/novo-curso')
   }
 
   return (

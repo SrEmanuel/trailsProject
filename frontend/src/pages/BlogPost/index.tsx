@@ -12,7 +12,7 @@ export function BlogPost() {
 
   useEffect(() => {
     async function handleLoadSubject(){
-      const response = await api.get(`/subjects/${params.blogid}`);
+      const response = await api.get(`/subjects/${params.blogtitle}`);
       setSubject(response.data);
     }
 

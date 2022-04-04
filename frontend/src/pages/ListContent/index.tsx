@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { PlusButton } from "../../components/PlusButton";
@@ -16,6 +16,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
+import { handleNotifyError } from "../../utils/handleNotifyError";
+import { AddNewSection } from "./components/addNewSection";
 import "./styles.scss";
 
 export const ListContent = memo(() => {
@@ -26,6 +28,7 @@ export const ListContent = memo(() => {
   const [totalPages, setTotalPages] = useState(1);
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
+  const [addNewSection, setAddNewSection] = useState<boolean>(false);
   const location = useLocation();
 
   const params = useParams();
@@ -40,23 +43,19 @@ export const ListContent = memo(() => {
       setTrails(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error: any) {
-      toast.error(error.response.data.message);
-      if (error.response.data.status === 403) {
-        await handleClearUserDataFromStorage();
-        navigate("/login");
-      }
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
   }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user?.id]);
 
   const handleLoadTopics = useCallback(async () => {
-    const response = await api.get(`/courses/${params.courseid}/topics`);
+    const response = await api.get(`/courses/${params.coursename}/topics`);
     setTopics(response.data.content);
-  }, [params.courseid]);
+  }, [params.coursename]);
 
   const handleLoadSelectedCourse = useCallback(async () => {
-    const response = await api.get(`/courses/${params.courseid}/`);
+    const response = await api.get(`/courses/${params.coursename}/`);
     setCourseName(response.data.name);
-  }, [params.courseid]);
+  }, [params.coursename]);
 
   useEffect(() => {
     async function loadData() {
@@ -74,6 +73,7 @@ export const ListContent = memo(() => {
   return (
     <div className="container">
       <ToastContainer />
+        <AddNewSection isVisible={addNewSection} />
       <NavBar />
       <h1>
         {isTeacher
@@ -98,7 +98,7 @@ export const ListContent = memo(() => {
                 <Subject
                   showOptions={isTeacher ? true : false}
                   key={subject.id}
-                  courseId={params.courseid as string}
+                  coursename={params.coursename as string}
                   subject={subject}
                 />
               ))}
@@ -108,7 +108,7 @@ export const ListContent = memo(() => {
                   text="Novo conteúdo"
                   color="var(--dark-green)"
                   topicId={topic.id}
-                  courseId={params.courseId as unknown as number}
+                  coursename={params.coursename as unknown as number}
                 />
               )}
             </div>
@@ -119,7 +119,7 @@ export const ListContent = memo(() => {
                 text="Nova sessão"
                 color="var(--purple)"
                 topicId={topic.id}
-                courseId={params.courseid as unknown as number}
+                coursename={params.coursename as unknown as number}
               />
             )}
           </Fragment>
