@@ -22,7 +22,7 @@ export function Routes(){
              <Route path="/nova-senha" element={<ResetPassword></ResetPassword>} />
              <Route path="/cursos" element={<ListContent></ListContent>} />
              <Route path="/cursos/:coursename" element={<ListContent></ListContent>} />
-             <Route path="/cursos/:courseid/:blogid" element={<BlogPost></BlogPost>} />
+             <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
              <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
             </RoutesContainer>
