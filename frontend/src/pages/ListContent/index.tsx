@@ -17,6 +17,7 @@ import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
+import { AddNewSection } from "./components/addNewSection";
 import "./styles.scss";
 
 export const ListContent = memo(() => {
@@ -27,6 +28,7 @@ export const ListContent = memo(() => {
   const [totalPages, setTotalPages] = useState(1);
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
+  const [addNewSection, setAddNewSection] = useState<boolean>(false);
   const location = useLocation();
 
   const params = useParams();
@@ -71,6 +73,7 @@ export const ListContent = memo(() => {
   return (
     <div className="container">
       <ToastContainer />
+        <AddNewSection isVisible={addNewSection} />
       <NavBar />
       <h1>
         {isTeacher
