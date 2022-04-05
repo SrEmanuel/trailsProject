@@ -1,4 +1,6 @@
+import { Formik } from "formik";
 import { FiX } from "react-icons/fi";
+import * as Yup from "yup";
 
 import { ModalContainer } from "../../../../components/ModalContainer";
 import { Overlay } from "../../../../components/Overlay";
@@ -16,12 +18,33 @@ export function AddNewSection({ isVisible, setIsVisible, setSection }: Props) {
     <Overlay hidden={!isVisible}>
       <ModalContainer>
         <FiX size={24} color="var(--red)" onClick={() => setIsVisible(false)} />
-        <h2>Deseja adicionar uma nova sessão?</h2>
-        <input onChange={ (e) => setSection(e.target.value)} placeholder="Nome da sessão" />
-        <div className="btn-container">
-          <button>Cancelar</button>
-          <button>Criar</button>
-        </div>
+        <Formik
+          initialValues={{ name: "" }}
+          validationSchema={Yup.object().shape({
+            name: Yup.string().required("O nome é obrigatório"),
+          })}
+          onSubmit={(values) => setSection(values.name)}
+        >
+          {({ handleChange, handleSubmit, errors, touched }) => (
+            <>
+              <h2>Deseja adicionar uma nova sessão?</h2>
+              <input
+                name="name"
+                onChange={handleChange}
+                placeholder="Nome da sessão"
+              />
+              { errors.name && touched.name && <span className="error" >{errors.name}</span> }
+              <div className="btn-container">
+                <button type="button" onClick={() => setIsVisible(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" onClick={handleSubmit as any}>
+                  Criar
+                </button>
+              </div>
+            </>
+          )}
+        </Formik>
       </ModalContainer>
     </Overlay>
   );
