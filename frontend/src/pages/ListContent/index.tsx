@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { PlusButton } from "../../components/PlusButton";
@@ -104,7 +105,6 @@ export const ListContent = memo(() => {
               ))}
               {isTeacher && (
                 <PlusButton
-                  type="content"
                   text="Novo conteúdo"
                   color="var(--dark-green)"
                   topicId={topic.id}
@@ -114,13 +114,7 @@ export const ListContent = memo(() => {
             </div>
 
             {index === topics.length - 1 && isTeacher && (
-              <PlusButton
-                type="section"
-                text="Nova sessão"
-                color="var(--purple)"
-                topicId={topic.id}
-                coursename={params.coursename as unknown as number}
-              />
+              <FloatingPlusButton onClick={ () => setAddNewSection(true) } />
             )}
           </Fragment>
         ))}
