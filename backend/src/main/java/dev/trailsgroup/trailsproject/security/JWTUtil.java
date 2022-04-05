@@ -25,6 +25,12 @@ public class JWTUtil {
                 .compact();
     }
 
+    public void verifyJwtToken(String token) {
+        if (!isValid(token.substring(7))) {
+            throw new AuthorizationException("Token inválido!");
+        }
+    }
+
     public boolean isValid(String token){
         Claims claims = getClaims(token);
         if(claims != null){
