@@ -1,12 +1,7 @@
-import {
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
 import { PlusButton } from "../../components/PlusButton";
@@ -23,19 +18,20 @@ import "./styles.scss";
 export const ListContent = memo(() => {
   const [trails, setTrails] = useState<ITrails[]>();
   const [topics, setTopics] = useState<ITopic[]>();
-  const [courseName, setCourseName] = useState("");
+  const [currentCourse, setCurrentCourse] = useState<ITrails>();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const [addNewSection, setAddNewSection] = useState<boolean>(false);
+  const [newSection, setNewSection] = useState<string>();
   const location = useLocation();
 
   const params = useParams();
   const navigate = useNavigate();
 
   const handleLoadCourses = useCallback(async () => {
-    const url = await getIsTeacher()
+    const url = (await getIsTeacher())
       ? `/users/${user?.id}/courses?sort=name,asc`
       : `/courses?size=12&page=${page - 1}`;
     try {
@@ -54,12 +50,31 @@ export const ListContent = memo(() => {
 
   const handleLoadSelectedCourse = useCallback(async () => {
     const response = await api.get(`/courses/${params.coursename}/`);
-    setCourseName(response.data.name);
+    setCurrentCourse(response.data);
   }, [params.coursename]);
+
+  const handleUpdateTopics = useCallback(async (topic: any) => {
+    try {
+      await api.post("/topics", topic);
+      const response = await api.get("/topics");
+      setTopics(response.data.content);
+    } catch (error) {}
+  }, []);
+
+  useEffect(() => {
+    if (newSection) {
+      const topic = {
+        name: newSection,
+        position: (topics as any).length + 1,
+        courseId: currentCourse?.id,
+      };
+      handleUpdateTopics(topic);
+    }
+  }, [currentCourse?.id, handleUpdateTopics, newSection, topics]);
 
   useEffect(() => {
     async function loadData() {
-      setIsTeacher( await getIsTeacher() );
+      setIsTeacher(await getIsTeacher());
       if (location.pathname === "/cursos") {
         await handleLoadCourses();
       } else {
@@ -67,20 +82,31 @@ export const ListContent = memo(() => {
         await handleLoadSelectedCourse();
       }
     }
-      loadData();
-  }, [location, isTeacher, user, handleLoadCourses, handleLoadTopics, handleLoadSelectedCourse, getIsTeacher]);
+    loadData();
+  }, [
+    location,
+    isTeacher,
+    user,
+    handleLoadCourses,
+    handleLoadTopics,
+    handleLoadSelectedCourse,
+    getIsTeacher,
+  ]);
 
   return (
     <div className="container">
       <ToastContainer />
-        <AddNewSection isVisible={addNewSection} />
+      <AddNewSection
+        setSection={setNewSection}
+        isVisible={addNewSection}
+      />
       <NavBar />
       <h1>
         {isTeacher
           ? `Bem vindo, ${user?.name}`
           : location.pathname === "/cursos"
           ? "Trilhas disponíveis"
-          : courseName}
+          : currentCourse?.name}
       </h1>
       {location.pathname === "/cursos" && (
         <Paginator page={page} totalPages={totalPages} setPage={setPage} />
@@ -104,7 +130,6 @@ export const ListContent = memo(() => {
               ))}
               {isTeacher && (
                 <PlusButton
-                  type="content"
                   text="Novo conteúdo"
                   color="var(--dark-green)"
                   topicId={topic.id}
@@ -114,13 +139,7 @@ export const ListContent = memo(() => {
             </div>
 
             {index === topics.length - 1 && isTeacher && (
-              <PlusButton
-                type="section"
-                text="Nova sessão"
-                color="var(--purple)"
-                topicId={topic.id}
-                coursename={params.coursename as unknown as number}
-              />
+              <FloatingPlusButton onClick={() => setAddNewSection(true)} />
             )}
           </Fragment>
         ))}

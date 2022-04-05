@@ -6,16 +6,15 @@ import './styles.scss';
 interface Props {
   text: string;
   color: string;
-  type: 'content' | 'section';
   topicId: number;
   coursename: number;
 }
 
-export function PlusButton({ text, color, type, coursename, topicId }: Props) {
+export function PlusButton({ text, color, coursename, topicId }: Props) {
   const navigate = useNavigate();
 
   function handleNavigateToCreatePage(){
-    type === 'content'? navigate(`/cursos/${coursename}/${topicId}/novo-conteudo`) : navigate('/novo-curso')
+    navigate(`/cursos/${coursename}/${topicId}/novo-conteudo`);
   }
 
   return (

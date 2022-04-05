@@ -35,7 +35,7 @@ export function CreateContent() {
       try {
         const image = values.image as File;
         delete values.image;
-        const subject = { ...values, topicId: params.topicId };
+        const subject = { ...values, topicId: params.topicId, position: 2 };
         /*const formatedFileName =
           file.name.toLowerCase().replaceAll(" ", "-") + "." + file.type;*/
 
