@@ -1,8 +1,11 @@
 package dev.trailsgroup.trailsproject.security;
 
+import dev.trailsgroup.trailsproject.services.RefreshTokenService;
+import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +14,29 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    @Value("${jwt.expiration.authentication}")
+    private Long expirationAuthentication;
 
-    public String generateToken(String email){
+    @Value("${jwt.expiration.refresh}")
+    private Long expirationRefresh;
+
+    public String generateAuthenticationToken(String email){
+        return generateToken(email, expirationAuthentication);
+    }
+
+    public String generateRefreshToken(String email){
+        String token = generateToken(email, expirationRefresh);
+        refreshTokenService.saveRefreshToken(email, token);
+        return token;
+    }
+
+    protected String generateToken(String email, Long expiration){
         return Jwts.builder()
                 .setSubject(email)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -59,6 +78,8 @@ public class JWTUtil {
             return null;
         }
     }
+
+
 
 
 }
