@@ -8,29 +8,29 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "tb_recovertoken")
+@Table(name = "tb_refreshtoken")
 @EntityListeners(AuditingEntityListener.class)
-public class RecoverToken {
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String recoverToken;
+    private String refreshToken;
 
     private Instant expirationDate;
 
-    @JoinColumn(unique=true)
+    @JoinColumn()
     @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    public RecoverToken(){
+    public RefreshToken(){
     }
 
-    public RecoverToken(Integer id, String recoverToken, User user, long expirationTime) {
+    public RefreshToken(Integer id, String refreshToken, User user, long expirationTime) {
         this.id = id;
-        this.recoverToken = recoverToken;
+        this.refreshToken = refreshToken;
         this.user = user;
         this.expirationDate = Instant.ofEpochMilli(System.currentTimeMillis()+expirationTime);
     }
@@ -40,12 +40,12 @@ public class RecoverToken {
         return id;
     }
 
-    public String getRecoverToken() {
-        return recoverToken;
+    public String getAccessToken() {
+        return refreshToken;
     }
 
-    public void setRecoverToken(String recoverToken) {
-        this.recoverToken = recoverToken;
+    public void setAccessToken(String accessToken) {
+        this.refreshToken = accessToken;
     }
 
     public Instant getExpirationDate() {

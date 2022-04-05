@@ -5,8 +5,6 @@ import dev.trailsgroup.trailsproject.entities.RecoverToken;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.RecoverTokenRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
-import dev.trailsgroup.trailsproject.security.JWTUtil;
-import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ import java.time.*;
 import java.util.*;
 
 @Service
-public class AuthService {
+public class RecoverTokenService {
 
     @Autowired
     private UserRepository userRepository;
@@ -32,10 +30,6 @@ public class AuthService {
     private Pbkdf2PasswordEncoder pe;
 
     @Autowired
-    private JWTUtil jwtUtil;
-
-
-    @Autowired
     private EmailService emailService;
 
     @Value("${recover-token.expiration}")
@@ -43,7 +37,7 @@ public class AuthService {
 
 
 
-    public void sendNewToken (String email){
+    public void sendNewRecoverToken(String email){
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         try {
             String rawUUID = UUID.randomUUID().toString().replace("-", "");
@@ -57,7 +51,7 @@ public class AuthService {
             RecoverToken rt = recoverTokenRepository.findByUser(user);
             if(Instant.now().isAfter(rt.getExpirationDate())){
                 recoverTokenRepository.delete(rt);
-                sendNewToken(email);
+                sendNewRecoverToken(email);
             }
             ZonedDateTime instant = Instant.ofEpochMilli((rt.getExpirationDate().toEpochMilli() - Instant.now().toEpochMilli())).atZone(ZoneId.of("UTC-3"));
             String counter;
@@ -73,9 +67,9 @@ public class AuthService {
 
     }
 
-    public void changePassword(String encodedToken, PasswordDTO pa){
+    public void changePasswordByRecoverToken(String encodedToken, PasswordDTO pa){
         try {
-            String[] rawToken = decodeToken(encodedToken);
+            String[] rawToken = decodeRecoverToken(encodedToken);
             User user = userRepository.findByEmail(rawToken[0]).get();
 
             if (pa.getPassword().equals(pa.getConfirmPassword())) {
@@ -97,7 +91,7 @@ public class AuthService {
     protected boolean validateRecoverToken(String tokenS,  User user){
         RecoverToken recoverToken = recoverTokenRepository.findByUser(user);
 
-        if(recoverToken != null && tokenS.equals(recoverToken.getAccessToken())){
+        if(recoverToken != null && tokenS.equals(recoverToken.getRecoverToken())){
             if(Instant.now().isBefore(recoverToken.getExpirationDate())){
                 recoverTokenRepository.delete(recoverToken);
                 return true;
@@ -111,16 +105,8 @@ public class AuthService {
         }
     }
 
-    protected String[] decodeToken(String token){
+    protected String[] decodeRecoverToken(String token){
         String decodedToken = new String(Base64.getDecoder().decode(token));
         return decodedToken.split("-ft-");
-    }
-
-    public UserSS verifyJwtToken(String token) {
-        if(jwtUtil.isValid(token.substring(7))){
-            return UserService.authenticated();
-        }else{
-            throw new AuthorizationException("Token inválido!");
-        }
     }
 }
