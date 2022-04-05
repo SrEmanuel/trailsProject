@@ -1,0 +1,16 @@
+.floating-btn {
+  background: var(--purple);
+  width: 70px;
+  height: 70px;
+  position: fixed;
+  border-radius: 50%;
+  bottom: 5%;
+  right: 5%;
+  -webkit-box-shadow: 2px -2px 14px -7px rgba(0, 0, 0, 0.66);
+  -moz-box-shadow: 2px -2px 14px -7px rgba(0, 0, 0, 0.66);
+  box-shadow: 2px -2px 14px -7px rgba(0, 0, 0, 0.66);
+
+  &:hover {
+    background: var(--dark-purple);
+  }
+}
