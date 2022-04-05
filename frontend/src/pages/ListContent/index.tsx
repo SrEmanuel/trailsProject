@@ -53,22 +53,23 @@ export const ListContent = memo(() => {
     setCurrentCourse(response.data);
   }, [params.coursename]);
 
-  const handleUpdateTopics = useCallback(async (topic: any) => {
+  const handleUpdateTopics = useCallback(async () => {
+    console.log('foi');
+    const topic = {
+      name: newSection,
+      position: (topics as any).length + 1,
+      courseId: currentCourse?.id,
+    };
     try {
       await api.post("/topics", topic);
-      const response = await api.get("/topics");
+      const response = await api.get(`/courses/${currentCourse?.linkName}/topics`);
       setTopics(response.data.content);
     } catch (error) {}
-  }, []);
+  }, [currentCourse?.id, currentCourse?.linkName, newSection, topics]);
 
   useEffect(() => {
     if (newSection) {
-      const topic = {
-        name: newSection,
-        position: (topics as any).length + 1,
-        courseId: currentCourse?.id,
-      };
-      handleUpdateTopics(topic);
+      handleUpdateTopics();
     }
   }, [currentCourse?.id, handleUpdateTopics, newSection, topics]);
 
