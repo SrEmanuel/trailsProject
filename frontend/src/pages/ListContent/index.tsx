@@ -97,6 +97,7 @@ export const ListContent = memo(() => {
     <div className="container">
       <ToastContainer />
       <AddNewSection
+        setIsVisible={setAddNewSection}
         setSection={setNewSection}
         isVisible={addNewSection}
       />
