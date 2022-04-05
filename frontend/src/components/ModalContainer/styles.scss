@@ -1,0 +1,10 @@
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  background: var(--background);
+  width: 550px;
+  padding: 20px;
+  border-radius: 5px;
+}
