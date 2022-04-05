@@ -14,6 +14,12 @@ interface Props {
 }
 
 export function AddNewSection({ isVisible, setIsVisible, setSection }: Props) {
+
+  function handleSumitValuesAndClose(name: string){
+    setSection(name);
+    setIsVisible(false);
+  }
+
   return (
     <Overlay hidden={!isVisible}>
       <ModalContainer>
@@ -23,7 +29,7 @@ export function AddNewSection({ isVisible, setIsVisible, setSection }: Props) {
           validationSchema={Yup.object().shape({
             name: Yup.string().required("O nome é obrigatório"),
           })}
-          onSubmit={(values) => setSection(values.name)}
+          onSubmit={(values) =>  handleSumitValuesAndClose(values.name) }
         >
           {({ handleChange, handleSubmit, errors, touched }) => (
             <>
