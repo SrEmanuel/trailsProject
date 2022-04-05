@@ -2,6 +2,10 @@
   svg{
     position: absolute;
     align-self: flex-end;
+
+    &:hover{
+      cursor: pointer;
+    }
   }
 
   .btn-container{
@@ -18,6 +22,7 @@
 
         &:hover{
           background: var(--dark-red);
+          cursor: pointer;
         }
       }
     }
