@@ -1,0 +1,25 @@
+.modal-container{
+  svg{
+    position: absolute;
+    align-self: flex-end;
+  }
+
+  .btn-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+
+    button{
+      width: 120px;
+
+      &:first-of-type{
+        background: var(--red);
+
+        &:hover{
+          background: var(--dark-red);
+        }
+      }
+    }
+  }
+}
