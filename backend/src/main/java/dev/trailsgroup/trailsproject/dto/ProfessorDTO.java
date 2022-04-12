@@ -2,6 +2,8 @@ package dev.trailsgroup.trailsproject.dto;
 
 public class ProfessorDTO {
 
+    private Integer id;
+
     private String name;
 
     private String email;
@@ -23,5 +25,13 @@ public class ProfessorDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

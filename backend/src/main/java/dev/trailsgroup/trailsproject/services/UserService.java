@@ -145,6 +145,7 @@ public class UserService {
                 ProfessorDTO prof = new ProfessorDTO();
                 prof.setEmail(x.getEmail());
                 prof.setName(x.getName());
+                prof.setId(x.getId());
                 professorDTOList.add(prof);
             }
         }
