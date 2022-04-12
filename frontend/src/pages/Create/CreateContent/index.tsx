@@ -97,8 +97,9 @@ export function CreateContent() {
                     onChange={handleChange}
                     name="grade"
                     placeholder="Selecione uma série"
+                    defaultValue="0"
                   >
-                    <option selected disabled hidden value="0">
+                    <option disabled hidden value="0">
                       Selecione uma opção
                     </option>
                     <option value="1º ano">1º ano</option>
