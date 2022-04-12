@@ -2,8 +2,12 @@ package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.entities.UserCourse;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
+import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
+import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
@@ -14,6 +18,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
@@ -30,6 +36,12 @@ public class CourseService {
 
     @Autowired
     private CourseRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserCourseRepository userCourseRepository;
 
     @Autowired
     private StaticFileService staticFileService;
@@ -51,7 +63,10 @@ public class CourseService {
             String fileName = "default-course.png";
             if (!(image == null))
                 fileName = staticFileService.save(image);
-            return repository.save(new Course(null, obj.getName(), fileName, linkName));
+            User user = userRepository.findById(obj.getProfessorID()).orElseThrow(() -> new ResourceNotFoundException("O ID de professor informado não existe."));
+            Course course = repository.save(new Course(null, obj.getName(), fileName, linkName));
+            userCourseRepository.save(new UserCourse(course, user));
+            return course;
         }catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
