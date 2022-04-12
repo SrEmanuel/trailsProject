@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import dev.trailsgroup.trailsproject.dto.ProfessorDTO;
 import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
@@ -86,5 +87,11 @@ public class UserResource {
     @GetMapping(value = "/me")
     public ResponseEntity<User> getCurrentUser(){
         return ResponseEntity.ok().body(service.findBySession());
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping(value = "/professors")
+    public ResponseEntity<List<ProfessorDTO>> getProfessors(){
+        return ResponseEntity.ok().body(service.getProfessors());
     }
 }

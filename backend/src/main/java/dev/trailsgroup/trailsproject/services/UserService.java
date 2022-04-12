@@ -1,9 +1,9 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.ProfessorDTO;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.entities.UserCourse;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
@@ -135,5 +135,19 @@ public class UserService {
         //This solution doesn't allow Sort with Pageable. Need to see another way.
         //https://stackoverflow.com/questions/56946999/can-we-sort-listt-from-spring-boot-pageable-or-sort-page-from-pageimpl
         return new PageImpl<Course>(courses.subList(start, end), pageable, courses.size());
+    }
+
+    public List<ProfessorDTO> getProfessors() {
+        List<User> users = repository.findAll();
+        List<ProfessorDTO> professorDTOList = new ArrayList<>();
+        for(User x : users){
+            if(x.getProfiles().contains(UserProfiles.PROFESSOR)) {
+                ProfessorDTO prof = new ProfessorDTO();
+                prof.setEmail(x.getEmail());
+                prof.setName(x.getName());
+                professorDTOList.add(prof);
+            }
+        }
+        return professorDTOList;
     }
 }
