@@ -101,9 +101,9 @@ export function CreateContent() {
                     <option selected disabled hidden value="0">
                       Selecione uma opção
                     </option>
-                    <option value="1">1º ano</option>
-                    <option value="2">2º ano</option>
-                    <option value="3">3º ano</option>
+                    <option value="1º ano">1º ano</option>
+                    <option value="2º ano">2º ano</option>
+                    <option value="3º ano">3º ano</option>
                   </select>
                   {errors.grade && touched.grade && (
                     <span className="error text">{errors.grade}</span>
