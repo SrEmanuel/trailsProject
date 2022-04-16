@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const api = axios.create({
   baseURL:
@@ -19,9 +20,7 @@ api.interceptors.response.use(
 
   (error: any) => {
     if (error.message === "Network Error") {
-      alert(
-        "Você não parece estar conectado a rede. Tente novamente mais tarde"
-      );
+      toast.warning("Você não parece estar conectado a rede. Tente novamente mais tarde");
       //Navigate('Landing',{message:'connection error'})
     }
 
