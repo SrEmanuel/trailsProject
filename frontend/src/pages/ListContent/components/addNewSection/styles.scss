@@ -11,34 +11,4 @@
   .error{
     align-self: center;
   }
-
-  .btn-container{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-
-    button{
-      width: 120px;
-
-      &:first-of-type{
-        background: var(--red);
-
-        &:hover{
-          background: var(--dark-red);
-          cursor: pointer;
-        }
-      }
-    }
-
-    @media(max-width:330px){
-      flex-direction: column-reverse;
-
-      button{
-        width: 100%;
-        margin-bottom: 10px;
-        align-self: center;
-      }
-    }
-  }
 }

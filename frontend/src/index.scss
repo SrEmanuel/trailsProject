@@ -1,15 +1,15 @@
-*{
+* {
   box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  border:0;
-  padding:0;
-  background: #F0F0F0;
-  font-family: 'Roboto', sans-serif;
-  
-  button{
+body {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: #f0f0f0;
+  font-family: "Roboto", sans-serif;
+
+  button {
     background: var(--green);
     border-radius: 10px;
     outline: none;
@@ -25,31 +25,37 @@ body{
     justify-content: center;
     transition: 0.2s;
 
-    &:hover{
+    &:hover {
       cursor: pointer;
       background: var(--dark-green);
     }
   }
 
-  h1, h2, h3, h4, h5, h6{
-    font-family: 'Inter', sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Inter", sans-serif;
     color: var(--dark-purple);
     font-weight: 700;
     margin: 10px;
     max-width: 500px;
   }
 
-  h1{
+  h1 {
     font-size: 34px;
     line-height: 44px;
   }
 
-  h2{
-    font-size:24px;
+  h2 {
+    font-size: 24px;
     list-style: 30px;
   }
 
-  input, select{
+  input,
+  select {
     height: 50px;
     width: 370px;
     max-width: 90%;
@@ -61,26 +67,25 @@ body{
     padding: 10px;
 
     color: var(--grey);
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 16px;
     line-height: 25px;
-
   }
 
-  select{
+  select {
     width: 370px;
-    height:50px;
+    height: 50px;
   }
 
-  .text{
-    font-family: 'Roboto', sans-serif;
+  .text {
+    font-family: "Roboto", sans-serif;
     font-size: 18px;
     line-height: 24px;
     color: var(--grey);
-    margin:5px;
+    margin: 5px;
   }
 
-  .error{
+  .error {
     color: var(--red);
     margin-top: -20px;
     align-self: flex-start;
@@ -91,7 +96,7 @@ body{
     font-size: 12px;
   }
 
-  .container{
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,23 +107,52 @@ body{
 
     max-width: 100vw;
 
-    @media(max-width:500px){
+    @media (max-width: 500px) {
       padding: 10px;
     }
   }
 
+  .btn-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+
+    button {
+      width: 120px;
+
+      &:first-of-type {
+        background: var(--red);
+
+        &:hover {
+          background: var(--dark-red);
+          cursor: pointer;
+        }
+      }
+    }
+
+    @media (max-width: 330px) {
+      flex-direction: column-reverse;
+
+      button {
+        width: 100%;
+        margin-bottom: 10px;
+        align-self: center;
+      }
+    }
+  }
 }
 
-:root{
-  --grey: #525256 ;
-  --light-grey: #C4C4C4;
-  --green: #3BEAA8;
-  --purple: #5E5483;
+:root {
+  --grey: #525256;
+  --light-grey: #c4c4c4;
+  --green: #3beaa8;
+  --purple: #5e5483;
   --dark-purple: #322153;
-  --background: #F0F0F0;
-  --dark-green: #2FBB86;
-  --white: #FFFFFF;
-  --red: #EB5A50;
-  --dark-red: #DD3126;
-  --white: #FFF;
+  --background: #f0f0f0;
+  --dark-green: #2fbb86;
+  --white: #ffffff;
+  --red: #eb5a50;
+  --dark-red: #dd3126;
+  --white: #fff;
 }
