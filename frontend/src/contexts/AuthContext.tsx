@@ -1,10 +1,17 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { IUser } from "../interfaces/user";
 
 interface IAuthContextProps {
   user: IUser | undefined;
   getUser: () => IUser | undefined;
   getIsTeacher: () => Promise<boolean>;
+  getIsAdmin: () => Promise<boolean>;
   handleSavaUserDataToStorage: (user: IUser, token: string) => Promise<void>;
   handleLoadUserDataFromStorage: () => Promise<void>;
   handleClearUserDataFromStorage: () => Promise<void>;
@@ -39,6 +46,16 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     }
   }
 
+  const getIsAdmin = useCallback(async () => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const user: IUser = JSON.parse(userData);
+      return user?.roles.includes("ROLE_ADMIN");
+    } else{
+      return false
+    }
+  }, []);
+
   async function handleSavaUserDataToStorage(
     user: IUser,
     token: string
@@ -55,10 +72,10 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
     }
   }
 
-  async function handleClearUserDataFromStorage(): Promise<void> {
+  const handleClearUserDataFromStorage = useCallback(async () => {
     localStorage.removeItem("user");
     setUser(undefined);
-  }
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -66,6 +83,7 @@ export function AuthContextProvider(props: IAuthContextProviderProps) {
         user,
         getUser,
         getIsTeacher,
+        getIsAdmin,
         handleSavaUserDataToStorage,
         handleLoadUserDataFromStorage,
         handleClearUserDataFromStorage,
