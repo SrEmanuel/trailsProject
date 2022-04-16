@@ -46,6 +46,7 @@ export function CreateContent() {
         const subjectLinkName = response.data.linkName;
         await api.post(`/subjects/${subjectLinkName}/add-image`, data);
         toast.success('Conteúdo criado com sucesso!');
+        navigate(-1);
       } catch (error: any) {
         handleNotifyError(error, navigate, handleClearUserDataFromStorage);
       }
