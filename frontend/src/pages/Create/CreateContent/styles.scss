@@ -1,7 +1,10 @@
 #cke_editor1 {
+
+  margin-top: -50px;
+
   #cke_1_contents {
     background: var(--green);
-    height: 50vh !important;
+    height: 60vh !important;
   }
 
   @media(max-width:400px){
@@ -9,6 +12,15 @@
     overflow-y: scroll;
   }
 
+}
+
+.editor-wrapper{
+  width: 100%;
+  height: auto;
+  align-self: center;
+
+  display: flex;
+  align-items: center;
 }
 
 .buttons-container {
@@ -31,6 +43,19 @@
       }
     }
   }
+}
+
+.form-1{
+  .editor-wrapper{
+    display: none;
+  }
+}
+
+.form-2{
+  input, select, .dropzone-container{
+    display: none;
+  }
+
 }
 
 @media (max-width: 800px) {

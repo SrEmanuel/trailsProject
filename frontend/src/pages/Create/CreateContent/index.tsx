@@ -75,9 +75,7 @@ export function CreateContent() {
           onSubmit={(values) => handleSubmit(values)}
         >
           {({ handleSubmit, handleChange, errors, touched }) => (
-            <form>
-              {step === 1 ? (
-                <>
+            <form className={step===1? 'form-1' : 'form-2'} >
                   <Dropzone onChange={imgHandler} />
                   {errors.image && touched.image && (
                     <span className="error text">{errors.image}</span>
@@ -108,11 +106,10 @@ export function CreateContent() {
                   {errors.grade && touched.grade && (
                     <span className="error text">{errors.grade}</span>
                   )}
-                </>
-              ) : (
-                <CKEditor
+               <div className="editor-wrapper">
+               <CKEditor
                   editor={ClassicEditor}
-                  style={{ width: "90%" }}
+                  style={{ width: "100%" }}
                   initData={
                     <p>
                       Este é o seu editor. Use-o para criar seus textos e
@@ -121,7 +118,7 @@ export function CreateContent() {
                   }
                   onChange={inputHandler as any}
                 />
-              )}
+               </div>
               <div className="buttons-container">
                 <button
                   type="button"
