@@ -10,7 +10,7 @@ import { Formik } from "formik";
 import { NewContentSchema } from "../../../schemas/newcontent.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
 import { handleNotifyError } from "../../../utils/handleNotifyError";
 
@@ -63,7 +63,6 @@ export function CreateContent() {
 
   return (
     <WaveContainer>
-      <ToastContainer />
       <span className="goBack" onClick={() => navigate(-1)}>
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>

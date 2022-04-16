@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { WaveContainer } from "../../components/WaveContainer";
@@ -32,7 +32,6 @@ export function Register() {
 
   return (
     <WaveContainer>
-      <ToastContainer />
       <img
         onClick={() => navigate("/")}
         className="left-side-floating-logo"

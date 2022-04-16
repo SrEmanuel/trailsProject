@@ -1,6 +1,5 @@
 import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
@@ -96,7 +95,6 @@ export const ListContent = memo(() => {
 
   return (
     <div className="container">
-      <ToastContainer />
       <AddNewSection
         setIsVisible={setAddNewSection}
         setSection={setNewSection}

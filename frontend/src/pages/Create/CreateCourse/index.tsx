@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { Dropzone } from "../../../components/Dropzone";
 import { WaveContainer } from "../../../components/WaveContainer";
 import { useAuth } from "../../../hooks/useAuth";
@@ -71,7 +71,6 @@ export function CreateCourse() {
 
   return (
     <WaveContainer>
-      <ToastContainer />
       <span className="goBack" onClick={() => navigate(-1)}>
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>

@@ -6,7 +6,7 @@ import { ForestContainer } from "../../components/ForestContainer/indext";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import api from "../../services/api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export function ForgotPassword() {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ export function ForgotPassword() {
   return (
     <WaveContainer>
       <ForestContainer>
-        <ToastContainer />
         <main className="password-container">
           <img onClick={() => navigate("/")} src={logo} alt="Projeto trilhas" />
           <h1>Se perdeu? Recupere sua senha</h1>

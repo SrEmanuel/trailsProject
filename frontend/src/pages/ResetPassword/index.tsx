@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ForestContainer } from "../../components/ForestContainer/indext";
 import { Formik } from "formik";
 import { ResetPasswordSchema } from "../../schemas/resetPasswordSchema";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import api from "../../services/api";
 
 export function ResetPassword() {
@@ -29,7 +29,6 @@ export function ResetPassword() {
   return (
     <WaveContainer>
       <ForestContainer>
-        <ToastContainer />
         <main className="password-container">
           <img onClick={() => navigate("/")} src={logo} alt="Projeto trilhas" />
           <h1>Insira a sua nova senha</h1>

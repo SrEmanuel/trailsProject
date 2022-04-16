@@ -5,7 +5,7 @@ import { FiLogIn } from "react-icons/fi";
 import "./styles.scss";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { Formik } from "formik";
 import { LoginSchema } from "../../schemas/login.schema";
 import { useAuth } from "../../hooks/useAuth";
@@ -34,7 +34,6 @@ export function Login() {
 
   return (
     <WaveContainer>
-      <ToastContainer />
       <main className="login-content">
         <img onClick={() => navigate("/")} src={Logo} alt="Projeto Trilhas" />
         <h1>Faça seu login para continuar</h1>
