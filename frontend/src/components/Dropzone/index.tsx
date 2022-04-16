@@ -40,7 +40,7 @@ export function Dropzone({ onChange }: Props) {
       ) : (
         <label htmlFor="dropzone">
           <FiUploadCloud color="var(--dark-green)" size={24} />
-          Arraste ou clique para adicionar uma imagem (opcional)
+          Arraste ou clique para adicionar uma imagem
         </label>
       )}
       <input
