@@ -32,6 +32,7 @@
     padding: 0;
     border: 0;
     border-radius: 10px;
+    position: relative;
 
     img{
       width: 100%;
@@ -41,8 +42,8 @@
 
     svg{
       position: absolute;
-      margin-left: 163px;
-      margin-top: -103px;
+      top:0;
+      right:-2px;
       border-top-right-radius: 10px;
       border-bottom-left-radius: 10px;
       background: var(--white);
