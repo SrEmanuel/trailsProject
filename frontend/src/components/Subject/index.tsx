@@ -2,6 +2,8 @@ import "./styles.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { ISubject } from "../../interfaces/subject";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FormEvent, useState } from "react";
+import { DeleteSubject } from "../DeleteSubject";
 
 interface Props {
   subject: ISubject;
@@ -10,14 +12,25 @@ interface Props {
 }
 
 export function Subject({ subject, coursename, showOptions }: Props) {
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const navigate = useNavigate();
 
+  function toggleDeleteModal(event: FormEvent) {
+    event.stopPropagation();
+    setIsDeleteModalVisible(!isDeleteModalVisible);
+  }
+
   return (
-    <div
-      onClick={() => navigate(`/cursos/${coursename}/${subject.linkName}`)}
-      className="card-container subject"
-    >
-      <div className="card-header">
+    <div className="card-container subject">
+      <DeleteSubject
+        isVisible={isDeleteModalVisible}
+        setIsVisible={setIsDeleteModalVisible}
+        selectedSubjectLinkName={subject.linkName}
+      />
+      <div
+        className="card-header"
+        onClick={() => navigate(`/cursos/${coursename}/${subject.linkName}`)}
+      >
         <img src={subject.imagePath} alt="capa do card" />
         <Link to="#">{subject.grade}</Link>
       </div>
@@ -29,7 +42,11 @@ export function Subject({ subject, coursename, showOptions }: Props) {
         {showOptions && (
           <div>
             <FiEdit color="var(--purple)" size={24} />
-            <FiTrash2 color="var(--red)" size={24} />
+            <FiTrash2
+              onClick={toggleDeleteModal}
+              color="var(--red)"
+              size={24}
+            />
           </div>
         )}
       </div>
