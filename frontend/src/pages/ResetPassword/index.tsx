@@ -16,7 +16,6 @@ export function ResetPassword() {
     confirmPassword: string;
   }) {
     const token = location.search;
-    console.log(token);
     try {
       const response = await api.post(`/auth/change-password${token}`, values);
       toast.success(response.data.message);

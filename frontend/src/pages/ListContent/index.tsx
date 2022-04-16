@@ -53,7 +53,6 @@ export const ListContent = memo(() => {
   }, [params.coursename]);
 
   const handleUpdateTopics = useCallback(async () => {
-    console.log('foi');
     const topic = {
       name: newSection,
       position: (topics as any).length + 1,

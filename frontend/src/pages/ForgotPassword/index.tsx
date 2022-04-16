@@ -39,7 +39,7 @@ export function ForgotPassword() {
             validationSchema={Yup.object().shape({
               email: EmailSchema,
             })}
-            onSubmit={(values) => { console.log('go'); handleSubmitEmail(values)}}
+            onSubmit={(values) => handleSubmitEmail(values)}
           >
             {({ handleChange, handleSubmit, touched, errors }) => (
               <form>

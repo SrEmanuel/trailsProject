@@ -16,7 +16,6 @@ export function Dropzone({ onChange }: Props) {
       onChange && onChange(e);
       setSelectedFile(e.target.files[0]);
       setSelectedFilePreview(URL.createObjectURL(e.target.files[0]));
-      console.log(selectedFilePreview ? true : false);
     }
   }
 

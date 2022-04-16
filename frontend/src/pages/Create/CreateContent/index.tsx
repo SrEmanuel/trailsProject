@@ -43,7 +43,6 @@ export function CreateContent() {
           data.append('image', image);
 
         const response = await api.post("/subjects", subject);
-        console.log(response);
         const subjectLinkName = response.data.linkName;
         await api.post(`/subjects/${subjectLinkName}/add-image`, data);
         toast.success('Conteúdo criado com sucesso!');
