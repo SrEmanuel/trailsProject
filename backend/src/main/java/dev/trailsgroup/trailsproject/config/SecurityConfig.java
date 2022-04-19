@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import dev.trailsgroup.trailsproject.security.CustomAuthenticationEntryPoint;
 import dev.trailsgroup.trailsproject.security.JWTAuthenticationFilter;
@@ -93,6 +94,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
         corsConfiguration.addAllowedHeader("Authorization");
         corsConfiguration.addAllowedHeader("authorization");
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST","UPDATE","DELETE"));
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
