@@ -30,7 +30,7 @@ public class UserResource {
     private UserCourseService userCourseService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
@@ -50,7 +50,7 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(value = "/{id}/add-course")
     public ResponseEntity<UserCourseDTO> addCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
         UserCourseDTO obj = userCourseService.insert(id, courseId);
@@ -59,7 +59,7 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}/remove-course")
     public ResponseEntity<Void> deleteCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
         userCourseService.delete(id, courseId);
@@ -83,13 +83,13 @@ public class UserResource {
         return ResponseEntity.ok().body(service.getCourses(id, pageable));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "/me")
     public ResponseEntity<User> getCurrentUser(){
         return ResponseEntity.ok().body(service.findBySession());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/professors")
     public ResponseEntity<List<ProfessorDTO>> getProfessors(){
         return ResponseEntity.ok().body(service.getProfessors());
