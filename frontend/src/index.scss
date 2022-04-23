@@ -9,7 +9,7 @@ body {
   background: #f0f0f0;
   font-family: "Roboto", sans-serif;
 
-  button {
+  button, .link-btn {
     background: var(--green);
     border-radius: 10px;
     outline: none;
@@ -29,6 +29,10 @@ body {
       cursor: pointer;
       background: var(--dark-green);
     }
+  }
+
+  .link-btn{
+    text-decoration: none;
   }
 
   h1,
