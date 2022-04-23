@@ -41,7 +41,7 @@ export function Subject({ subject, coursename, showOptions }: Props) {
         </span>
         {showOptions && (
           <div>
-            <FiEdit color="var(--purple)" size={24} />
+            <FiEdit onClick={() => navigate(`/cursos/${coursename}/${subject.linkName}/atualizar`)} color="var(--purple)" size={24} />
             <FiTrash2
               onClick={toggleDeleteModal}
               color="var(--red)"
