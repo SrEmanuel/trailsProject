@@ -18,15 +18,15 @@
     align-self: center;
     text-align: center;
 
-    a{
+    a {
       margin-top: 10px;
     }
 
-    svg{
+    svg {
       width: 60%;
     }
 
-    span{
+    span {
       width: 80%;
     }
   }
@@ -35,4 +35,25 @@
     width: 50%;
   }
 
+  @media (max-width: 900px) {
+    img {
+      display: none;
+    }
+
+    .message {
+      width: 100%;
+
+      svg {
+        width: 80%;
+      }
+
+      h1{
+        font-size: 24px;
+      }
+
+      span {
+        width: 100%;
+      }
+    }
+  }
 }
