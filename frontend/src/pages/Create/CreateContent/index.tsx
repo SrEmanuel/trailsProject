@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "ckeditor4-react";
@@ -28,12 +23,7 @@ interface PostData {
 
 export function CreateContent() {
   const [step, setStep] = useState(1);
-  const [initialValues, setInitialValues] = useState<PostData>({
-    grade: "",
-    name: "",
-    image: "",
-    htmlContent: "",
-  });
+  const [initialValues, setInitialValues] = useState<PostData>();
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const formikRef = useRef<FormikProps<PostData>>(null);
@@ -88,6 +78,13 @@ export function CreateContent() {
         formikRef.current?.setFieldValue("name", "asasasasa");
         setInitialValues(subject);
       });
+    } else {
+      setInitialValues({
+        grade: "",
+        name: "",
+        image: "",
+        htmlContent: "",
+      });
     }
   }, [loadCurrentSubject, location]);
 
@@ -98,75 +95,77 @@ export function CreateContent() {
       </span>
       <main className="create-container">
         <h1>Criar nova postagem</h1>
-        <Formik
-          innerRef={formikRef}
-          initialValues={initialValues}
-          validationSchema={NewContentSchema}
-          enableReinitialize
-          onSubmit={(values) => handleSubmit(values)}
-        >
-          {({ handleSubmit, handleChange, errors, touched, values }) => (
-            <form className={step === 1 ? "form-1" : "form-2"}>
-              <Dropzone onChange={imgHandler} preview={initialValues.image} />
-              {errors.image && touched.image && (
-                <span className="error text">{errors.image}</span>
-              )}
-              <input
-                onChange={handleChange}
-                type="text"
-                name="name"
-                value={values.name}
-                placeholder="Título"
-              />
-              {errors.name && touched.name && (
-                <span className="error text">{errors.name}</span>
-              )}
-
-              <select
-                onChange={handleChange}
-                name="grade"
-                placeholder="Selecione uma série"
-                value={values.grade || 0}
-              >
-                <option disabled hidden value="0">
-                  Selecione uma opção
-                </option>
-                <option value="1º ano">1º ano</option>
-                <option value="2º ano">2º ano</option>
-                <option value="3º ano">3º ano</option>
-              </select>
-              {errors.grade && touched.grade && (
-                <span className="error text">{errors.grade}</span>
-              )}
-              <div className="editor-wrapper">
-                <CKEditor
-                  editor={ClassicEditor}
-                  style={{ width: "100%" }}
-                  initData={
-                    values.htmlContent || (
-                      <p>
-                        Este é o seu editor. Use-o para criar seus textos e
-                        postagens!
-                      </p>
-                    )
-                  }
-                  onChange={inputHandler as any}
+        {initialValues && (
+          <Formik
+            innerRef={formikRef}
+            initialValues={initialValues}
+            validationSchema={NewContentSchema}
+            enableReinitialize
+            onSubmit={(values) => handleSubmit(values)}
+          >
+            {({ handleSubmit, handleChange, errors, touched, values }) => (
+              <form className={step === 1 ? "form-1" : "form-2"}>
+                <Dropzone onChange={imgHandler} preview={initialValues.image} />
+                {errors.image && touched.image && (
+                  <span className="error text">{errors.image}</span>
+                )}
+                <input
+                  onChange={handleChange}
+                  type="text"
+                  name="name"
+                  value={values.name}
+                  placeholder="Título"
                 />
-              </div>
-              <div className="buttons-container">
-                <button
-                  type="button"
-                  onClick={() => (step === 1 ? navigate(-1) : setStep(1))}
+                {errors.name && touched.name && (
+                  <span className="error text">{errors.name}</span>
+                )}
+
+                <select
+                  onChange={handleChange}
+                  name="grade"
+                  placeholder="Selecione uma série"
+                  value={values.grade || 0}
                 >
-                  {step === 1 ? "Cancelar" : "Voltar"}
-                </button>
-                <button type="button" onClick={() => handleSubmit()}>
-                  {step === 1 ? "Avançar" : "Terminar"}
-                </button>
-              </div>
-            </form>
-          )}
-        </Formik>
+                  <option disabled hidden value="0">
+                    Selecione uma opção
+                  </option>
+                  <option value="1º ano">1º ano</option>
+                  <option value="2º ano">2º ano</option>
+                  <option value="3º ano">3º ano</option>
+                </select>
+                {errors.grade && touched.grade && (
+                  <span className="error text">{errors.grade}</span>
+                )}
+                <div className="editor-wrapper">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    style={{ width: "100%" }}
+                    initData={
+                      values.htmlContent || (
+                        <p>
+                          Este é o seu editor. Use-o para criar seus textos e
+                          postagens!
+                        </p>
+                      )
+                    }
+                    onChange={inputHandler as any}
+                  />
+                </div>
+                <div className="buttons-container">
+                  <button
+                    type="button"
+                    onClick={() => (step === 1 ? navigate(-1) : setStep(1))}
+                  >
+                    {step === 1 ? "Cancelar" : "Voltar"}
+                  </button>
+                  <button type="button" onClick={() => handleSubmit()}>
+                    {step === 1 ? "Avançar" : "Terminar"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </Formik>
+        )}
       </main>
     </WaveContainer>
   );
