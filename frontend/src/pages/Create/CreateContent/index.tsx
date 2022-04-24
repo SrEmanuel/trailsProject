@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "ckeditor4-react";
@@ -6,14 +11,13 @@ import { Dropzone } from "../../../components/Dropzone";
 import { WaveContainer } from "../../../components/WaveContainer";
 import "../styles.scss";
 import "./styles.scss";
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import { NewContentSchema } from "../../../schemas/newcontent.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
 import { handleNotifyError } from "../../../utils/handleNotifyError";
-import { ISubject } from "../../../interfaces/subject";
 
 interface PostData {
   name: string;
@@ -24,18 +28,22 @@ interface PostData {
 
 export function CreateContent() {
   const [step, setStep] = useState(1);
-  const [currentSubject, setCurrentSubject] = useState<ISubject>();
-  const [initialValues, setInitialValues] = useState<PostData | undefined>();
+  const [initialValues, setInitialValues] = useState<PostData>({
+    grade: "",
+    name: "",
+    image: "",
+    htmlContent: "",
+  });
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
-  const formikRef = useRef() as any;
+  const formikRef = useRef<FormikProps<PostData>>(null);
   const params = useParams();
   const location = useLocation();
 
   const loadCurrentSubject = useCallback(async () => {
     try {
       const response = await api.get(`/subjects/${params.contentname}`);
-      setCurrentSubject(response.data);
+      return response.data;
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -66,28 +74,22 @@ export function CreateContent() {
     }
   }
 
-  function inputHandler(event: any, editor: any) {
+  function inputHandler(event: any) {
     formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
   }
 
   function imgHandler(event: any) {
-    formikRef.current.setFieldValue("image", event.target.files[0]);
+    formikRef?.current?.setFieldValue("image", event.target.files[0]);
   }
 
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
-      loadCurrentSubject();
+      loadCurrentSubject().then((subject) => {
+        formikRef.current?.setFieldValue("name", "asasasasa");
+        setInitialValues(subject);
+      });
     }
   }, [loadCurrentSubject, location]);
-
-  useEffect(() => {
-    setInitialValues({
-      grade: currentSubject?.grade || '',
-      name: currentSubject?.name || '',
-      image: currentSubject?.imagePath || '',
-      htmlContent: currentSubject?.htmlContent || '',
-    });
-  }, [currentSubject]);
 
   return (
     <WaveContainer>
@@ -98,13 +100,14 @@ export function CreateContent() {
         <h1>Criar nova postagem</h1>
         <Formik
           innerRef={formikRef}
-          initialValues={ initialValues || { grade: "", name: "", image: "", htmlContent: "" }}
+          initialValues={initialValues}
           validationSchema={NewContentSchema}
+          enableReinitialize
           onSubmit={(values) => handleSubmit(values)}
         >
-          {({ handleSubmit, handleChange, errors, touched }) => (
+          {({ handleSubmit, handleChange, errors, touched, values }) => (
             <form className={step === 1 ? "form-1" : "form-2"}>
-              <Dropzone onChange={imgHandler} />
+              <Dropzone onChange={imgHandler} preview={values.image} />
               {errors.image && touched.image && (
                 <span className="error text">{errors.image}</span>
               )}
@@ -112,6 +115,7 @@ export function CreateContent() {
                 onChange={handleChange}
                 type="text"
                 name="name"
+                value={values.name}
                 placeholder="Título"
               />
               {errors.name && touched.name && (
@@ -122,7 +126,7 @@ export function CreateContent() {
                 onChange={handleChange}
                 name="grade"
                 placeholder="Selecione uma série"
-                defaultValue="0"
+                value={values.grade || 0}
               >
                 <option disabled hidden value="0">
                   Selecione uma opção
@@ -139,10 +143,12 @@ export function CreateContent() {
                   editor={ClassicEditor}
                   style={{ width: "100%" }}
                   initData={
-                    <p>
-                      Este é o seu editor. Use-o para criar seus textos e
-                      postagens!
-                    </p>
+                    values.htmlContent || (
+                      <p>
+                        Este é o seu editor. Use-o para criar seus textos e
+                        postagens!
+                      </p>
+                    )
                   }
                   onChange={inputHandler as any}
                 />
