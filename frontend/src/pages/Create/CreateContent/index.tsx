@@ -53,7 +53,7 @@ export function CreateContent() {
         const data = new FormData();
         data.append("image", image);
 
-        const response = await api.post("/subjects", subject);
+        const response = location.pathname.includes('atualizar')? await api.put(`/subjects/${params.contentname}`) : await api.post("/subjects", subject);
         const subjectLinkName = response.data.linkName;
         await api.post(`/subjects/${subjectLinkName}/add-image`, data);
         toast.success("Conteúdo criado com sucesso!");
