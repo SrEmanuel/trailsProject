@@ -75,7 +75,6 @@ export function CreateContent() {
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
-        formikRef.current?.setFieldValue("name", "asasasasa");
         setInitialValues(subject);
       });
     } else {
