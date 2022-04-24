@@ -19,6 +19,7 @@ interface PostData {
   grade: string;
   image?: File | string;
   htmlContent?: string;
+  imagePath?: string;
 }
 
 export function CreateContent() {
@@ -53,7 +54,9 @@ export function CreateContent() {
         const data = new FormData();
         data.append("image", image);
 
-        const response = location.pathname.includes('atualizar')? await api.put(`/subjects/${params.contentname}`) : await api.post("/subjects", subject);
+        const response = location.pathname.includes("atualizar")
+          ? await api.put(`/subjects/${params.contentname}`)
+          : await api.post("/subjects", subject);
         const subjectLinkName = response.data.linkName;
         await api.post(`/subjects/${subjectLinkName}/add-image`, data);
         toast.success("Conteúdo criado com sucesso!");
@@ -76,6 +79,14 @@ export function CreateContent() {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
         setInitialValues(subject);
+        fetch(subject.imagePath).then(async (response) => {
+          const blob = await response.blob();
+          const file = new File(
+            [blob],
+            subject.imagePath.split("/uploads/")[1]
+          );
+          formikRef.current?.setFieldValue("image", file);
+        });
       });
     } else {
       setInitialValues({
@@ -93,7 +104,11 @@ export function CreateContent() {
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>
       <main className="create-container">
-        <h1>{location.pathname.includes('atualizar')? 'Atualizar postagem': 'Criar nova postagem'}</h1>
+        <h1>
+          {location.pathname.includes("atualizar")
+            ? "Atualizar postagem"
+            : "Criar nova postagem"}
+        </h1>
         {initialValues && (
           <Formik
             innerRef={formikRef}
@@ -104,7 +119,10 @@ export function CreateContent() {
           >
             {({ handleSubmit, handleChange, errors, touched, values }) => (
               <form className={step === 1 ? "form-1" : "form-2"}>
-                <Dropzone onChange={imgHandler} preview={initialValues.image} />
+                <Dropzone
+                  onChange={imgHandler}
+                  preview={initialValues.imagePath}
+                />
                 {errors.image && touched.image && (
                   <span className="error text">{errors.image}</span>
                 )}
