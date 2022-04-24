@@ -107,7 +107,7 @@ export function CreateContent() {
         >
           {({ handleSubmit, handleChange, errors, touched, values }) => (
             <form className={step === 1 ? "form-1" : "form-2"}>
-              <Dropzone onChange={imgHandler} preview={values.image} />
+              <Dropzone onChange={imgHandler} preview={initialValues.image} />
               {errors.image && touched.image && (
                 <span className="error text">{errors.image}</span>
               )}
