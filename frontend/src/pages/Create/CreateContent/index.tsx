@@ -93,7 +93,7 @@ export function CreateContent() {
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>
       <main className="create-container">
-        <h1>Criar nova postagem</h1>
+        <h1>{location.pathname.includes('atualizar')? 'Atualizar postagem': 'Criar nova postagem'}</h1>
         {initialValues && (
           <Formik
             innerRef={formikRef}
