@@ -1,8 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
-import dev.trailsgroup.trailsproject.dto.UserSubjectDTO;
-import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.entities.UserSubject;
@@ -23,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -88,6 +85,7 @@ public class SubjectService {
         try{
             Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(subject);
+            staticFileService.delete(subject.getImageName());
             repository.delete(subject);
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());

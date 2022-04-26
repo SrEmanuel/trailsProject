@@ -77,6 +77,7 @@ public class CourseService {
         try {
             Course course = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(course);
+            staticFileService.delete(course.getImageName());
             repository.delete(course);
         } catch(EntityNotFoundException | NoSuchElementException e){
             throw new ResourceNotFoundException(linkName);
