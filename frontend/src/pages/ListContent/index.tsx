@@ -78,12 +78,12 @@ export const ListContent = memo(() => {
     } catch (error) {}
   }, [currentCourse?.id, currentCourse?.linkName, newSection, topics]);
 
-  async function handleShowDeleteModal(subjectLinkName: string) {
+  const handleShowDeleteModal = async(subjectLinkName: string) => {
     setIsDeleteModalVisible(true);
     setSelectedSubject(subjectLinkName);
   }
 
-  async function handleDeleteSubject(event: FormEvent) {
+  const handleDeleteSubject =  async(event: FormEvent) => {
     event.preventDefault();
     try {
       await api.delete(`/subjects/${selectedSubject}`);
