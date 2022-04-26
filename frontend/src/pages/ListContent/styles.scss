@@ -22,3 +22,26 @@
 .topic-title{
     align-self:flex-start;
 }
+
+.empty-course-list{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    object-fit: cover;
+
+    h2{
+        color: var(--grey);
+        z-index: 2;
+    }
+
+    svg{
+        cursor: pointer;
+        max-width: 80%;
+        object-fit: cover;
+        object-position: center;
+        z-index: 2;
+    }
+}

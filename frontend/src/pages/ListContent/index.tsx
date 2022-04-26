@@ -21,6 +21,8 @@ import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { AddNewSection } from "./components/addNewSection";
+
+import { ReactComponent as AddNewContent } from "../../assets/images/AddNewContent.svg";
 import "./styles.scss";
 
 export const ListContent = memo(() => {
@@ -66,7 +68,7 @@ export const ListContent = memo(() => {
   const handleUpdateTopics = useCallback(async () => {
     const topic = {
       name: newSection,
-      position: (topics as any).length + 1,
+      position: 120,
       courseId: currentCourse?.id,
     };
     try {
@@ -75,15 +77,17 @@ export const ListContent = memo(() => {
         `/courses/${currentCourse?.linkName}/topics`
       );
       setTopics(response.data.content);
-    } catch (error) {}
-  }, [currentCourse?.id, currentCourse?.linkName, newSection, topics]);
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
+  }, [currentCourse?.id, currentCourse?.linkName, handleClearUserDataFromStorage, navigate, newSection]);
 
-  const handleShowDeleteModal = async(subjectLinkName: string) => {
+  const handleShowDeleteModal = async (subjectLinkName: string) => {
     setIsDeleteModalVisible(true);
     setSelectedSubject(subjectLinkName);
-  }
+  };
 
-  const handleDeleteSubject =  async(event: FormEvent) => {
+  const handleDeleteSubject = async (event: FormEvent) => {
     event.preventDefault();
     try {
       await api.delete(`/subjects/${selectedSubject}`);
@@ -91,10 +95,10 @@ export const ListContent = memo(() => {
       setIsDeleteModalVisible(false);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
-    } finally{
+    } finally {
       loadData();
     }
-  }
+  };
 
   const loadData = useCallback(async () => {
     setIsTeacher(await getIsTeacher());
@@ -104,7 +108,13 @@ export const ListContent = memo(() => {
       await handleLoadTopics();
       await handleLoadSelectedCourse();
     }
-  }, [getIsTeacher, handleLoadCourses, handleLoadSelectedCourse, handleLoadTopics, location.pathname]);
+  }, [
+    getIsTeacher,
+    handleLoadCourses,
+    handleLoadSelectedCourse,
+    handleLoadTopics,
+    location.pathname,
+  ]);
 
   useEffect(() => {
     if (newSection) {
@@ -182,6 +192,12 @@ export const ListContent = memo(() => {
             )}
           </Fragment>
         ))}
+      {( (topics === undefined || (topics && topics.length === 0)) && location.pathname!== '/cursos' ) && (
+        <div className="empty-course-list">
+          <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>
+          <AddNewContent onClick={()=> setAddNewSection(true)} />
+        </div>
+      )}
     </div>
   );
 });
