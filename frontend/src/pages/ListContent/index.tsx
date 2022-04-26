@@ -1,5 +1,6 @@
 import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { DeleteSubject } from "../../components/DeleteSubject";
 import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
@@ -24,6 +25,8 @@ export const ListContent = memo(() => {
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const [addNewSection, setAddNewSection] = useState<boolean>(false);
   const [newSection, setNewSection] = useState<string>();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
   const location = useLocation();
 
   const params = useParams();
@@ -60,10 +63,17 @@ export const ListContent = memo(() => {
     };
     try {
       await api.post("/topics", topic);
-      const response = await api.get(`/courses/${currentCourse?.linkName}/topics`);
+      const response = await api.get(
+        `/courses/${currentCourse?.linkName}/topics`
+      );
       setTopics(response.data.content);
     } catch (error) {}
   }, [currentCourse?.id, currentCourse?.linkName, newSection, topics]);
+
+  async function handleDeleteSubject(subjectLinkName: string) {
+    setIsDeleteModalVisible(true);
+    setSelectedSubject(subjectLinkName);
+  }
 
   useEffect(() => {
     if (newSection) {
@@ -99,6 +109,11 @@ export const ListContent = memo(() => {
         setSection={setNewSection}
         isVisible={addNewSection}
       />
+      <DeleteSubject
+        isVisible={isDeleteModalVisible}
+        setIsVisible={setIsDeleteModalVisible}
+        selectedSubjectLinkName={selectedSubject}
+      />
       <NavBar />
       <h1>
         {isTeacher
@@ -126,6 +141,7 @@ export const ListContent = memo(() => {
                   coursename={params.coursename as string}
                   topicId={topic.id}
                   subject={subject}
+                  onDelete={handleDeleteSubject}
                 />
               ))}
               {isTeacher && (
