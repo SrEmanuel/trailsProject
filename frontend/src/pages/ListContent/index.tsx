@@ -1,4 +1,11 @@
-import { FormEvent, Fragment, memo, useCallback, useEffect, useState } from "react";
+import {
+  FormEvent,
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DeleteSubject } from "../../components/DeleteSubject";
@@ -76,16 +83,28 @@ export const ListContent = memo(() => {
     setSelectedSubject(subjectLinkName);
   }
 
-  async function handleDeleteSubject(event: FormEvent){
+  async function handleDeleteSubject(event: FormEvent) {
     event.preventDefault();
     try {
       await api.delete(`/subjects/${selectedSubject}`);
-      toast.success('Deletado com sucesso!');
+      toast.success("Deletado com sucesso!");
       setIsDeleteModalVisible(false);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    } finally{
+      loadData();
     }
   }
+
+  const loadData = useCallback(async () => {
+    setIsTeacher(await getIsTeacher());
+    if (location.pathname === "/cursos") {
+      await handleLoadCourses();
+    } else {
+      await handleLoadTopics();
+      await handleLoadSelectedCourse();
+    }
+  }, [getIsTeacher, handleLoadCourses, handleLoadSelectedCourse, handleLoadTopics, location.pathname]);
 
   useEffect(() => {
     if (newSection) {
@@ -94,15 +113,6 @@ export const ListContent = memo(() => {
   }, [currentCourse?.id, handleUpdateTopics, newSection, topics]);
 
   useEffect(() => {
-    async function loadData() {
-      setIsTeacher(await getIsTeacher());
-      if (location.pathname === "/cursos") {
-        await handleLoadCourses();
-      } else {
-        await handleLoadTopics();
-        await handleLoadSelectedCourse();
-      }
-    }
     loadData();
   }, [
     location,
@@ -112,6 +122,7 @@ export const ListContent = memo(() => {
     handleLoadTopics,
     handleLoadSelectedCourse,
     getIsTeacher,
+    loadData,
   ]);
 
   return (
