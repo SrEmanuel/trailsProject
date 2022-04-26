@@ -1,5 +1,6 @@
-import { Fragment, memo, useCallback, useEffect, useState } from "react";
+import { FormEvent, Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { DeleteSubject } from "../../components/DeleteSubject";
 import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
@@ -70,9 +71,20 @@ export const ListContent = memo(() => {
     } catch (error) {}
   }, [currentCourse?.id, currentCourse?.linkName, newSection, topics]);
 
-  async function handleDeleteSubject(subjectLinkName: string) {
+  async function handleShowDeleteModal(subjectLinkName: string) {
     setIsDeleteModalVisible(true);
     setSelectedSubject(subjectLinkName);
+  }
+
+  async function handleDeleteSubject(event: FormEvent){
+    event.preventDefault();
+    try {
+      await api.delete(`/subjects/${selectedSubject}`);
+      toast.success('Deletado com sucesso!');
+      setIsDeleteModalVisible(false);
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
   }
 
   useEffect(() => {
@@ -112,7 +124,7 @@ export const ListContent = memo(() => {
       <DeleteSubject
         isVisible={isDeleteModalVisible}
         setIsVisible={setIsDeleteModalVisible}
-        selectedSubjectLinkName={selectedSubject}
+        onDelete={handleDeleteSubject}
       />
       <NavBar />
       <h1>
@@ -141,7 +153,7 @@ export const ListContent = memo(() => {
                   coursename={params.coursename as string}
                   topicId={topic.id}
                   subject={subject}
-                  onDelete={handleDeleteSubject}
+                  onDelete={handleShowDeleteModal}
                 />
               ))}
               {isTeacher && (
