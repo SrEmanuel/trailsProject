@@ -55,11 +55,11 @@ export function CreateContent() {
         data.append("image", image);
 
         const response = location.pathname.includes("atualizar")
-          ? await api.put(`/subjects/${params.contentname}`)
+          ? await api.put(`/subjects/${params.contentname}`, subject)
           : await api.post("/subjects", subject);
         const subjectLinkName = response.data.linkName;
         await api.post(`/subjects/${subjectLinkName}/add-image`, data);
-        toast.success("Conteúdo criado com sucesso!");
+        toast.success(`Conteúdo ${location.pathname.includes("atualizar")? 'atualizado' : 'criado' } com sucesso!`);
         navigate(-1);
       } catch (error: any) {
         handleNotifyError(error, navigate, handleClearUserDataFromStorage);
