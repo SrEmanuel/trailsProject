@@ -4,6 +4,7 @@ import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.CourseService;
 import dev.trailsgroup.trailsproject.services.TopicService;
@@ -44,25 +45,28 @@ public class CourseResource {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Course> insert(@Validated({CreateInfo.class, UpdateInfo.class})@RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
+    public ResponseEntity<Course> insert(@Validated({CreateInfo.class, UpdateInfo.class})@RequestBody CourseDTO course){
 
-        Course obj = service.insert(course, imageFile);
+        Course obj = service.insert(course);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
-    @DeleteMapping(value = "/{linkName}")
-    public ResponseEntity<Void>  delete(@PathVariable String linkName){
-        service.delete(linkName);
-        return ResponseEntity.noContent().build();
+    @PostMapping(value = "/{linkName}/add-image")
+    public ResponseEntity<Course> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable String linkName) {
+        Course obj = service.insertImage(file, linkName);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
+
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{linkName}")
-    public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestPart CourseDTO course, @RequestParam(value = "image", required = false) MultipartFile imageFile){
-        Course obj = service.update(linkName, course, imageFile);
+    public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody CourseDTO course){
+        Course obj = service.update(linkName, course);
         return ResponseEntity.ok().body(obj);
     }
 

@@ -18,8 +18,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
@@ -55,14 +53,12 @@ public class CourseService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(linkName));
     }
 
-    public Course insert(CourseDTO obj, MultipartFile image){
+    public Course insert(CourseDTO obj){
         try {
             String linkName = ClassUtils.createLinkName(obj.getName());
             if(verifyLinkNameAvailability(linkName))
                 throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe outro nome diferente.");
             String fileName = "default-course.png";
-            if (!(image == null))
-                fileName = staticFileService.save(image);
             User user = userRepository.findById(obj.getProfessorID()).orElseThrow(() -> new ResourceNotFoundException("O ID de professor informado não existe."));
             Course course = repository.save(new Course(null, obj.getName(), fileName, linkName));
             userCourseRepository.save(new UserCourse(course, user));
@@ -90,11 +86,11 @@ public class CourseService {
     }
 
 
-        public Course update(String linkName, CourseDTO obj, MultipartFile image){
+        public Course update(String linkName, CourseDTO obj){
         try{
             Course courseDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(courseDatabase);
-            courseUpdateInformation(courseDatabase, obj, image);
+            courseUpdateInformation(courseDatabase, obj);
             return repository.save(courseDatabase);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(linkName);
@@ -103,18 +99,20 @@ public class CourseService {
         }
     }
 
-    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj, MultipartFile image){
+    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj){
         String linkName = ClassUtils.createLinkName(obj.getName());
         if(verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, courseDataBase.getLinkName()))
             throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
 
         courseDataBase.setName(obj.getName());
         courseDataBase.setLinkName(linkName);
-        if(!(image==null)){
-            String oldName = courseDataBase.getImageName();
-            String newName = staticFileService.update(image, oldName);
-            courseDataBase.setImage(newName);
-        }
+    }
+
+    public Course insertImage(MultipartFile multipartFile, String linkName){
+        Course course = repository.findByLinkName(linkName).orElseThrow(()-> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        course.setImage(staticFileService.update(multipartFile, course.getImageName()));
+        repository.save(course);
+        return course;
     }
 
     private void verifyUserPermission(Course obj) throws NullPointerException {
