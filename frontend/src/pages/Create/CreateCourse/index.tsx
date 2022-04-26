@@ -46,12 +46,14 @@ export function CreateCourse() {
 
     const formData = new FormData();
     formData.append('image', course.image)
-    formData.append('course', { name: course.name, professorID: course.professorID } as any)
+    const courseData = { name: course.name, professorID: course.professorID };
 
     try {
-      await api.post('/courses', formData)
-      toast.success('Curso criado com sucesso')
-      navigate(-1)
+      const response =  await api.post('/courses', courseData);
+
+      await api.post(`/courses/${response.data.linkName}/add-image`, formData);
+      toast.success('Curso criado com sucesso');
+      navigate(-1);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage)
     }
