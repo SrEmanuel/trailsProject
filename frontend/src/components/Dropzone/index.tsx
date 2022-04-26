@@ -1,12 +1,13 @@
-import { ChangeEvent, useState, createRef } from "react";
+import { ChangeEvent, useState, createRef, useEffect } from "react";
 import { FiUploadCloud, FiX } from "react-icons/fi";
 import "./styles.scss";
 
 interface Props {
   onChange?: (...args: any) => any;
+  preview?: any;
 }
 
-export function Dropzone({ onChange }: Props) {
+export function Dropzone({ onChange, preview }: Props) {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [selectedFilePreview, setSelectedFilePreview] = useState<string>();
   const inputRef = createRef<HTMLInputElement>();
@@ -24,6 +25,12 @@ export function Dropzone({ onChange }: Props) {
     setSelectedFilePreview(undefined);
     (inputRef.current as any).value = "";
   }
+
+  useEffect(()=> {
+    if(preview){
+      setSelectedFilePreview(preview);
+    }
+  }, [preview])
 
   return (
     <div className="dropzone-container">

@@ -124,6 +124,7 @@ export const ListContent = memo(() => {
                   showOptions={isTeacher ? true : false}
                   key={subject.id}
                   coursename={params.coursename as string}
+                  topicId={topic.id}
                   subject={subject}
                 />
               ))}

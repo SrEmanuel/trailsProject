@@ -9,9 +9,10 @@ interface Props {
   subject: ISubject;
   coursename: string;
   showOptions: boolean;
+  topicId?: number; 
 }
 
-export function Subject({ subject, coursename, showOptions }: Props) {
+export function Subject({ subject, coursename, showOptions, topicId }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ export function Subject({ subject, coursename, showOptions }: Props) {
         </span>
         {showOptions && (
           <div>
-            <FiEdit color="var(--purple)" size={24} />
+            <FiEdit onClick={() => navigate(`/cursos/${coursename}/${topicId}/${subject.linkName}/atualizar`)} color="var(--purple)" size={24} />
             <FiTrash2
               onClick={toggleDeleteModal}
               color="var(--red)"

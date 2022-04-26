@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes as RoutesContainer } from 'react-router-dom';
+import { PageNotFound } from './pages/404';
 import { About } from './pages/About';
 import { BlogPost } from './pages/BlogPost';
 import { CreateContent } from './pages/Create/CreateContent';
@@ -25,6 +26,8 @@ export function Routes(){
              <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
              <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
+             <Route path="/cursos/:coursename/:topicId/:contentname/atualizar" element={<CreateContent></CreateContent>} />
+             <Route path="*" element={<PageNotFound></PageNotFound>} />
             </RoutesContainer>
         </BrowserRouter>
     )
