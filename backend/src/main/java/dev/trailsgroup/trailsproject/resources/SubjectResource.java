@@ -63,7 +63,7 @@ public class SubjectResource {
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{linkName}")
-    public ResponseEntity<Subject> update(@PathVariable String linkName, @Validated(UpdateInfo.class) @RequestPart SubjectDTO subject){
+    public ResponseEntity<Subject> update(@PathVariable String linkName, @Validated(UpdateInfo.class) @RequestBody SubjectDTO subject){
         Subject obj = service.update(linkName, subject);
         return ResponseEntity.ok().body(obj);
     }
