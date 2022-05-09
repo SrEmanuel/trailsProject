@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="Projeto Trilhas" src="./readme/logo.png" width="400px" />
+    <img alt="Projeto Trilhas" src="./docs/readme/logo.png" width="400px" />
 </h1>
 
 <h3 align="center">
