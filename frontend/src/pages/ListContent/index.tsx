@@ -68,7 +68,7 @@ export const ListContent = memo(() => {
   const handleUpdateTopics = useCallback(async () => {
     const topic = {
       name: newSection,
-      position: 120,
+      position: (topics as any).length + 1,
       courseId: currentCourse?.id,
     };
     try {
@@ -80,7 +80,7 @@ export const ListContent = memo(() => {
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
-  }, [currentCourse?.id, currentCourse?.linkName, handleClearUserDataFromStorage, navigate, newSection]);
+  }, [currentCourse?.id, currentCourse?.linkName, handleClearUserDataFromStorage, navigate, newSection, topics]);
 
   const handleShowDeleteModal = async (subjectLinkName: string) => {
     setIsDeleteModalVisible(true);
