@@ -79,7 +79,7 @@ public class UserService {
 
     public User insert(UserDTO obj){
         try {
-            if(!verifyEmailAvailability(obj.getEmail()))
+            if(verifyEmailAvailability(obj.getEmail()))
                 throw new DatabaseException("O email já foi cadastrado no sistema! Informe outro email.");
 
             User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), UserType.toEnum(obj.getType()), obj.getStatus());
@@ -90,7 +90,7 @@ public class UserService {
     }
 
     public boolean verifyEmailAvailability(String email){
-        return repository.findByEmail(email) == null;
+        return repository.findByEmail(email).isPresent();
     }
 
     public void delete(Integer id){
