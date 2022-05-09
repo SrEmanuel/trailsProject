@@ -27,7 +27,7 @@ public class Subject implements Serializable {
 
     private Integer position;
 
-    @Lob
+    @Column(columnDefinition="TEXT")
     private String htmlContent;
 
     @CreatedDate
