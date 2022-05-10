@@ -28,6 +28,11 @@ export const ListContent = memo(() => {
 
   const params = useParams();
   const navigate = useNavigate();
+  const title = isTeacher
+  ? `Bem vindo, ${user?.name}`
+  : location.pathname === "/cursos"
+  ? "Trilhas disponíveis"
+  : currentCourse?.name;
 
   const handleLoadCourses = useCallback(async () => {
     const url = (await getIsTeacher())
@@ -91,11 +96,7 @@ export const ListContent = memo(() => {
       />
       <NavBar />
       <h1>
-        {isTeacher
-          ? `Bem vindo, ${user?.name}`
-          : location.pathname === "/cursos"
-          ? "Trilhas disponíveis"
-          : currentCourse?.name}
+        {title}
       </h1>
       {location.pathname === "/cursos" && (
         <Paginator page={page} totalPages={totalPages} setPage={setPage} />
