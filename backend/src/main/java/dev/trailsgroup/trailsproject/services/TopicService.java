@@ -50,8 +50,8 @@ public class TopicService {
         String linkName = ClassUtils.createLinkName(obj.getName());
         if(verifyLinkNameAvailability(linkName))
             throw new DatabaseException("O nome de tópico '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
-        if(!verifyPosition(obj.getPosition()))
-            throw new DatabaseException("Já existe um topico com essa posição!");
+        //if(!verifyPosition(obj.getPosition()))
+          //  throw new DatabaseException("Já existe um topico com essa posição!");
         Course course = courseRepository.findById(obj.getCourseId()).orElseThrow(() -> new ResourceNotFoundException(obj.getCourseId()));
         Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course, linkName);
         verifyUserPermission(topic);
@@ -97,7 +97,7 @@ public class TopicService {
         return repository.findAll(example, pageable);
     }
 
-    public boolean verifyPosition(Integer num){
+    /*public boolean verifyPosition(Integer num){
         Topic topic = new Topic();
         topic.setPosition(num);
 
@@ -105,7 +105,7 @@ public class TopicService {
 
         int count = (int) repository.count(example);
         return count == 0;
-    }
+    }*/
 
     private void verifyUserPermission(Topic obj) throws NullPointerException {
         UserSS userss = UserService.authenticated();
