@@ -43,7 +43,7 @@ public class User implements Serializable {
     private Set<UserCourse> items =  new HashSet<>();
 
     @ElementCollection(fetch=FetchType.EAGER)
-    @CollectionTable(name="tb_profiles")
+    @CollectionTable(name="tb_profiles")    
     private Set<Integer> profiles =  new HashSet<>();
 
 

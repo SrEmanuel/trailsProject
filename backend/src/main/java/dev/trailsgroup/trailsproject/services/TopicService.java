@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.SubjectPositionDTO;
 import dev.trailsgroup.trailsproject.dto.TopicDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Subject;
@@ -22,14 +23,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TopicService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Autowired
     private TopicRepository repository;
@@ -116,5 +122,23 @@ public class TopicService {
 
     public boolean verifyLinkNameAvailability(String name){
         return repository.findByLinkName(name).isPresent();
+    }
+
+    public Topic updateSubjectPositions(String linkname, List<SubjectPositionDTO> subjectPositionDTOList) {
+        Optional<Topic> topic = repository.findByLinkName(linkname);
+        if(topic.isEmpty()) {
+            throw new ResourceNotFoundException("Recurso não encontrado: " + linkname);
+        }else{
+            List<Subject> subjects =  topic.get().getSubjects();
+            subjects.forEach(x -> {
+                List<SubjectPositionDTO> subject = subjectPositionDTOList.stream().filter(y ->
+                        y.getSubjectId() == x.getId())
+                        .collect(Collectors.toList());
+                if(!subject.isEmpty())
+                    x.setPosition(subject.get(0).getPosition());
+            });
+            subjectService.saveAll(subjects);
+            return repository.findByLinkName(linkname).get();
+        }
     }
 }
