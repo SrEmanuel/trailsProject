@@ -34,7 +34,6 @@ export const ListContent = memo(() => {
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const [addNewSection, setAddNewSection] = useState<boolean>(false);
-  const [newSection, setNewSection] = useState<string>();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const location = useLocation();
@@ -65,22 +64,6 @@ export const ListContent = memo(() => {
     setCurrentCourse(response.data);
   }, [params.coursename]);
 
-  const handleUpdateTopics = useCallback(async () => {
-    const topic = {
-      name: newSection,
-      position: (topics as any).length + 1,
-      courseId: currentCourse?.id,
-    };
-    try {
-      await api.post("/topics", topic);
-      const response = await api.get(
-        `/courses/${currentCourse?.linkName}/topics`
-      );
-      setTopics(response.data.content);
-    } catch (error) {
-      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
-    }
-  }, [currentCourse?.id, currentCourse?.linkName, handleClearUserDataFromStorage, navigate, newSection, topics]);
 
   const handleShowDeleteModal = async (subjectLinkName: string) => {
     setIsDeleteModalVisible(true);
@@ -117,12 +100,6 @@ export const ListContent = memo(() => {
   ]);
 
   useEffect(() => {
-    if (newSection) {
-      handleUpdateTopics();
-    }
-  }, [currentCourse?.id, handleUpdateTopics, newSection, topics]);
-
-  useEffect(() => {
     loadData();
   }, [
     location,
@@ -139,7 +116,8 @@ export const ListContent = memo(() => {
     <div className="container">
       <AddNewSection
         setIsVisible={setAddNewSection}
-        setSection={setNewSection}
+        setTopics={setTopics}
+        currentCourse={currentCourse as ITrails}
         isVisible={addNewSection}
       />
       <DeleteSubject
