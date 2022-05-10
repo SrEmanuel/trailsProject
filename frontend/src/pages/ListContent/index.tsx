@@ -104,21 +104,20 @@ export const ListContent = memo(() => {
         {location.pathname === "/cursos" &&
           trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
       </div>
-      
+
       {location.pathname !== "/cursos" &&
         topics?.map((topic, index) => (
-          <Fragment key={topic.id}>
-            <Topic
-              topic={topic}
-              params={params}
-              enableAdminMode={isTeacher as boolean}
-              onDeleteSubject={loadData}
-            />
-            {index === topics.length - 1 && isTeacher && (
-              <FloatingPlusButton onClick={() => setAddNewSection(true)} />
-            )}
-          </Fragment>
+          <Topic
+            topic={topic}
+            params={params}
+            enableAdminMode={isTeacher as boolean}
+            onDeleteSubject={loadData}
+          />
         ))}
+
+      { location.pathname !== "/cursos" && isTeacher && (
+        <FloatingPlusButton onClick={() => setAddNewSection(true)} />
+      )}
 
       {(topics === undefined || (topics && topics.length === 0)) &&
         location.pathname !== "/cursos" && (
