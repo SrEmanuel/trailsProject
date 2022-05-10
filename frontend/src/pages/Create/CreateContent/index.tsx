@@ -8,7 +8,6 @@ import "../styles.scss";
 import "./styles.scss";
 import { Formik, FormikProps } from "formik";
 import { NewContentSchema } from "../../../schemas/newcontent.schema";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import api from "../../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
@@ -155,7 +154,6 @@ export function CreateContent() {
                 )}
                 <div className="editor-wrapper">
                   <CKEditor
-                    editor={ClassicEditor}
                     style={{ width: "100%" }}
                     initData={
                       values.htmlContent || (

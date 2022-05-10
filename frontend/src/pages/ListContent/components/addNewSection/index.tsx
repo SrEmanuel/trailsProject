@@ -1,22 +1,44 @@
 import { Formik } from "formik";
 import { FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { ModalContainer } from "../../../../components/ModalContainer";
 import { Overlay } from "../../../../components/Overlay";
+import { useAuth } from "../../../../hooks/useAuth";
+import { ITopic } from "../../../../interfaces/topic";
+import { ITrails } from "../../../../interfaces/Trail";
+import api from "../../../../services/api";
+import { handleNotifyError } from "../../../../utils/handleNotifyError";
 
 import "./styles.scss";
 
 interface Props {
   isVisible: boolean;
+  currentCourse: ITrails;
   setIsVisible: (arg: boolean) => void;
-  setSection: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setTopics: React.Dispatch<React.SetStateAction<ITopic[] | undefined>>;
 }
 
-export function AddNewSection({ isVisible, setIsVisible, setSection }: Props) {
+export function AddNewSection({ isVisible, currentCourse , setIsVisible, setTopics }: Props) {
+  const { handleClearUserDataFromStorage } = useAuth();
+  const navigate = useNavigate();
 
-  function handleSumitValuesAndClose(name: string){
-    setSection(name);
+  async function handleSumitValuesAndClose(name: string){
+      const topic = {
+        name: name,
+        position: 100,
+        courseId: currentCourse?.id,
+      };
+      try {
+        await api.post("/topics", topic);
+        const response = await api.get(
+          `/courses/${currentCourse?.linkName}/topics`
+        );
+        setTopics(response.data.content);
+      } catch (error) {
+        handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+      }
     setIsVisible(false);
   }
 

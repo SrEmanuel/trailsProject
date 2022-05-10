@@ -1,19 +1,8 @@
-import {
-  FormEvent,
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { DeleteSubject } from "../../components/DeleteSubject";
 import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
 import { Paginator } from "../../components/Paginator";
-import { PlusButton } from "../../components/PlusButton";
-import { Subject } from "../../components/Subject";
 import { Trail } from "../../components/Trail";
 import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
@@ -24,6 +13,7 @@ import { AddNewSection } from "./components/addNewSection";
 
 import { ReactComponent as AddNewContent } from "../../assets/images/AddNewContent.svg";
 import "./styles.scss";
+import { Topic } from "../../components/Topic";
 
 export const ListContent = memo(() => {
   const [trails, setTrails] = useState<ITrails[]>();
@@ -34,9 +24,6 @@ export const ListContent = memo(() => {
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const [addNewSection, setAddNewSection] = useState<boolean>(false);
-  const [newSection, setNewSection] = useState<string>();
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState<string>("");
   const location = useLocation();
 
   const params = useParams();
@@ -65,41 +52,6 @@ export const ListContent = memo(() => {
     setCurrentCourse(response.data);
   }, [params.coursename]);
 
-  const handleUpdateTopics = useCallback(async () => {
-    const topic = {
-      name: newSection,
-      position: (topics as any).length + 1,
-      courseId: currentCourse?.id,
-    };
-    try {
-      await api.post("/topics", topic);
-      const response = await api.get(
-        `/courses/${currentCourse?.linkName}/topics`
-      );
-      setTopics(response.data.content);
-    } catch (error) {
-      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
-    }
-  }, [currentCourse?.id, currentCourse?.linkName, handleClearUserDataFromStorage, navigate, newSection, topics]);
-
-  const handleShowDeleteModal = async (subjectLinkName: string) => {
-    setIsDeleteModalVisible(true);
-    setSelectedSubject(subjectLinkName);
-  };
-
-  const handleDeleteSubject = async (event: FormEvent) => {
-    event.preventDefault();
-    try {
-      await api.delete(`/subjects/${selectedSubject}`);
-      toast.success("Deletado com sucesso!");
-      setIsDeleteModalVisible(false);
-    } catch (error) {
-      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
-    } finally {
-      loadData();
-    }
-  };
-
   const loadData = useCallback(async () => {
     setIsTeacher(await getIsTeacher());
     if (location.pathname === "/cursos") {
@@ -115,12 +67,6 @@ export const ListContent = memo(() => {
     handleLoadTopics,
     location.pathname,
   ]);
-
-  useEffect(() => {
-    if (newSection) {
-      handleUpdateTopics();
-    }
-  }, [currentCourse?.id, handleUpdateTopics, newSection, topics]);
 
   useEffect(() => {
     loadData();
@@ -139,13 +85,9 @@ export const ListContent = memo(() => {
     <div className="container">
       <AddNewSection
         setIsVisible={setAddNewSection}
-        setSection={setNewSection}
+        setTopics={setTopics}
+        currentCourse={currentCourse as ITrails}
         isVisible={addNewSection}
-      />
-      <DeleteSubject
-        isVisible={isDeleteModalVisible}
-        setIsVisible={setIsDeleteModalVisible}
-        onDelete={handleDeleteSubject}
       />
       <NavBar />
       <h1>
@@ -162,42 +104,29 @@ export const ListContent = memo(() => {
         {location.pathname === "/cursos" &&
           trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
       </div>
+      
       {location.pathname !== "/cursos" &&
         topics?.map((topic, index) => (
           <Fragment key={topic.id}>
-            <h2 className="topic-title">{topic.name}</h2>
-            <div className="trails-grid-container">
-              {topic.subjects.map((subject) => (
-                <Subject
-                  showOptions={isTeacher ? true : false}
-                  key={subject.id}
-                  coursename={params.coursename as string}
-                  topicId={topic.id}
-                  subject={subject}
-                  onDelete={handleShowDeleteModal}
-                />
-              ))}
-              {isTeacher && (
-                <PlusButton
-                  text="Novo conteúdo"
-                  color="var(--dark-green)"
-                  topicId={topic.id}
-                  coursename={params.coursename as unknown as number}
-                />
-              )}
-            </div>
-
+            <Topic
+              topic={topic}
+              params={params}
+              enableAdminMode={isTeacher as boolean}
+              onDeleteSubject={loadData}
+            />
             {index === topics.length - 1 && isTeacher && (
               <FloatingPlusButton onClick={() => setAddNewSection(true)} />
             )}
           </Fragment>
         ))}
-      {( (topics === undefined || (topics && topics.length === 0)) && location.pathname!== '/cursos' ) && (
-        <div className="empty-course-list">
-          <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>
-          <AddNewContent onClick={()=> setAddNewSection(true)} />
-        </div>
-      )}
+
+      {(topics === undefined || (topics && topics.length === 0)) &&
+        location.pathname !== "/cursos" && (
+          <div className="empty-course-list">
+            <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>
+            <AddNewContent onClick={() => setAddNewSection(true)} />
+          </div>
+        )}
     </div>
   );
 });
