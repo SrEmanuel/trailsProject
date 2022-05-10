@@ -63,6 +63,8 @@ public class CourseResource {
     }
 
 
+
+
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{linkName}")
     public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody CourseDTO course){

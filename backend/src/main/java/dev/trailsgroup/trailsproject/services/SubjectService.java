@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,6 +51,11 @@ public class SubjectService {
     public Subject findByName(String linkName){
         Optional<Subject> obj = repository.findByLinkName(linkName);
         return obj.orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+    }
+
+
+    public void saveAll(List<Subject> subjectList){
+        repository.saveAll(subjectList);
     }
 
     public Subject insert(SubjectDTO obj){
@@ -120,6 +126,8 @@ public class SubjectService {
         }
 
     }
+
+
 
     private void addProfessorName(Subject obj){
         UserSS userss = UserService.authenticated();

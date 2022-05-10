@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.resources;
 
+import dev.trailsgroup.trailsproject.dto.SubjectPositionDTO;
 import dev.trailsgroup.trailsproject.dto.TopicDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Topic;
@@ -13,7 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/topics")
@@ -39,6 +42,13 @@ public class TopicResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
+    }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PostMapping(value = "/{linkName}/update-positions")
+    public ResponseEntity<Topic> updateSubjectPositions(@Valid @RequestBody List<SubjectPositionDTO> subjectPositionDTOList, @PathVariable String linkName){
+        Topic obj = service.updateSubjectPositions(linkName, subjectPositionDTOList);
+        return ResponseEntity.ok().body(obj);
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
