@@ -82,7 +82,7 @@ public class UserService {
             if(verifyEmailAvailability(obj.getEmail()))
                 throw new DatabaseException("O email já foi cadastrado no sistema! Informe outro email.");
 
-            User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), UserType.toEnum(obj.getType()), obj.getStatus());
+            User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), obj.getStatus());
             return repository.save(user);
         }catch (DataIntegrityViolationException e ){
             throw new DatabaseException(e.getMessage());
@@ -117,7 +117,6 @@ public class UserService {
         userDataBase.setName(obj.getName());
         userDataBase.setEmail(obj.getEmail());
         userDataBase.setStatus(obj.getStatus());
-        userDataBase.setType(obj.getType());
         userDataBase.setPassword(pe.encode(obj.getPassword()));
     }
 

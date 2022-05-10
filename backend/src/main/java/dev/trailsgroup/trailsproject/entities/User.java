@@ -37,7 +37,6 @@ public class User implements Serializable {
     @Column(unique=true)
     private String email;
 
-    private Integer type;
     private Boolean status;
 
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,12 +52,11 @@ public class User implements Serializable {
         addProfile(UserProfiles.PROFESSOR);
     }
 
-    public User(Integer id, String name, String password, String email, UserType type, Boolean status) {
+    public User(Integer id, String name, String password, String email, Boolean status) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email.toLowerCase();
-        this.type = (type == null) ? UserType.PROFESSOR.getCod() : type.getCod();
         this.status = status == null || status;
         addProfile(UserProfiles.USER);
         addProfile(UserProfiles.PROFESSOR);
@@ -107,13 +105,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 
     public Boolean getStatus() {
         return status;
