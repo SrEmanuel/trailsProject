@@ -65,6 +65,10 @@ public class TopicService {
         return repository.save(topic);
     }
 
+    public void saveAll(List<Topic> topicList){
+        repository.saveAll(topicList);
+    }
+
     public void delete(String linkName){
         try{
             Topic topic = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));

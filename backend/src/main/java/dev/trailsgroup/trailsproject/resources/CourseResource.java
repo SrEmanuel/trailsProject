@@ -1,6 +1,8 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.CourseDTO;
+import dev.trailsgroup.trailsproject.dto.SubjectPositionDTO;
+import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Course;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/courses")
@@ -75,6 +78,13 @@ public class CourseResource {
     @GetMapping(value = "/{linkName}/topics")
     public ResponseEntity<Page<Topic>> getTopics(@PathVariable String linkName, Pageable pageable){
         return ResponseEntity.ok().body(topicService.getTopicsByCourse(linkName, pageable));
+    }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PostMapping(value = "/{linkName}/update-positions")
+    public ResponseEntity<List<Topic>> updateSubjectPositions(@Valid @RequestBody List<TopicPositionDTO> topicPositionDTO, @PathVariable String linkName){
+        List<Topic> obj = service.updateTopicPositions(linkName, topicPositionDTO);
+        return ResponseEntity.ok().body(obj);
     }
 
 

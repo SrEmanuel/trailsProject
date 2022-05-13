@@ -10,9 +10,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_course")
@@ -42,7 +40,7 @@ public class Course implements Serializable {
     public Course(){}
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Topic> topics = new HashSet<>();
+    private List<Topic> topics = new ArrayList<>();
 
     public Course(Integer id, String name, String image, String linkName) {
         this.id = id;
@@ -111,7 +109,7 @@ public class Course implements Serializable {
     }
 
     @JsonIgnore
-    public Set<Topic> getTopics() {
+    public List<Topic> getTopics() {
         return topics;
     }
 

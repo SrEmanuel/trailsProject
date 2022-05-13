@@ -1,9 +1,8 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.CourseDTO;
-import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.entities.UserCourse;
+import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
+import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
@@ -22,15 +21,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TopicService topicService;
 
     @Autowired
     private CourseRepository repository;
@@ -120,6 +121,24 @@ public class CourseService {
         UserSS userss = UserService.authenticated();
         if(!userService.verifyPermission(obj) && !userss.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Você não é professor deste curso para realizar essa ação!");
+        }
+    }
+
+    public List<Topic> updateTopicPositions(String linkname, List<TopicPositionDTO> topicPositionDTO) {
+        Optional<Course> course = repository.findByLinkName(linkname);
+        if(course.isEmpty()) {
+            throw new ResourceNotFoundException("Recurso não encontrado: " + linkname);
+        }else{
+            List<Topic> topics =  course.get().getTopics();
+            topics.forEach(x -> {
+                List<TopicPositionDTO> topic = topicPositionDTO.stream().filter(y ->
+                                y.getTopicId() == x.getId())
+                        .collect(Collectors.toList());
+                if(!topic.isEmpty())
+                    x.setPosition(topic.get(0).getPosition());
+            });
+            topicService.saveAll(topics);
+            return course.get().getTopics();
         }
     }
 
