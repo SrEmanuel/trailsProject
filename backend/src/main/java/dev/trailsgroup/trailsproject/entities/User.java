@@ -2,7 +2,6 @@ package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,9 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -46,6 +43,8 @@ public class User implements Serializable {
     @CollectionTable(name="tb_profiles")    
     private Set<Integer> profiles =  new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentSubject> studentSubject = new ArrayList<>();
 
     public User(){
         addProfile(UserProfiles.USER);

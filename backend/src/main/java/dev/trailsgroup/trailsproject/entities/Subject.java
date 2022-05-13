@@ -138,7 +138,7 @@ public class Subject implements Serializable {
 
     public List<UserSubject> getAuthors(){
         List<UserSubject> sortedUserSubject = authors;
-        sortedUserSubject.sort(Comparator.comparing(UserSubject::getLastModificationDate).reversed());
+        sortedUserSubject.sort(Comparator.comparing(UserSubject::getModificationDate).reversed());
         return sortedUserSubject;
     }
 

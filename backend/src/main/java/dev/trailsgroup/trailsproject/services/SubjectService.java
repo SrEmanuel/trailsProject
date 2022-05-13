@@ -1,13 +1,9 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
-import dev.trailsgroup.trailsproject.entities.Subject;
-import dev.trailsgroup.trailsproject.entities.Topic;
-import dev.trailsgroup.trailsproject.entities.UserSubject;
+import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.repositories.SubjectRepository;
-import dev.trailsgroup.trailsproject.repositories.TopicRepository;
-import dev.trailsgroup.trailsproject.repositories.UserSubjectRepository;
+import dev.trailsgroup.trailsproject.repositories.*;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
@@ -36,7 +32,10 @@ public class SubjectService {
     private TopicRepository topicRepository;
 
     @Autowired
-    private UserSubjectRepository userSubjectRepository;
+    private StudentSubjectRepository studentSubjectRepository;
+
+    @Autowired
+    private ProfessorSubjectRepository professorSubjectRepository;
 
     @Autowired
     private StaticFileService staticFileService;
@@ -127,27 +126,33 @@ public class SubjectService {
 
     }
 
-
-
     private void addProfessorName(Subject obj){
         UserSS userss = UserService.authenticated();
 
         String name = Objects.requireNonNull(userss).getName();
         String email = Objects.requireNonNull(userss).getUsername();
-        UserSubject userSubject = new UserSubject();
-        userSubject.setProfessorEmail(email);
-        userSubject.setProfessorName(name);
-        userSubject.setSubject(obj);
+        ProfessorSubject professorSubject = new ProfessorSubject();
+        professorSubject.setUserEmail(email);
+        professorSubject.setUserName(name);
+        professorSubject.setSubject(obj);
 
-        Example<UserSubject> example = Example.of(userSubject);
-        if(userSubjectRepository.exists(example)){
-            UserSubject userSubject1 = userSubjectRepository.findOne(example).get();
-            userSubject1.addCounter();
-            userSubjectRepository.save(userSubject1);
+        Example<ProfessorSubject> example = Example.of(professorSubject);
+        if(professorSubjectRepository.exists(example)){
+            ProfessorSubject professorSubject1 = professorSubjectRepository.findOne(example).get();
+            professorSubject1.addCounter();
+            professorSubjectRepository.save(professorSubject1);
         }else {
-            userSubject.addCounter();
-            userSubjectRepository.save(userSubject);
+            professorSubject.addCounter();
+            professorSubjectRepository.save(professorSubject);
         }
     }
 
+    public void markUserProgress(boolean state, String linkName) {
+        User user = userService.findById(UserService.authenticated().getId());
+        Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador de Subject não encontrado: "+ linkName));
+        StudentSubject studentSubject = new StudentSubject(null, subject, user);
+        studentSubject.setCompleted(state);
+        studentSubjectRepository.save(studentSubject);
+
+    }
 }

@@ -68,7 +68,10 @@ public class SubjectResource {
         return ResponseEntity.ok().body(obj);
     }
 
-
-
-
+    @PreAuthorize("hasAnyRole('USER')")
+    @PutMapping(value = "/{linkName}/user/mark")
+    public ResponseEntity<Void> markUserProgress(@PathVariable String linkName, @RequestParam(name = "state") boolean state){
+        service.markUserProgress(state, linkName);
+        return ResponseEntity.noContent().build();
+    }
 }
