@@ -1,4 +1,4 @@
-import { Fragment, memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FloatingPlusButton } from "../../components/FloatingPlusButton";
 import { NavBar } from "../../components/Navbar";
@@ -28,6 +28,11 @@ export const ListContent = memo(() => {
 
   const params = useParams();
   const navigate = useNavigate();
+  const title = isTeacher
+  ? `Bem vindo, ${user?.name}`
+  : location.pathname === "/cursos"
+  ? "Trilhas disponíveis"
+  : currentCourse?.name;
 
   const handleLoadCourses = useCallback(async () => {
     const url = (await getIsTeacher())
@@ -91,11 +96,7 @@ export const ListContent = memo(() => {
       />
       <NavBar />
       <h1>
-        {isTeacher
-          ? `Bem vindo, ${user?.name}`
-          : location.pathname === "/cursos"
-          ? "Trilhas disponíveis"
-          : currentCourse?.name}
+        {title}
       </h1>
       {location.pathname === "/cursos" && (
         <Paginator page={page} totalPages={totalPages} setPage={setPage} />
@@ -104,21 +105,20 @@ export const ListContent = memo(() => {
         {location.pathname === "/cursos" &&
           trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
       </div>
-      
+
       {location.pathname !== "/cursos" &&
         topics?.map((topic, index) => (
-          <Fragment key={topic.id}>
-            <Topic
-              topic={topic}
-              params={params}
-              enableAdminMode={isTeacher as boolean}
-              onDeleteSubject={loadData}
-            />
-            {index === topics.length - 1 && isTeacher && (
-              <FloatingPlusButton onClick={() => setAddNewSection(true)} />
-            )}
-          </Fragment>
+          <Topic
+            topic={topic}
+            params={params}
+            enableAdminMode={isTeacher as boolean}
+            onDeleteSubject={loadData}
+          />
         ))}
+
+      { location.pathname !== "/cursos" && isTeacher && (
+        <FloatingPlusButton onClick={() => setAddNewSection(true)} />
+      )}
 
       {(topics === undefined || (topics && topics.length === 0)) &&
         location.pathname !== "/cursos" && (
