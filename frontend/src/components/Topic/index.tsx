@@ -54,39 +54,52 @@ export function Topic({
         onDelete={handleDeleteSubject}
       />
       <h2 className="topic-title">{topic.name}</h2>
-      <div className="trails-grid-container">
-        {topic.subjects.map((subject, index) => (
-          <Draggable
-            draggableId={String(subject.id)}
-            index={index}
-            key={subject.id}
-          >
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <Subject
+      {enableAdminMode ? (
+        <div className="trails-grid-container">
+          {topic.subjects.map((subject, index) => (
+            <Draggable
+              draggableId={String(subject.id)}
+              index={index}
+              key={subject.id}
+            >
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                >
+                   <Subject
                   showOptions={enableAdminMode}
                   coursename={params.coursename as string}
                   topicId={topic.id}
                   subject={subject}
                   onDelete={handleShowDeleteModal}
                 />
-              </div>
-            )}
-          </Draggable>
-        ))}
-        {enableAdminMode && (
-          <PlusButton
+                </div>
+              )}
+            </Draggable>
+            
+          ))}
+           <PlusButton
             text="Novo conteúdo"
             color="var(--dark-green)"
             topicId={topic.id}
             coursename={params.coursename as unknown as number}
           />
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="trails-grid-container">
+          {topic.subjects.map((subject, index) => (
+            <Subject
+              showOptions={enableAdminMode}
+              coursename={params.coursename as string}
+              topicId={topic.id}
+              subject={subject}
+              onDelete={handleShowDeleteModal}
+            />
+          ))}
+        </div>
+      )}
     </Fragment>
   );
 }
