@@ -14,6 +14,7 @@ import { AddNewSection } from "./components/addNewSection";
 import { ReactComponent as AddNewContent } from "../../assets/images/AddNewContent.svg";
 import "./styles.scss";
 import { Topic } from "../../components/Topic";
+import { DragDropTopicsList } from "./components/DragDropTopicsList";
 
 export const ListContent = memo(() => {
   const [trails, setTrails] = useState<ITrails[]>();
@@ -29,10 +30,10 @@ export const ListContent = memo(() => {
   const params = useParams();
   const navigate = useNavigate();
   const title = isTeacher
-  ? `Bem vindo, ${user?.name}`
-  : location.pathname === "/cursos"
-  ? "Trilhas disponíveis"
-  : currentCourse?.name;
+    ? `Bem vindo, ${user?.name}`
+    : location.pathname === "/cursos"
+    ? "Trilhas disponíveis"
+    : currentCourse?.name;
 
   const handleLoadCourses = useCallback(async () => {
     const url = (await getIsTeacher())
@@ -95,9 +96,7 @@ export const ListContent = memo(() => {
         isVisible={addNewSection}
       />
       <NavBar />
-      <h1>
-        {title}
-      </h1>
+      <h1>{title}</h1>
       {location.pathname === "/cursos" && (
         <Paginator page={page} totalPages={totalPages} setPage={setPage} />
       )}
@@ -107,6 +106,7 @@ export const ListContent = memo(() => {
       </div>
 
       {location.pathname !== "/cursos" &&
+        !isTeacher &&
         topics?.map((topic, index) => (
           <Topic
             topic={topic}
@@ -116,8 +116,11 @@ export const ListContent = memo(() => {
           />
         ))}
 
-      { location.pathname !== "/cursos" && isTeacher && (
-        <FloatingPlusButton onClick={() => setAddNewSection(true)} />
+      {location.pathname !== "/cursos" && isTeacher && (
+        <>
+          <DragDropTopicsList topics={topics as ITopic[]} params={params} onDeleteSubject={loadData} />
+          <FloatingPlusButton onClick={() => setAddNewSection(true)} />
+        </>
       )}
 
       {(topics === undefined || (topics && topics.length === 0)) &&
