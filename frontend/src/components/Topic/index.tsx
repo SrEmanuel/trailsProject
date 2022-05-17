@@ -1,4 +1,5 @@
 import { FormEvent, Fragment, useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
@@ -16,7 +17,12 @@ interface Props {
   onDeleteSubject: () => void;
 }
 
-export function Topic({ topic, params, enableAdminMode, onDeleteSubject }: Props) {
+export function Topic({
+  topic,
+  params,
+  enableAdminMode,
+  onDeleteSubject,
+}: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const navigate = useNavigate();
@@ -49,15 +55,28 @@ export function Topic({ topic, params, enableAdminMode, onDeleteSubject }: Props
       />
       <h2 className="topic-title">{topic.name}</h2>
       <div className="trails-grid-container">
-        {topic.subjects.map((subject) => (
-          <Subject
-            showOptions={enableAdminMode}
+        {topic.subjects.map((subject, index) => (
+          <Draggable
+            draggableId={String(subject.id)}
+            index={index}
             key={subject.id}
-            coursename={params.coursename as string}
-            topicId={topic.id}
-            subject={subject}
-            onDelete={handleShowDeleteModal}
-          />
+          >
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <Subject
+                  showOptions={enableAdminMode}
+                  coursename={params.coursename as string}
+                  topicId={topic.id}
+                  subject={subject}
+                  onDelete={handleShowDeleteModal}
+                />
+              </div>
+            )}
+          </Draggable>
         ))}
         {enableAdminMode && (
           <PlusButton
