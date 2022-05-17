@@ -4,9 +4,8 @@ import dev.trailsgroup.trailsproject.dto.CourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.repositories.CourseRepository;
-import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
-import dev.trailsgroup.trailsproject.repositories.UserRepository;
+import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
+import dev.trailsgroup.trailsproject.repositories.*;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
@@ -14,6 +13,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundExcepti
 import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,6 +41,9 @@ public class CourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository;
+
+    @Autowired
+    private StudentSubjectRepository studentSubjectRepository;
 
     @Autowired
     private StaticFileService staticFileService;
@@ -139,6 +142,43 @@ public class CourseService {
             });
             topicService.saveAll(topics);
             return course.get().getTopics();
+        }
+    }
+
+    public void verifyCourseCompleted(Course course){
+        User user = userService.findById(UserService.authenticated().getId());
+        Integer counter=0;
+        for(Topic x : course.getTopics()){
+            for(Subject y : x.getSubjects()) {
+                Topic topic = new Topic();
+                topic.setCourse(course);
+                Example<Topic> example = Example.of(topic);
+                Optional<StudentSubject> studentSubject = studentSubjectRepository.findBySubjectAndUser(y, user);
+                if(studentSubject.isPresent() && studentSubject.get().isCompleted())
+                    counter++;
+            }
+        }
+        if(counter.equals(course.getSubjectsCount()))
+            markUserProgress(course, true);
+        else{
+            markUserProgress(course, false);
+        }
+    }
+
+    public UserCourse markUserProgress(Course course, boolean condition){
+        User user = userService.findById(UserService.authenticated().getId());
+        UserCoursePK userCoursePK = new UserCoursePK();
+        userCoursePK.setCourse(course);
+        userCoursePK.setUser(user);
+        Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
+        if(userCourse.isPresent()){
+            UserCourse userCourseGet = userCourse.get();
+            userCourseGet.setCompleted(condition);
+            return userCourseRepository.save(userCourseGet);
+        }else{
+            UserCourse userCourseNew =  new UserCourse(course, user);
+            userCourseNew.setCompleted(condition);
+            return userCourseRepository.save(userCourseNew);
         }
     }
 

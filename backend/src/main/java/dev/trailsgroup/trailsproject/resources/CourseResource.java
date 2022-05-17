@@ -1,12 +1,10 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.CourseDTO;
-import dev.trailsgroup.trailsproject.dto.SubjectPositionDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
 import dev.trailsgroup.trailsproject.services.CourseService;
 import dev.trailsgroup.trailsproject.services.TopicService;
@@ -65,9 +63,6 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-
-
-
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{linkName}")
     public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody CourseDTO course){
@@ -86,7 +81,4 @@ public class CourseResource {
         List<Topic> obj = service.updateTopicPositions(linkName, topicPositionDTO);
         return ResponseEntity.ok().body(obj);
     }
-
-
-
 }

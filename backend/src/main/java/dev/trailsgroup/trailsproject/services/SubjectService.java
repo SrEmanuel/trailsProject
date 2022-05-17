@@ -10,6 +10,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,10 @@ public class SubjectService {
 
     @Autowired
     private SubjectRepository repository;
+
+    @Lazy
+    @Autowired
+    private CourseService courseService;
 
     @Autowired
     private TopicRepository topicRepository;
@@ -73,19 +78,15 @@ public class SubjectService {
 
         }
     }
-
     public boolean verifyLinkNameAvailability(String name){
         return repository.findByLinkName(name).isPresent();
     }
-
     public Subject insertImage(MultipartFile multipartFile, String linkName){
         Subject subject = repository.findByLinkName(linkName).orElseThrow(()-> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
         subject.setImage(staticFileService.update(multipartFile, subject.getImageName()));
         repository.save(subject);
         return subject;
     }
-
-
     public void delete(String linkName){
         try{
             Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
@@ -150,9 +151,16 @@ public class SubjectService {
     public void markUserProgress(boolean state, String linkName) {
         User user = userService.findById(UserService.authenticated().getId());
         Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador de Subject não encontrado: "+ linkName));
-        StudentSubject studentSubject = new StudentSubject(null, subject, user);
-        studentSubject.setCompleted(state);
-        studentSubjectRepository.save(studentSubject);
-
+        Optional<StudentSubject> studentSubject = studentSubjectRepository.findBySubjectAndUser(subject, user);
+        if(studentSubject.isEmpty()) {
+            StudentSubject studentSubjectNew = new StudentSubject(null, subject, user);
+            studentSubjectNew.setCompleted(state);
+            studentSubjectRepository.save(studentSubjectNew);
+            courseService.verifyCourseCompleted(subject.getTopic().getCourse());
+        }else{
+            StudentSubject studentSubjectDB = studentSubject.get();
+            studentSubjectDB.setCompleted(state);
+            courseService.verifyCourseCompleted(subject.getTopic().getCourse());
+        }
     }
 }
