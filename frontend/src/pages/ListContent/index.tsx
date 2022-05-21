@@ -118,7 +118,7 @@ export const ListContent = memo(() => {
 
       {location.pathname !== "/cursos" && isTeacher && (
         <>
-          <DragDropTopicsList topics={topics as ITopic[]} params={params} onDeleteSubject={loadData} />
+          <DragDropTopicsList setTopics={setTopics} topics={topics as ITopic[]} params={params} onContentChange={loadData} />
           <FloatingPlusButton onClick={() => setAddNewSection(true)} />
         </>
       )}
