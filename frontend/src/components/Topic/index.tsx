@@ -89,7 +89,7 @@ export function Topic({
         </div>
       ) : (
         <div className="trails-grid-container">
-          {topic.subjects.map((subject, index) => (
+          {topic.subjects.map((subject) => (
             <Subject
               showOptions={enableAdminMode}
               coursename={params.coursename as string}
