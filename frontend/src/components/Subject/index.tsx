@@ -26,7 +26,7 @@ export function Subject({ subject, coursename, showOptions, topicId, onDelete }:
       <div className="card-line"></div>
       <div className="subject-card-bottom">
         <span>
-          {subject.position}-{subject.name}
+          {subject.position + 1}-{subject.name}
         </span>
         {showOptions && (
           <div>
