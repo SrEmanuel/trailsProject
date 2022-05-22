@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_user_course")
+@Table(name = "tb_usercourse")
 public class UserCourse implements Serializable {
 
     @EmbeddedId
@@ -17,9 +17,12 @@ public class UserCourse implements Serializable {
 
     public UserCourse(){}
 
+    private boolean completed;
+
     public UserCourse(Course course, User user) {
         id.setCourse(course);
         id.setUser(user);
+        this.completed = false;
     }
 
     public Course getCourse(){
@@ -36,6 +39,14 @@ public class UserCourse implements Serializable {
 
     public void setUser(User user){
         id.setUser(user);
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     @Override
