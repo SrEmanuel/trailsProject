@@ -63,9 +63,9 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
 
     topics.forEach( topic => {
       topic.subjects.forEach( (subject, index) => data.push( { subjectId: subject.id, position: index } ) )
-    })
+    });
 
-    setTopics(topics);
+    setTopics([...topics]);
 
     updateList(selectedTopic.linkName, data);
   }
