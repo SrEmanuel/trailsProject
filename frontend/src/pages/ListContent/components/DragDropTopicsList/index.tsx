@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import { Topic } from "../../../../components/Topic";
@@ -22,6 +23,7 @@ interface UpdatePositionPayload {
 export function DragDropTopicsList({ params, topics, onContentChange, setTopics}: Props) {
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
+  const [currentSourceId, setCurrentSourceId] = useState<string>();
 
   const reorder = (subjects: ISubject[], startIndex: number, endIndex: number) => {
     const result = Array.from(subjects);
@@ -73,12 +75,16 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
+      onDragUpdate={(initial, provided) =>  {
+        setCurrentSourceId(initial.source?.droppableId)
+      } }
     >
       {topics?.map((topic, index) => (
         <Droppable
           droppableId={String(index)}
           key={topic.id}
           direction="horizontal"
+          isDropDisabled={ JSON.stringify(index) !== currentSourceId}
         >
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
