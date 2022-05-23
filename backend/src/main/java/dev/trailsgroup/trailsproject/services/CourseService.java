@@ -56,19 +56,18 @@ public class CourseService {
         Page<Course> all = repository.findAll(pageable);
         List<OutputCourseDTO> coursesEnchanted = new ArrayList<>();
 
-        for (int i = 0; i < all.getNumberOfElements(); i++) {
-            for (Course x : all) {
-                UserCoursePK userCoursePK = new UserCoursePK();
-                userCoursePK.setCourse(x);
-                userCoursePK.setUser(user);
-                Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
+        for (Course x : all) {
+            UserCoursePK userCoursePK = new UserCoursePK();
+            userCoursePK.setCourse(x);
+            userCoursePK.setUser(user);
+            Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
 
-                boolean completed = false;
-                if (userCourse.isPresent()) {
-                    completed = userCourse.get().isCompleted();
-                    coursesEnchanted.add(new OutputCourseDTO(x, completed));
-                }
-            }
+            boolean completed = false;
+            if (userCourse.isPresent()) {
+                completed = userCourse.get().isCompleted();
+                coursesEnchanted.add(new OutputCourseDTO(x, completed));
+        }
+
         }
         return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
