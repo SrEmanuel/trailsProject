@@ -66,7 +66,7 @@ public class CourseService {
             if (userCourse.isPresent()) {
                 completed = userCourse.get().isCompleted();
                 coursesEnchanted.add(new OutputCourseDTO(x, completed));
-        }
+            }
 
         }
         return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
