@@ -24,6 +24,7 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const [currentSourceId, setCurrentSourceId] = useState<string>();
+  const [draggedItemDOMRect, setDraggedItemDOMRect] = useState<DOMRect>();
 
   const reorder = (subjects: ISubject[], startIndex: number, endIndex: number) => {
     const result = Array.from(subjects);
@@ -68,6 +69,7 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
     });
 
     setTopics([...topics]);
+    setDraggedItemDOMRect(undefined);
 
     updateList(selectedTopic.linkName, data);
   }
@@ -75,6 +77,10 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
+      onBeforeDragStart={initial => {
+        const draggableElement = document.getElementById(`draggable-${initial.draggableId}`)
+        setDraggedItemDOMRect(draggableElement?.getBoundingClientRect())
+      }}
       onDragUpdate={(initial, provided) =>  {
         setCurrentSourceId(initial.source?.droppableId)
       } }
@@ -86,7 +92,7 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
           direction="horizontal"
           isDropDisabled={ JSON.stringify(index) !== currentSourceId}
         >
-          {(provided) => (
+          {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <Topic
                 topic={topic}
@@ -96,6 +102,14 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
               />
 
               {provided.placeholder}
+              {draggedItemDOMRect && snapshot.isUsingPlaceholder && (
+                <div className="custom-placeholder card-container"  style={{ 
+                  position: 'absolute',
+                  top: draggedItemDOMRect.top, 
+                  left: draggedItemDOMRect.left
+                }} > 
+                </div>
+              )}
             </div>
           )}
         </Droppable>
