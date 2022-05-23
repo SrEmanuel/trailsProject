@@ -100,6 +100,10 @@ body {
     font-size: 12px;
   }
 
+  .custom-placeholder{
+    border: 2px dashed var(--grey);
+  }
+
   .container {
     display: flex;
     flex-direction: column;
