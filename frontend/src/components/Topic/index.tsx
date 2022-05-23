@@ -67,20 +67,21 @@ export function Topic({
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
+                  /* the id to be used to find this DOM element and add the custom placeholder while dragging*/
+                  id={`draggable-${subject.id}`}
                 >
-                   <Subject
-                  showOptions={enableAdminMode}
-                  coursename={params.coursename as string}
-                  topicId={topic.id}
-                  subject={subject}
-                  onDelete={handleShowDeleteModal}
-                />
+                  <Subject
+                    showOptions={enableAdminMode}
+                    coursename={params.coursename as string}
+                    topicId={topic.id}
+                    subject={subject}
+                    onDelete={handleShowDeleteModal}
+                  />
                 </div>
               )}
             </Draggable>
-            
           ))}
-           <PlusButton
+          <PlusButton
             text="Novo conteúdo"
             color="var(--dark-green)"
             topicId={topic.id}
