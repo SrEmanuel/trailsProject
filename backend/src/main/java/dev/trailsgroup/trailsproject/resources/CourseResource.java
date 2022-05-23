@@ -82,4 +82,11 @@ public class CourseResource {
         List<Topic> obj = service.updateTopicPositions(linkName, topicPositionDTO);
         return ResponseEntity.ok().body(obj);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping(value = "/{linkName}")
+    public ResponseEntity<Void>  delete(@PathVariable String linkName){
+        service.delete(linkName);
+        return ResponseEntity.noContent().build();
+    }
 }
