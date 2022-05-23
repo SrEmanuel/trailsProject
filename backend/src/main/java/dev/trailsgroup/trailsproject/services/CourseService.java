@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.CourseDTO;
+import dev.trailsgroup.trailsproject.dto.InputCourseDTO;
+import dev.trailsgroup.trailsproject.dto.OutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
@@ -13,9 +14,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundExcepti
 import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,16 +47,40 @@ public class CourseService {
     @Autowired
     private StaticFileService staticFileService;
 
-    public Page<Course> findAll(Pageable pageable){
-        return repository.findAll(pageable);
+    public Page<?> findAll(Pageable pageable) {
+        if(UserService.authenticated() == null)
+            return repository.findAll(pageable);
+
+        String email = UserService.authenticated().getUsername();
+        User user = userRepository.findByEmail(email).get();
+        Page<Course> all = repository.findAll(pageable);
+        List<OutputCourseDTO> coursesEnchanted = new ArrayList<>();
+
+        for (int i = 0; i < all.getNumberOfElements(); i++) {
+            for (Course x : all) {
+                UserCoursePK userCoursePK = new UserCoursePK();
+                userCoursePK.setCourse(x);
+                userCoursePK.setUser(user);
+                Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
+
+                boolean completed = false;
+                if (userCourse.isPresent()) {
+                    completed = userCourse.get().isCompleted();
+                    coursesEnchanted.add(new OutputCourseDTO(x, completed));
+                }
+            }
+        }
+        return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
+
+
 
     public Course findByName(String linkName){
         Optional<Course> obj = repository.findByLinkName(linkName);
         return obj.orElseThrow(() -> new ResourceNotFoundException(linkName));
     }
 
-    public Course insert(CourseDTO obj){
+    public Course insert(InputCourseDTO obj){
         try {
             String linkName = ClassUtils.createLinkName(obj.getName());
             if(verifyLinkNameAvailability(linkName))
@@ -91,7 +114,7 @@ public class CourseService {
     }
 
 
-        public Course update(String linkName, CourseDTO obj){
+        public Course update(String linkName, InputCourseDTO obj){
         try{
             Course courseDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(courseDatabase);
@@ -104,7 +127,7 @@ public class CourseService {
         }
     }
 
-    public void courseUpdateInformation(Course courseDataBase, CourseDTO obj){
+    public void courseUpdateInformation(Course courseDataBase, InputCourseDTO obj){
         String linkName = ClassUtils.createLinkName(obj.getName());
         if(verifyLinkNameAvailability(linkName) && !Objects.equals(linkName, courseDataBase.getLinkName()))
             throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");

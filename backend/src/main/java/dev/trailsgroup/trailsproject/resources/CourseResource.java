@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
-import dev.trailsgroup.trailsproject.dto.CourseDTO;
+import dev.trailsgroup.trailsproject.dto.InputCourseDTO;
+import dev.trailsgroup.trailsproject.dto.OutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
@@ -34,7 +35,7 @@ public class CourseResource {
     private TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<Page<Course>> findAll(Pageable pageable){
+    public ResponseEntity<Page<?>> findAll(Pageable pageable){
         return ResponseEntity.ok().body(service.findAll(pageable));
     }
 
@@ -46,7 +47,7 @@ public class CourseResource {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Course> insert(@Validated({CreateInfo.class, UpdateInfo.class})@RequestBody CourseDTO course){
+    public ResponseEntity<Course> insert(@Validated({CreateInfo.class, UpdateInfo.class})@RequestBody InputCourseDTO course){
 
         Course obj = service.insert(course);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -65,7 +66,7 @@ public class CourseResource {
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PutMapping(value = "/{linkName}")
-    public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody CourseDTO course){
+    public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody InputCourseDTO course){
         Course obj = service.update(linkName, course);
         return ResponseEntity.ok().body(obj);
     }

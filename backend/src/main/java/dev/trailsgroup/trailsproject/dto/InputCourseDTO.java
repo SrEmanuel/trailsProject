@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class CourseDTO {
+public class InputCourseDTO {
 
     @Size(min=3, message="O nome não pode ser menor que 3 caracteres", groups = CreateInfo.class)
     @NotEmpty(message = "O nome é obrigatório!", groups= CreateInfo.class)
@@ -20,7 +20,7 @@ public class CourseDTO {
     private String image;
 
 
-    public CourseDTO(){
+    public InputCourseDTO(){
     }
 
     public String getName() {
