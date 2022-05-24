@@ -87,7 +87,7 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
           isDropDisabled={ JSON.stringify(index) !== currentSourceId}
         >
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <div className="dropabble-wrapper" {...provided.droppableProps} ref={provided.innerRef}>
               <Topic
                 topic={topic}
                 params={params}
