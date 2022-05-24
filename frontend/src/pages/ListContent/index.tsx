@@ -78,12 +78,6 @@ export const ListContent = memo(() => {
     loadData();
   }, [
     location,
-    isTeacher,
-    user,
-    handleLoadCourses,
-    handleLoadTopics,
-    handleLoadSelectedCourse,
-    getIsTeacher,
     loadData,
   ]);
 
