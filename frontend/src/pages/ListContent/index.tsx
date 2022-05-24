@@ -105,7 +105,7 @@ export const ListContent = memo(() => {
           <Topic
             topic={topic}
             params={params}
-            enableAdminMode={isTeacher as boolean}
+            enableAdminMode={false}
             onDeleteSubject={loadData}
           />
         ))}
