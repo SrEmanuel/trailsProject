@@ -97,7 +97,7 @@ export const ListContent = memo(() => {
 
       {location.pathname !== "/cursos" &&
         !isTeacher &&
-        topics?.map((topic, index) => (
+        topics?.map((topic) => (
           <Topic
             topic={topic}
             params={params}
