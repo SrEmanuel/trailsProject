@@ -10,6 +10,8 @@ import { DeleteSubject } from "../DeleteSubject";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
 
+import "./styles.scss";
+
 interface Props {
   topic: ITopic;
   params: any;
@@ -55,39 +57,42 @@ export function Topic({
       />
       <h2 className="topic-title">{topic.name}</h2>
       {enableAdminMode ? (
-        <div className="trails-grid-container">
-          {topic.subjects.map((subject, index) => (
-            <Draggable
-              draggableId={String(subject.id)}
-              index={index}
-              key={subject.id}
-            >
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  /* the id to be used to find this DOM element and add the custom placeholder while dragging*/
-                  id={`draggable-${subject.id}`}
-                >
-                  <Subject
-                    showOptions={enableAdminMode}
-                    coursename={params.coursename as string}
-                    topicId={topic.id}
-                    subject={subject}
-                    onDelete={handleShowDeleteModal}
-                  />
-                </div>
-              )}
-            </Draggable>
-          ))}
+        <>
+          <div className="trails-grid-container">
+            {topic.subjects.map((subject, index) => (
+              <Draggable
+                draggableId={String(subject.id)}
+                index={index}
+                key={subject.id}
+              >
+                {(provided) => (
+                  <div
+                    className="draggable-wrapper"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    /* the id to be used to find this DOM element and add the custom placeholder while dragging*/
+                    id={`draggable-${subject.id}`}
+                  >
+                    <Subject
+                      showOptions={enableAdminMode}
+                      coursename={params.coursename as string}
+                      topicId={topic.id}
+                      subject={subject}
+                      onDelete={handleShowDeleteModal}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          </div>
           <PlusButton
             text="Novo conteúdo"
             color="var(--dark-green)"
             topicId={topic.id}
             coursename={params.coursename as unknown as number}
           />
-        </div>
+        </>
       ) : (
         <div className="trails-grid-container">
           {topic.subjects.map((subject) => (

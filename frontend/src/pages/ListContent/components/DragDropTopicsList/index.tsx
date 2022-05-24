@@ -89,11 +89,11 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
         <Droppable
           droppableId={String(index)}
           key={topic.id}
-          direction="horizontal"
+          direction={ window.screen.width >= 540? "horizontal" : "vertical" }
           isDropDisabled={ JSON.stringify(index) !== currentSourceId}
         >
           {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <div className="dropabble-wrapper" {...provided.droppableProps} ref={provided.innerRef}>
               <Topic
                 topic={topic}
                 params={params}
@@ -105,7 +105,7 @@ export function DragDropTopicsList({ params, topics, onContentChange, setTopics}
               {draggedItemDOMRect && snapshot.isUsingPlaceholder && (
                 <div className="custom-placeholder card-container"  style={{ 
                   position: 'absolute',
-                  top: draggedItemDOMRect.top, 
+                  top: draggedItemDOMRect.top +40, 
                   left: draggedItemDOMRect.left
                 }} > 
                 </div>

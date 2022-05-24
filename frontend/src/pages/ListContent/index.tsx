@@ -78,12 +78,6 @@ export const ListContent = memo(() => {
     loadData();
   }, [
     location,
-    isTeacher,
-    user,
-    handleLoadCourses,
-    handleLoadTopics,
-    handleLoadSelectedCourse,
-    getIsTeacher,
     loadData,
   ]);
 
@@ -111,7 +105,7 @@ export const ListContent = memo(() => {
           <Topic
             topic={topic}
             params={params}
-            enableAdminMode={isTeacher as boolean}
+            enableAdminMode={false}
             onDeleteSubject={loadData}
           />
         ))}
