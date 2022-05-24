@@ -95,6 +95,7 @@ export function Topic({
         <div className="trails-grid-container">
           {topic.subjects.map((subject) => (
             <Subject
+              key={subject.id}
               showOptions={enableAdminMode}
               coursename={params.coursename as string}
               topicId={topic.id}

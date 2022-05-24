@@ -99,6 +99,7 @@ export const ListContent = memo(() => {
         !isTeacher &&
         topics?.map((topic) => (
           <Topic
+            key={topic.id}
             topic={topic}
             params={params}
             enableAdminMode={false}
