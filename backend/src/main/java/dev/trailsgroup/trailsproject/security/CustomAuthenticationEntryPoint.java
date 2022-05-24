@@ -19,7 +19,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
-        StandardError err = new StandardError(status.value(), "ACESSO NEGADO! Informe um token válido.", request.getRequestURI());
+        StandardError err = new StandardError(status.value(), "ACESSO NEGADO! A rota informada não está disponível ou você preicsa informar um token válido.", request.getRequestURI());
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
