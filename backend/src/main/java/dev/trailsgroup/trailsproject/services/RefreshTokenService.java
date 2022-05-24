@@ -26,7 +26,7 @@ public class RefreshTokenService {
     JWTUtil jwtUtil;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     public String generateAccessToken(String refreshToken){
         String token = refreshToken.substring(7);
@@ -39,7 +39,7 @@ public class RefreshTokenService {
     }
 
     public void saveRefreshToken(String userEmail, String token){
-        repository.save(new RefreshToken(null, token, userRepository.findByEmail(userEmail).get(), expiration));
+        repository.save(new RefreshToken(null, token, userService.findByEmail(userEmail), expiration));
     }
 
 }
