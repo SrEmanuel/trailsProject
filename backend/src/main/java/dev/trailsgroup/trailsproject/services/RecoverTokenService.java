@@ -4,9 +4,7 @@ import dev.trailsgroup.trailsproject.dto.PasswordDTO;
 import dev.trailsgroup.trailsproject.entities.RecoverToken;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.repositories.RecoverTokenRepository;
-import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
-import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,7 +19,7 @@ import java.util.*;
 public class RecoverTokenService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private RecoverTokenRepository recoverTokenRepository;
@@ -38,7 +36,7 @@ public class RecoverTokenService {
 
 
     public void sendNewRecoverToken(String email){
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
+        User user = userService.findByEmail(email);
         try {
             String rawUUID = UUID.randomUUID().toString().replace("-", "");
             recoverTokenRepository.save(new RecoverToken(null, rawUUID, user, expiration));
@@ -70,12 +68,12 @@ public class RecoverTokenService {
     public void changePasswordByRecoverToken(String encodedToken, PasswordDTO pa){
         try {
             String[] rawToken = decodeRecoverToken(encodedToken);
-            User user = userRepository.findByEmail(rawToken[0]).get();
+            User user = userService.findByEmail(rawToken[0]);
 
             if (pa.getPassword().equals(pa.getConfirmPassword())) {
                 if (validateRecoverToken(rawToken[1], user)) {
                     user.setPassword(pe.encode(pa.getPassword()));
-                    userRepository.save(user);
+                    userService.save(user);
                 }else{
                     throw new AuthorizationException("Token inválido! Reinicie o processo de recuperação de senha.");
                 }

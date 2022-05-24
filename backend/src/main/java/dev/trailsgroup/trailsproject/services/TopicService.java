@@ -5,9 +5,7 @@ import dev.trailsgroup.trailsproject.dto.TopicDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
-import dev.trailsgroup.trailsproject.entities.UserSubject;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.repositories.CourseRepository;
 import dev.trailsgroup.trailsproject.repositories.TopicRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
@@ -15,14 +13,13 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +31,7 @@ public class TopicService {
     @Autowired
     private UserService userService;
 
+    @Lazy
     @Autowired
     private SubjectService subjectService;
 
@@ -41,24 +39,31 @@ public class TopicService {
     private TopicRepository repository;
 
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     public Page<Topic> findAll(Pageable pageable){
         return repository.findAll(pageable);
     }
 
     public Topic findByName(String linkName){
-        Optional<Topic> obj =  repository.findByLinkName(linkName);
-        return obj.orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        return repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
+                + linkName + "' não foi encontrado no sistema"));
+    }
+
+    public Topic findById(Integer topicId) {
+        return repository.findById(topicId).orElseThrow(() -> new ResourceNotFoundException(topicId));
     }
 
     public Topic insert(TopicDTO obj){
         String linkName = ClassUtils.createLinkName(obj.getName());
         if(verifyLinkNameAvailability(linkName))
-            throw new DatabaseException("O nome de tópico '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
+            throw new DatabaseException("O nome de tópico '"
+                    + obj.getName() +"' já existe no sistema! Informe um nome diferente.");
+
         //if(!verifyPosition(obj.getPosition()))
           //  throw new DatabaseException("Já existe um topico com essa posição!");
-        Course course = courseRepository.findById(obj.getCourseId()).orElseThrow(() -> new ResourceNotFoundException(obj.getCourseId()));
+
+        Course course = courseService.findById(obj.getCourseId());
         Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course, linkName);
         verifyUserPermission(topic);
 
@@ -80,9 +85,12 @@ public class TopicService {
     }
 
     public Topic update(String linkName, TopicDTO obj){
-        Topic topicDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        Topic topicDatabase = repository.findByLinkName(linkName).orElseThrow(()
+                -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+
         verifyUserPermission(topicDatabase);
         topicUpdateInformation(topicDatabase, obj);
+
         return repository.save(topicDatabase);
     }
 
@@ -99,7 +107,7 @@ public class TopicService {
     public Page<Topic> getTopicsByCourse(String linkName, Pageable pageable){
         //I make an example of a topic with the referred course on it.
         //I use this Example to make a query in findAll, passing it alongside with pageable.
-        Course course = courseRepository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        Course course = courseService.findByName(linkName);
         Topic topic = new Topic();
         topic.setCourse(course);
         Example<Topic> example = Example.of(topic);
@@ -119,7 +127,7 @@ public class TopicService {
 
     private void verifyUserPermission(Topic obj) throws NullPointerException {
         UserSS userss = UserService.authenticated();
-        if(!userService.verifyPermission(obj.getCourse()) && !userss.hasRole(UserProfiles.ADMIN)){
+        if(userService.verifyPermission(obj.getCourse()) && !userss.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Você não é professor do curso relacionado a este tópico para realizar essa ação!");
         }
     }
@@ -130,10 +138,13 @@ public class TopicService {
 
     public Topic updateSubjectPositions(String linkname, List<SubjectPositionDTO> subjectPositionDTOList) {
         Optional<Topic> topic = repository.findByLinkName(linkname);
+
         if(topic.isEmpty()) {
             throw new ResourceNotFoundException("Recurso não encontrado: " + linkname);
+
         }else{
             List<Subject> subjects =  topic.get().getSubjects();
+
             subjects.forEach(x -> {
                 List<SubjectPositionDTO> subject = subjectPositionDTOList.stream().filter(y ->
                         y.getSubjectId() == x.getId())
@@ -141,8 +152,11 @@ public class TopicService {
                 if(!subject.isEmpty())
                     x.setPosition(subject.get(0).getPosition());
             });
+
             subjectService.saveAll(subjects);
             return repository.findByLinkName(linkname).get();
         }
     }
+
+
 }
