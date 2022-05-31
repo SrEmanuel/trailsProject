@@ -50,6 +50,7 @@
     }
 
     .progress-bar{
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -61,7 +62,6 @@
 
       .current-progress{
         position: absolute;
-        width: 150px;
         border: 1px solid var(--green);
       }
     }
