@@ -92,7 +92,21 @@ export const ListContent = memo(() => {
       )}
       <div className="trails-grid-container">
         {location.pathname === "/cursos" &&
-          trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
+          trails?.map((trail) => (
+            <Trail
+              mode={
+                user?.roles.includes("ADMIN")
+                  ? "admin"
+                  : isTeacher
+                  ? "teacher"
+                  : user
+                  ? "student"
+                  : "guest"
+              }
+              key={trail.id}
+              trail={trail}
+            />
+          ))}
       </div>
 
       {location.pathname !== "/cursos" &&
@@ -120,6 +134,7 @@ export const ListContent = memo(() => {
       )}
 
       {(topics === undefined || (topics && topics.length === 0)) &&
+        isTeacher &&
         location.pathname !== "/cursos" && (
           <div className="empty-course-list">
             <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>
