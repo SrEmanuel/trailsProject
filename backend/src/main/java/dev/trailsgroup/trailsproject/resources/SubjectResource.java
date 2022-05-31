@@ -30,9 +30,8 @@ public class SubjectResource {
     }
 
     @GetMapping(value = "/{linkName}")
-    public ResponseEntity<Subject> findByName(@PathVariable String linkName){
-        Subject obj = service.findByName(linkName);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<Object> findByName(@PathVariable String linkName){
+        return ResponseEntity.ok().body(service.findByName(linkName));
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")

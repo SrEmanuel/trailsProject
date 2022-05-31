@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.OutputSubjectDTO;
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
@@ -48,9 +49,18 @@ public class SubjectService {
         return repository.findAll(pageable);
     }
 
-    public Subject findByName(String linkName){
-        return repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
+    public <T extends Object> T findByName(String linkName){
+        Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
                 + linkName + "' não foi encontrado no sistema"));
+        if(UserService.authenticated() == null)
+            return (T)subject;
+
+        String email = UserService.authenticated().getUsername();
+        User user = userService.findByEmail(email);
+
+        StudentSubject studentSubject = userSubjectService.findStudentSubject(subject, user);
+
+        return  (T) new OutputSubjectDTO(subject, studentSubject.isCompleted());
     }
 
     protected void saveAll(List<Subject> subjectList){
