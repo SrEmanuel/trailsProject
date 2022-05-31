@@ -13,7 +13,7 @@ export function Trail({ color, trail, mode }: Props) {
   const navigate = useNavigate();
 
   const percent: number = trail.completedCount
-    ? (trail.completedCount * 100) / trail.subjectsCount
+    ? Math.round((trail.completedCount * 100) / trail.subjectsCount)
     : 0;
 
   return (
@@ -38,7 +38,10 @@ export function Trail({ color, trail, mode }: Props) {
         {mode === "student" && (
           <>
             <div className="progress-bar">
-              <div style={{ width: `${percent}%` }} className="current-progress"></div>
+              <div
+                style={{ width: `${percent}%` }}
+                className="current-progress"
+              ></div>
             </div>
             <span className="progress-label">{percent}% concluido</span>
           </>
