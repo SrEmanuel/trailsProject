@@ -4,4 +4,5 @@ export interface ITrails {
   imagePath: string;
   subjectsCount: number;
   linkName: string;
+  completedCount: number;
 }
