@@ -62,11 +62,11 @@ public class CourseService {
             userCoursePK.setUser(user);
             Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
 
-            boolean completed = false;
+            Integer count = 0;
             if (userCourse.isPresent()) {
-                completed = userCourse.get().isCompleted();
+                count = userCourse.get().getCountCompleted();
             }
-            coursesEnchanted.add(new OutputCourseDTO(x, completed));
+            coursesEnchanted.add(new OutputCourseDTO(x, count));
         }
         return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
@@ -182,13 +182,13 @@ public class CourseService {
             }
         }
         if(counter.equals(course.getSubjectsCount()))
-            markUserProgress(course, true);
+            markUserProgress(course, counter);
         else{
-            markUserProgress(course, false);
+            markUserProgress(course,  counter);
         }
     }
 
-    public UserCourse markUserProgress(Course course, boolean condition){
+    public UserCourse markUserProgress(Course course, Integer count){
         User user = userService.findBySession();
         UserCoursePK userCoursePK = new UserCoursePK();
         userCoursePK.setCourse(course);
@@ -196,11 +196,11 @@ public class CourseService {
         Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
         if(userCourse.isPresent()){
             UserCourse userCourseGet = userCourse.get();
-            userCourseGet.setCompleted(condition);
+            userCourseGet.setCountCompleted(count);
             return userCourseService.save(userCourseGet);
         }else{
             UserCourse userCourseNew =  new UserCourse(course, user);
-            userCourseNew.setCompleted(condition);
+            userCourseNew.setCountCompleted(count);
             return userCourseService.save(userCourseNew);
         }
     }

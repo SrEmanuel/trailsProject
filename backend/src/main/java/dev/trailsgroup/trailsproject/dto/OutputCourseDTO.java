@@ -24,17 +24,18 @@ public class OutputCourseDTO {
 
     private Integer subjectsCount;
 
-    private boolean completed;
+    private Integer completedCount;
+
 
     private String imagePath;
-    public OutputCourseDTO(Course course, boolean completed) {
+    public OutputCourseDTO(Course course, Integer completedCount) {
         this.id = course.getId();
         this.name = course.getName();
         this.linkName = course.getLinkName();
         this.createdDate = course.getCreatedDate();
         this.lastModifiedDate = course.getLastModifiedDate();
         this.subjectsCount = course.getSubjectsCount();
-        this.completed = completed;
+        this.completedCount = completedCount;
         this.imagePath = course.getImagePath();
     }
 
@@ -94,11 +95,12 @@ public class OutputCourseDTO {
         this.subjectsCount = subjectsCount;
     }
 
-    public boolean isCompleted() {
-        return completed;
+
+    public Integer getCompletedCount() {
+        return completedCount;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setCompletedCount(Integer completedCount) {
+        this.completedCount = completedCount;
     }
 }

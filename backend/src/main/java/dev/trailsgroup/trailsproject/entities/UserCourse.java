@@ -17,12 +17,13 @@ public class UserCourse implements Serializable {
 
     public UserCourse(){}
 
-    private boolean completed;
+
+    private Integer countCompleted;
 
     public UserCourse(Course course, User user) {
         id.setCourse(course);
         id.setUser(user);
-        this.completed = false;
+        this.countCompleted = 0;
     }
 
     public Course getCourse(){
@@ -41,13 +42,15 @@ public class UserCourse implements Serializable {
         id.setUser(user);
     }
 
-    public boolean isCompleted() {
-        return completed;
+
+    public Integer getCountCompleted() {
+        return countCompleted;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setCountCompleted(Integer countCompleted) {
+        this.countCompleted = countCompleted;
     }
+
 
     @Override
     public boolean equals(Object o) {
