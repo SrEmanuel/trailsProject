@@ -1,33 +1,44 @@
 import "./styles.scss";
-import { FiFileText } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { ITrails } from "../../interfaces/Trail";
 import { useNavigate } from "react-router-dom";
 
-interface Props{
+interface Props {
   color?: string;
   trail: ITrails;
+  mode: "teacher" | 'student' | "guest" | "admin";
 }
 
-export function Trail({color, trail}: Props) {
-
+export function Trail({ color, trail, mode }: Props) {
   const navigate = useNavigate();
-   
+
   return (
-    <div onClick={()=> navigate(`/cursos/${trail.linkName}`) }  className="card-container" style={ {background: color} } >
-      <div className="card-header">
+    <div
+      onClick={() => navigate(`/cursos/${trail.linkName}`)}
+      className="trail-container"
+      style={{ background: color }}
+    >
       <img src={trail.imagePath} alt="capa do card" />
-        <span>{trail.name}</span>
-      </div>
       <div className="card-line"></div>
-      <div className="card-bottom">
-        <span>
-          <FiFileText color="var(--purple)" size={24} />
-          {trail.subjectsCount} - artigos
-        </span>
-        <span>
-          <FiFileText color="var(--red)" size={24} />
-          34 - exercícios
-        </span>
+      <div className="trail-bottom">
+        <div className="title-and-options">
+          <h3>{trail.name}</h3>
+          {(mode === 'admin' || mode ==='teacher') && (
+            <div className="options">
+              <FiEdit size={20} color="var(--grey)" />
+              <FiTrash2 size={20} color="var(--grey)" />
+            </div>
+          )}
+        </div>
+        {mode !== "teacher" && <span>Professor - João Fernandes de Souza</span>}
+        {mode === "student" && (
+          <>
+            <div className="progress-bar">
+              <div className="current-progress"></div>
+            </div>
+            <span className="progress-label">20% concluido</span>
+          </>
+        )}
       </div>
     </div>
   );
