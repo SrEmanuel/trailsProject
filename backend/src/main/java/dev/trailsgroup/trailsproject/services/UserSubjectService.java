@@ -12,16 +12,17 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class UserSubjectService {
 
     @Autowired
-    ProfessorSubjectRepository professorSubjectRepository;
+    protected ProfessorSubjectRepository professorSubjectRepository;
 
     @Autowired
-    StudentSubjectRepository studentSubjectRepository;
+    protected StudentSubjectRepository studentSubjectRepository;
 
 
     public Example<? extends UserSubject> getExample(List<? extends UserSubject> list){
@@ -57,5 +58,14 @@ public class UserSubjectService {
 
     public void saveStudent(StudentSubject studentSubject) {
         studentSubjectRepository.save(studentSubject);
+    }
+
+    public StudentSubject findStudentSubject(Subject subject, User user) {
+        try{
+            return studentSubjectRepository.findBySubjectAndUser(subject, user).get();
+        }catch(NoSuchElementException e){
+            return studentSubjectRepository.save(new StudentSubject(null, subject, user));
+        }
+
     }
 }
