@@ -13,7 +13,10 @@ export function BlogPost() {
   useEffect(() => {
     async function handleLoadSubject(){
       const response = await api.get(`/subjects/${params.blogtitle}`);
-      setSubject(response.data);
+      const tempSubject: ISubject = response.data;
+      !tempSubject.completed && await api.put(`/subjects/${tempSubject.linkName}/user/mark?state=true`);
+      console.log(tempSubject);
+      setSubject(tempSubject);
     }
 
     handleLoadSubject()
