@@ -15,11 +15,10 @@ export function BlogPost() {
       const response = await api.get(`/subjects/${params.blogtitle}`);
       const tempSubject: ISubject = response.data;
       !tempSubject.completed && await api.put(`/subjects/${tempSubject.linkName}/user/mark?state=true`);
-      console.log(tempSubject);
       setSubject(tempSubject);
     }
 
-    handleLoadSubject()
+    handleLoadSubject();
 
   }, [params])
 
