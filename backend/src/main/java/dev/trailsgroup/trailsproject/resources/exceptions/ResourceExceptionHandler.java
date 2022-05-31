@@ -6,6 +6,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -73,6 +74,12 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<StandardError> UserNameNotFoundAuth(UnknownHostException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        StandardError err = new StandardError(status.value(), "Não foi possível encontrar o usuário relacionado à esse token. Informe outro token válido.", request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 
 
 }
