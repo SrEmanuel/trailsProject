@@ -1,77 +1,74 @@
-.card-container {
-  width: 25vw;
-  height: 175px;
-  margin-bottom: 50px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+.trail-container {
+  display: flex;
+  flex-direction: column;
+  height: 210px;
 
-  .card-header {
-    height: 120px;
-    width:100%;
+  img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 130px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 
+  .card-line {
+    width: 100% calc(100% -2px);
+    border: 1px solid var(--grey);
+  }
+
+  .trail-bottom {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-
-    img {
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-    span {
-      font-family: "Roboto", sans-serif;
-      font-weight: 700;
-      font-size: 30px;
-      line-height: 29px;
-      color: vaR(--white);
-      position:absolute;
-      margin-top: 50px;
-      margin-left: 10px;
-      -webkit-text-stroke-width: 1px;
-      -webkit-text-stroke-color: black;
-
-    }
-  }
-
-  .card-line{
-      width: 100% calc(100% -2px);
-      border: 1px solid var(--grey);
-  }
-
-  .card-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 50px;
-    max-width: 100%;
     background: var(--white);
-    padding: 5px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: 80px;
+    padding: 10px;
+
+    .title-and-options {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      h3 {
+        font-size: 20px;
+        margin: 0;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 52px;
+      }
+    }
 
     span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      font-family: "Roboto", sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 16px;
+      font-size: 12px;
       line-height: 20px;
       color: var(--grey);
     }
-  }
 
-  @media(max-width:760px){
-    width: 35vw;
-  }
+    .progress-bar{
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 2px;
+      border: 1px solid var(--background);
+      background: var(--background);
 
-  @media(max-width:540px){
-    width: 90%;
+      .current-progress{
+        position: absolute;
+        width: 150px;
+        border: 1px solid var(--green);
+      }
+    }
+
+    .progress-label{
+      align-self: center;
+      justify-self: center;
+    }
   }
 }
