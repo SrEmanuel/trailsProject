@@ -35,7 +35,7 @@ export function CreateCourse() {
 
   const handleLoadTeachers = useCallback(async() =>{
     try {
-      const response = await api.get("/users/professors");
+      const response = await api.get("/users/");
       setTeachers(response.data);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);

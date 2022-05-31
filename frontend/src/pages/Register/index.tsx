@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { WaveContainer } from "../../components/WaveContainer";
 import logo from "../../assets/images/Logo.svg";
@@ -22,11 +22,13 @@ export function Register() {
 
   async function handleSubmitUserData(data: IRegisterSchema) {
     try {
-      await api.post("/users", data);
-      toast.success('Cadastro realizado com sucesso!');
-      setTimeout(() => navigate('/login'), 2000)
+      await api.post("/users/", data);
+      toast.success("Cadastro realizado com sucesso!");
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error: any) {
-      toast.error(error.response.data.message || error.response.data[0].message);
+      toast.error(
+        error.response.data.message || error.response.data[0].message
+      );
     }
   }
 
@@ -92,7 +94,9 @@ export function Register() {
                 </div>
               </div>
               <div className="buttons-container">
-                <button type="button" onClick={()=> navigate(-1)} >Cancelar</button>
+                <button type="button" onClick={() => navigate(-1)}>
+                  Cancelar
+                </button>
                 <button type="button" onClick={() => handleSubmit()}>
                   Enviar
                 </button>

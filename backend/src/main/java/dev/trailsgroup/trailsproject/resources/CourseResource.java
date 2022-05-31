@@ -55,7 +55,7 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(value = "/{linkName}/add-image")
     public ResponseEntity<Course> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable String linkName) {
         Course obj = service.insertImage(file, linkName);
