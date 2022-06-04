@@ -24,13 +24,22 @@ export function Trail({ color, trail, mode }: Props) {
     >
       <img src={trail.imagePath} alt="capa do card" />
       <div className="card-line"></div>
-      <div className={`trail-bottom ${mode === 'teacher' && 'smaller-card-bottom' }`}>
+      <div
+        className={`trail-bottom ${
+          mode === "teacher" && "smaller-card-bottom"
+        }`}
+      >
         <div className="title-and-options">
           <h3>{trail.name}</h3>
-          {(mode === "admin" || mode === "teacher") && (
+          {mode === "admin" && (
             <div className="options">
               <FiEdit size={20} color="var(--grey)" />
               <FiTrash2 size={20} color="var(--grey)" />
+            </div>
+          )}
+          {mode === "teacher" && (
+            <div style={{ width: 24 }}  className="options">
+              <FiEdit size={20} color="var(--grey)" />
             </div>
           )}
         </div>
