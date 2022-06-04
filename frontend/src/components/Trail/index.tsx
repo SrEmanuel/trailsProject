@@ -26,7 +26,7 @@ export function Trail({ color, trail, mode }: Props) {
       <div className="card-line"></div>
       <div
         className={`trail-bottom ${
-          mode === "teacher" && "smaller-card-bottom"
+         (mode === "teacher" || mode === 'guest' ) && "smaller-card-bottom"
         }`}
       >
         <div className="title-and-options">
