@@ -1,7 +1,7 @@
 import "./styles.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { ISubject } from "../../interfaces/subject";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiCheckCircle, FiEdit, FiTrash2 } from "react-icons/fi";
 
 interface Props {
   subject: ISubject;
@@ -20,6 +20,7 @@ export function Subject({ subject, coursename, showOptions, topicId, onDelete }:
         className="card-header"
         onClick={() => navigate(`/cursos/${coursename}/${subject.linkName}`)}
       >
+        { subject.completed && <FiCheckCircle color="var(--green)" size={24} /> }
         <img src={subject.imagePath} alt="capa do card" />
         <Link to="#">{subject.grade}</Link>
       </div>
