@@ -34,7 +34,7 @@ export function Trail({ color, trail, mode }: Props) {
             </div>
           )}
         </div>
-        {mode !== "teacher" && <span>Professor - João Fernandes de Souza</span>}
+        {/*mode !== "teacher" && <span>Professor - João Fernandes de Souza</span>*/}
         {mode === "student" && (
           <>
             <div className="progress-bar">
