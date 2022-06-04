@@ -1,7 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.SubjectPositionDTO;
-import dev.trailsgroup.trailsproject.dto.TopicDTO;
+import dev.trailsgroup.trailsproject.dto.*;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
@@ -17,9 +16,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -104,15 +105,23 @@ public class TopicService {
         topicDataBase.setPosition(obj.getPosition());
     }
 
-    public Page<Topic> getTopicsByCourse(String linkName, Pageable pageable){
-        //I make an example of a topic with the referred course on it.
-        //I use this Example to make a query in findAll, passing it alongside with pageable.
+    public Page<?> getTopicsByCourse(String linkName, Pageable pageable){
         Course course = courseService.findByName(linkName);
         Topic topic = new Topic();
         topic.setCourse(course);
         Example<Topic> example = Example.of(topic);
+        Page<Topic> topics = repository.findAll(example, pageable);
 
-        return repository.findAll(example, pageable);
+        if(UserService.authenticated() == null)
+            return topics;
+
+        List<OutputTopicDTO> outputTopicDTOList = new ArrayList<>();
+
+        for(Topic x : topics){
+            outputTopicDTOList.add(new OutputTopicDTO(x, (List<OutputSubjectDTO>) subjectService.findSubjectsByTopic(topic)));
+        }
+
+        return new PageImpl<OutputTopicDTO>(outputTopicDTOList, pageable, outputTopicDTOList.size());
     }
 
     /*public boolean verifyPosition(Integer num){

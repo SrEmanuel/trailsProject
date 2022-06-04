@@ -72,7 +72,7 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{linkName}/topics")
-    public ResponseEntity<Page<Topic>> getTopics(@PathVariable String linkName, Pageable pageable){
+    public ResponseEntity<Page<?>> getTopics(@PathVariable String linkName, Pageable pageable){
         return ResponseEntity.ok().body(topicService.getTopicsByCourse(linkName, pageable));
     }
 

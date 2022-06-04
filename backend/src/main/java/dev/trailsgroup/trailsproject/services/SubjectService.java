@@ -13,11 +13,13 @@ import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,6 +51,26 @@ public class SubjectService {
         return repository.findAll(pageable);
     }
 
+    protected List<?> findSubjectsByTopic(Topic topic){
+        Subject subject = new Subject();
+        subject.setTopic(topic);
+        List<Subject> subjects =  repository.findAll(Example.of(subject));
+
+        if(UserService.authenticated() == null)
+            return subjects;
+
+        String email = UserService.authenticated().getUsername();
+        User user = userService.findByEmail(email);
+
+        List<OutputSubjectDTO> outputSubjectDTOList = new ArrayList<>();
+        for(Subject x  : subjects){
+            StudentSubject studentSubject = userSubjectService.findStudentSubject(x, user);
+            outputSubjectDTOList.add(new OutputSubjectDTO(x, studentSubject.isCompleted()));
+        }
+
+        return outputSubjectDTOList;
+    }
+
     public <T extends Object> T findByName(String linkName){
         Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
                 + linkName + "' não foi encontrado no sistema"));
@@ -76,7 +98,8 @@ public class SubjectService {
                         obj.getName() +"' já existe no sistema! Informe um nome diferente.");
 
             Topic topic = topicService.findById(obj.getTopicId());
-            Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
+            Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(),
+                    obj.getHtmlContent(),obj.getPosition(), topic);
             Subject savedSubject = repository.save(subject);
 
             verifyUserPermission(savedSubject); //TODO verify that validation. Is that in the correct place?
