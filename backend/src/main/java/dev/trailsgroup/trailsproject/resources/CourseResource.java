@@ -55,7 +55,7 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PostMapping(value = "/{linkName}/add-image")
     public ResponseEntity<Course> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable String linkName) {
         Course obj = service.insertImage(file, linkName);
@@ -64,7 +64,7 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @PutMapping(value = "/{linkName}")
     public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody InputCourseDTO course){
         Course obj = service.update(linkName, course);
