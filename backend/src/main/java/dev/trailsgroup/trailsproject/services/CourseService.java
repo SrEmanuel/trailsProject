@@ -50,16 +50,23 @@ public class CourseService {
 
     public Page<?> findAll(Pageable pageable) {
         if(UserService.authenticated() == null) {
-            List<Course> courses = repository.findAll();
-            List<OutputCourseDTO> outputCourseDTOList = new ArrayList<>();
-            for(Course x : courses){
-                List<User> professors = userCourseService.findProfessorsByCourse(x);
-                outputCourseDTOList.add(new OutputCourseDTO(x, professors));
-            }
-            return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
+           return normalFindAll(pageable);
         }
 
+        return loggedFindAll(pageable);
+    }
 
+    private Page<?> normalFindAll(Pageable pageable){
+        List<Course> courses = repository.findAll();
+        List<OutputCourseDTO> outputCourseDTOList = new ArrayList<>();
+        for(Course x : courses){
+            List<User> professors = userCourseService.findProfessorsByCourse(x);
+            outputCourseDTOList.add(new OutputCourseDTO(x, professors));
+        }
+        return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
+    }
+
+    private Page<?> loggedFindAll(Pageable pageable){
         String email = UserService.authenticated().getUsername();
         User user = userService.findByEmail(email);
         Page<Course> all = repository.findAll(pageable);
@@ -81,6 +88,8 @@ public class CourseService {
         }
         return new PageImpl<LoggedOutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
+
+
 
     public Course findById(Integer courseId) {
         return repository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
