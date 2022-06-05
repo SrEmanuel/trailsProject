@@ -19,7 +19,7 @@ export function Trail({ color, trail, mode }: Props) {
 
   function navigateToUpdateCourse(e: FormEvent) {
     e.stopPropagation();
-    navigate(`/cursos/atualizar/${trail.id}`);
+    navigate(`/cursos/atualizar/${trail.linkName}`);
   }
 
   return (
