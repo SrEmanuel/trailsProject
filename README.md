@@ -1,3 +1,4 @@
+
 <h1 align="center">
     <img alt="Projeto Trilhas" src="./docs/readme/logo.png" width="400px" />
 </h1>
@@ -32,6 +33,25 @@ Esse projeto foi desenvolvido pelos alunos do 3 AII do curso técnico em Inform�
 
 ## :computer: Como executar o projeto
 
+### Frotend:
+
+
+### Backend:
+
+Requisitos mínimos para a execução:
+
+✅ Você precisa ter o Java Development Kit (Versão 11 LTS) instalada em seu computador para conseguir compilar a aplicação.
+Recomendamos o JDK da Azul, que você pode encontrar aqui: https://www.azul.com/downloads/?package=jdk
+
+✅ Você precisa ter instalado e configurado em sua máquina um banco de dados Postgres para a correta inicialização do sistema.
+ - Você tem duas formas de realizar tal instalação:<br>
+1. Por meio da instalação do Postgres de forma normal em sua máquina, por meio do link: https://www.postgresql.org/download/
+2. (Recomendada) Por meio da instalação do Container Postgres em seu Docker, utilizando o comando ```docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres``` 
+
+✅ Para agilizar o processo de configuração e execução da aplicação, recomendamos o uso de uma IDEA. Nós utilizamos o Intellij e Spring Tools Suite para tal. Entretanto, esse tutorial somente abordará a segunda opção.
+	
+- Links para download da ferramenta: <br>
+1. Spring Tools Suite: 
 
 ## :memo: Licença
 
