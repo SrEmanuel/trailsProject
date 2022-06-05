@@ -17,19 +17,22 @@ export function BlogPost() {
     async function handleLoadSubject() {
       try {
         const response = await api.get(`/subjects/${params.blogtitle}`);
+
         const tempSubject: ISubject = response.data;
-        !tempSubject.completed &&
-          (await api.put(
-            `/subjects/${tempSubject.linkName}/user/mark?state=true`
-          ));
+
+        if (!tempSubject.completed) {
+          const url = `/subjects/${tempSubject.linkName}/user/mark?state=true`;
+          await api.put(url);
+        }
+
         setSubject(tempSubject);
       } catch (error) {
-        handleNotifyError(error, navigate, handleClearUserDataFromStorage)
+        handleNotifyError(error, navigate, handleClearUserDataFromStorage);
       }
     }
 
     handleLoadSubject();
-  }, [params]);
+  }, [handleClearUserDataFromStorage, navigate, params]);
 
   return (
     <div className="container">
