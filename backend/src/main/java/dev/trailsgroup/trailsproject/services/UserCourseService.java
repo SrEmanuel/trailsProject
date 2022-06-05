@@ -9,9 +9,13 @@ import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
 import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserCourseService {
@@ -56,6 +60,20 @@ public class UserCourseService {
                 -> new ResourceNotFoundException("Não foi possível encontrar a relação do usuário ID:"
                 + userCoursePK.getUser().getId()+ "com o Curso ID: "+
                 userCoursePK.getCourse().getId()));
+    }
+
+    public List<User> findProfessorsByCourse(Course course){
+        UserCourse userCourse = new UserCourse();
+        userCourse.setCourse(course);
+        List<UserCourse> userCourseList = userCourseRepository.findAll(Example.of(userCourse));
+
+        List<User> users = new ArrayList<>();
+        for(UserCourse x : userCourseList){
+            if(x.getUser().getProfiles().contains(UserProfiles.PROFESSOR))
+                users.add(x.getUser());
+        }
+
+        return users;
     }
 
     public Optional<UserCourse> findByIdOptional(UserCoursePK userCoursePK){
