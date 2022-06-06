@@ -49,10 +49,11 @@ Recomendamos o JDK da Azul, que você pode encontrar aqui: https://www.azul.com/
 1. Por meio da instalação do Postgres de forma normal em sua máquina, por meio do link (note que é recomendável que o usuário do postgres chame-se: 'postgres'): https://www.postgresql.org/download/ 
 3. (Recomendada) Por meio da instalação do Container Postgres em seu Docker, utilizando o comando ```docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres``` 
 
-✅ Para agilizar o processo de configuração e execução da aplicação, recomendamos o uso de uma IDEA. Nós utilizamos o Intellij e Spring Tools Suite para tal. Entretanto, esse tutorial somente abordará a segunda opção.
+✅ Para agilizar o processo de configuração e execução da aplicação, recomendamos o uso de uma IDEA. Nós utilizamos o Intellij e Spring Tools Suite para tal. Entretanto, esse tutorial somente abordará a segunda opção. Para execuar a IDEA, descompacte a pasta e abra o arquivo executável.
 	
 - Links para download da ferramenta: <br>
-1. Spring Tools Suite: https://drive.google.com/file/d/17KTwxMWAMEgTNqNbhY76ETkMDyOUtnS4/view?usp=sharing
+1. Spring Tools Suite (Windows): https://drive.google.com/file/d/17KTwxMWAMEgTNqNbhY76ETkMDyOUtnS4/view?usp=sharing
+2. Spring Tools Suite (Linux): https://drive.google.com/file/d/1MFEC6fjdgsBX0qUyM8Da_uVDWyPVU9_r/view?usp=sharing
 
 #### Como executar:
 Com todas as dependências instaladas em sua máquina, clone este repositório e realize o seguinte passo a passo no Spring Tools Suite:
