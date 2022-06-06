@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.InputCourseDTO;
+import dev.trailsgroup.trailsproject.dto.LoggedOutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.OutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.entities.*;
@@ -48,28 +49,47 @@ public class CourseService {
     private StaticFileService staticFileService;
 
     public Page<?> findAll(Pageable pageable) {
-        if(UserService.authenticated() == null)
-            return repository.findAll(pageable);
+        if(UserService.authenticated() == null) {
+           return normalFindAll(pageable);
+        }
 
+        return loggedFindAll(pageable);
+    }
+
+    private Page<?> normalFindAll(Pageable pageable){
+        List<Course> courses = repository.findAll();
+        List<OutputCourseDTO> outputCourseDTOList = new ArrayList<>();
+        for(Course x : courses){
+            List<User> professors = userCourseService.findProfessorsByCourse(x);
+            outputCourseDTOList.add(new OutputCourseDTO(x, professors));
+        }
+        return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
+    }
+
+    private Page<?> loggedFindAll(Pageable pageable){
         String email = UserService.authenticated().getUsername();
         User user = userService.findByEmail(email);
         Page<Course> all = repository.findAll(pageable);
-        List<OutputCourseDTO> coursesEnchanted = new ArrayList<>();
+        List<LoggedOutputCourseDTO> coursesEnchanted = new ArrayList<>();
 
         for (Course x : all) {
             UserCoursePK userCoursePK = new UserCoursePK();
             userCoursePK.setCourse(x);
             userCoursePK.setUser(user);
             Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
+            List<User> professors = userCourseService.findProfessorsByCourse(x);
 
             Integer count = 0;
+
             if (userCourse.isPresent()) {
                 count = userCourse.get().getCountCompleted();
             }
-            coursesEnchanted.add(new OutputCourseDTO(x, count));
+            coursesEnchanted.add(new LoggedOutputCourseDTO(x, count, professors));
         }
-        return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
+        return new PageImpl<LoggedOutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
+
+
 
     public Course findById(Integer courseId) {
         return repository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));

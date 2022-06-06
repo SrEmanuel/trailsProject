@@ -118,7 +118,7 @@ public class TopicService {
         List<OutputTopicDTO> outputTopicDTOList = new ArrayList<>();
 
         for(Topic x : topics){
-            outputTopicDTOList.add(new OutputTopicDTO(x, (List<OutputSubjectDTO>) subjectService.findSubjectsByTopic(topic)));
+            outputTopicDTOList.add(new OutputTopicDTO(x, (List<OutputSubjectDTO>) subjectService.findSubjectsByTopic(x)));
         }
 
         return new PageImpl<OutputTopicDTO>(outputTopicDTOList, pageable, outputTopicDTOList.size());
