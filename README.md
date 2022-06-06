@@ -90,7 +90,7 @@ Após a realização de todos os passos, a inicialização do projeto é bem sim
 2. Clique com o botão direito em 'trailsProject' no STS.
 3. Vá na opção  'Run As' e clique em 'Run as SpringBootApplication' 
 4. Observe no console. Assim que a mensagem 'Started TrailsProjectApplication in X.XXX seconds (JVM running for X.XXX)', aparecer, o projeto estará completamente inicializado e pronto para receber requisições.
-Note que as requisições devem ser direcionadas à porta 8080 da sua máquina.
+Note que as requisições devem ser direcionadas para a porta 8080 da sua máquina.
 ## :memo: Licença
 
 Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](/LICENSE) para mais detalhes.
