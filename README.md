@@ -35,7 +35,7 @@ Esse projeto foi desenvolvido pelos alunos do 3 AII do curso técnico em Inform�
 
 ### Frotend:
 
-Para executar a aplicação seŕa necessário possuir o runtime Node.js Instalado em sua máquina.
+✅ Para executar a aplicação seŕa necessário possuir o runtime Node.js Instalado em sua máquina.
 
 Em Sistemas windows recomendamos realizar o processo por meio da ferramenta chocolatey. Confira a documentação oficial para a realização do processo:
 
@@ -79,7 +79,9 @@ Vá para a pasta frontend e digite no terminal:
 
 > npm install
 
-Aguarde todas as dependencias serem instaladas. Depois disso, resta apenas configurar as variaveis de ambiente utilizadas no projeto, crie um arquivo .env na pasta frontend e adicione as seguintes linhas de código:
+Aguarde todas as dependencias serem instaladas. 
+
+✅ Depois disso, resta apenas configurar as variaveis de ambiente utilizadas no projeto, crie um arquivo .env na pasta frontend e adicione as seguintes linhas de código:
 
 ```
 REACT_APP_API_URL=http://localhost:8080
@@ -92,7 +94,7 @@ Agora o projeto está pronto para rodar. Na pasta frontend digite:
 
 > npm start
 
-Pronto, o frontend está funcionando. Agora vamos aprender como configurar o backend para que ele tenha de onde consumir dados.
+✅ Pronto, o frontend está funcionando. Agora vamos aprender como configurar o backend para que ele tenha de onde consumir dados.
 
 
 
