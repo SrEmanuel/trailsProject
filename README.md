@@ -35,6 +35,66 @@ Esse projeto foi desenvolvido pelos alunos do 3 AII do curso técnico em Inform�
 
 ### Frotend:
 
+Para executar a aplicação seŕa necessário possuir o runtime Node.js Instalado em sua máquina.
+
+Em Sistemas windows recomendamos realizar o processo por meio da ferramenta chocolatey. Confira a documentação oficial para a realização do processo:
+
+https://chocolatey.org/install
+
+Após a instalação, o node pode ser obtido em seu windows com o seguinte comando:
+
+> choco install nodejs.install
+
+Em sistema Linux é possível baixa-lo por meio do gerenciador de pacotes da sua distribuição, poŕem estará desatualizado. O método recomendado é atraves da instalação do Nvm ( Node version manager), que será abordado a seguir.
+
+Para instalar o nvm use um dos seguintes comandos abaixo:
+
+> curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+> wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+Reinicie o terminal para as mudanças entrarem em vigor.
+
+Execute um comando de teste:
+
+> nvm -v
+
+Se receber o output com número de versão, tudo ocorreu corretamente. Em caso de algum problema visite o repositório oficial da ferramenta:
+
+https://github.com/nvm-sh/nvm#installing-and-updating
+
+Com o nvm instalado basta um comando para instalar o Node.js. ( a flag --lts baixa a ultima versão estável, o que recomendamos).
+
+> nvm install --lts
+
+Após o processo, reinicie o terminal e você deve conseguir um output de versão para o node ao digitar:
+
+> node -v
+
+Se tudo ocorreu bem, você já possui o Node.js instalado e pronto para usar.
+
+Com o Node instalado, é possivel usar seu gerenciador de dependencias, o npm, para instalar as dependencias do projeto.
+
+Vá para a pasta frontend e digite no terminal:
+
+> npm install
+
+Aguarde todas as dependencias serem instaladas. Depois disso, resta apenas configurar as variaveis de ambiente utilizadas no projeto, crie um arquivo .env na pasta frontend e adicione as seguintes linhas de código:
+
+```
+REACT_APP_API_URL=http://localhost:8080
+REACT_APP_LOCAL_API_URL=http://localhost:8080
+```
+
+Isso permitirá a conexão com a API do projeto, cujo setup está descrito abaixo.
+
+Agora o projeto está pronto para rodar. Na pasta frontend digite:
+
+> npm start
+
+Pronto, o frontend está funcionando. Agora vamos aprender como configurar o backend para que ele tenha de onde consumir dados.
+
+
 
 
 ### Backend:
