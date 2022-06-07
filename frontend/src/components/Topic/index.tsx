@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
-import { ConfirmationModal } from "../DeleteSubject";
+import { ConfirmationModal } from "../ConfirmationModal";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
 
