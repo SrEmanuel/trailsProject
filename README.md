@@ -169,6 +169,9 @@ Após a realização de todos os passos, a inicialização do projeto é bem sim
 2. Clique com o botão direito em 'trailsProject' no STS.
 3. Vá na opção  'Run As' e clique em 'Run as SpringBootApplication' 
 4. Observe no console. Assim que a mensagem 'Started TrailsProjectApplication in X.XXX seconds (JVM running for X.XXX)', aparecer, o projeto estará completamente inicializado e pronto para receber requisições.
+5. Popule o banco de dados por meio do .sql na pasta /docs do repositório. Ele funcionará corretamente após a execução de todos os passos e te permitirá utilizar a carga de teste.
+Esse script foi testado com o pgAdmin e o DBeaver. Vá em Query Tool ou "Editor de SQL" de sua ferramenta e cole exatamente o .sql de população do banco.
+
 Note que as requisições devem ser direcionadas para a porta 8080 da sua máquina.
 ## :memo: Licença
 
