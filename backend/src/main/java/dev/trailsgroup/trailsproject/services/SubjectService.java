@@ -71,7 +71,7 @@ public class SubjectService {
         return outputSubjectDTOList;
     }
 
-    public <T extends Object> T findByName(String linkName){
+    public <T extends Object> T findByNameOutput(String linkName){
         Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
                 + linkName + "' não foi encontrado no sistema"));
         if(UserService.authenticated() == null)
@@ -83,6 +83,11 @@ public class SubjectService {
         StudentSubject studentSubject = userSubjectService.findStudentSubject(subject, user);
 
         return  (T) new OutputSubjectDTO(subject, studentSubject.isCompleted());
+    }
+
+    public Subject findByName(String linkName){
+        return repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
+                + linkName + "' não foi encontrado no sistema"));
     }
 
     protected void saveAll(List<Subject> subjectList){
