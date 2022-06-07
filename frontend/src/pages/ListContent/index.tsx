@@ -103,6 +103,7 @@ export const ListContent = memo(() => {
                   ? "student"
                   : "guest"
               }
+              onChange={loadData}
               key={trail.id}
               trail={trail}
             />
