@@ -39,6 +39,10 @@ public class Subject implements Serializable {
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserSubject> students = new ArrayList<>();
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfessorSubject> authors = new ArrayList<>();
 
