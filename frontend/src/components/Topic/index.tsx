@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
-import { DeleteSubject } from "../DeleteSubject";
+import { ConfirmationModal } from "../DeleteSubject";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
 
@@ -50,10 +50,13 @@ export function Topic({
 
   return (
     <Fragment key={topic.id}>
-      <DeleteSubject
+      <ConfirmationModal
+        message="Deseja realmente excluir esse conteúdo?"
+        confirmText="Deletar"
+        cancelText="cancelar"
         isVisible={isDeleteModalVisible}
         setIsVisible={setIsDeleteModalVisible}
-        onDelete={handleDeleteSubject}
+        onConfirm={handleDeleteSubject}
       />
       <h2 className="topic-title">{topic.name}</h2>
       {enableAdminMode ? (

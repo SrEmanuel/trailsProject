@@ -5,20 +5,23 @@ import { Overlay } from "../Overlay";
 interface Props {
   isVisible: boolean;
   setIsVisible: (arg: boolean) => void;
-  onDelete: (event: FormEvent) => void;
+  onConfirm: (event: FormEvent) => void;
+  message: string;
+  confirmText: string;
+  cancelText: string;
 }
 
-export function DeleteSubject({isVisible, setIsVisible, onDelete }: Props) {
+export function ConfirmationModal({isVisible, message, confirmText, cancelText , setIsVisible, onConfirm }: Props) {
   return (
     <Overlay hidden={!isVisible}>
       <ModalContainer>
-        <h2>Deseja realmente excluir este conteúdo?</h2>
+        <h2>{message}</h2>
         <div className="btn-container">
           <button type="button" onClick={() => setIsVisible(false)}>
-            Cancelar
+            {cancelText}
           </button>
-          <button type="submit" onClick={onDelete} >
-            Deletar
+          <button type="submit" onClick={onConfirm} >
+            {confirmText}
           </button>
         </div>
       </ModalContainer>
