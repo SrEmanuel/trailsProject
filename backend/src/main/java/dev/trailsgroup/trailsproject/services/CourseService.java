@@ -95,6 +95,11 @@ public class CourseService {
         return repository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
     }
 
+    public OutputCourseDTO outputFindByName(String linkName){
+        Course course = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException(linkName));
+        List<User> professors = userCourseService.findProfessorsByCourse(course);
+        return new OutputCourseDTO(course, professors);
+    }
     public Course findByName(String linkName){
         Optional<Course> obj = repository.findByLinkName(linkName);
         return obj.orElseThrow(() -> new ResourceNotFoundException(linkName));

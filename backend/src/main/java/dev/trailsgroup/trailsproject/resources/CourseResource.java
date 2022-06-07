@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.InputCourseDTO;
+import dev.trailsgroup.trailsproject.dto.OutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
@@ -39,8 +40,8 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{linkName}")
-    public ResponseEntity<Course> findByName(@PathVariable String linkName){
-        Course obj = service.findByName(linkName);
+    public ResponseEntity<OutputCourseDTO> findByName(@PathVariable String linkName){
+        OutputCourseDTO obj = service.outputFindByName(linkName);
         return ResponseEntity.ok().body(obj);
     }
 
