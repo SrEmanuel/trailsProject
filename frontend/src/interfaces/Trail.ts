@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface ITrails {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export interface ITrails {
   subjectsCount: number;
   linkName: string;
   completedCount: number;
+  professors: IUser[];
 }
