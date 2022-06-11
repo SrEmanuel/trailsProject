@@ -40,7 +40,7 @@ export function CreateCourse() {
     formikRef.current.setFieldValue("image", event.target.files[0]);
   }
 
-  const handleLoadTeachers = useCallback(async () => {
+  const handleLoadUsers = useCallback(async () => {
     try {
       const response = await api.get("/users/");
       setTeachers(response.data);
@@ -83,7 +83,7 @@ export function CreateCourse() {
         toast.error("Você não possui permissão para criar uma turma");
         navigate("/");
       } else if (await getIsAdmin()) {
-        await handleLoadTeachers();
+        await handleLoadUsers();
       }
     }
 
@@ -108,7 +108,7 @@ export function CreateCourse() {
   }, [
     getIsAdmin,
     handleLoadCurrentCourseData,
-    handleLoadTeachers,
+    handleLoadUsers,
     location,
     navigate,
   ]);
