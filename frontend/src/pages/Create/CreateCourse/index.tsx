@@ -24,7 +24,7 @@ interface ITeacher {
 interface ICourse {
   image: string;
   name: string;
-  professorID?: string;
+  professorID?: number | string ;
 }
 
 export function CreateCourse() {
@@ -91,7 +91,7 @@ export function CreateCourse() {
 
     if (location.pathname.includes("atualizar")) {
       handleLoadCurrentCourseData().then((course) => {
-        setInitialValues({ name: course.name, image: course.imagePath });
+        setInitialValues({ name: course.name, image: course.imagePath, professorID: course.professors[0]?.id || 0 });
         fetch(course.imagePath).then(async (response) => {
           const blob = await response.blob();
           const file = new File([blob], course.imagePath.split("/uploads/")[1]);
@@ -102,7 +102,7 @@ export function CreateCourse() {
       setInitialValues({
         name: "",
         image: "",
-        professorID: "",
+        professorID: 0,
       });
     }
   }, [
@@ -159,7 +159,7 @@ export function CreateCourse() {
                     name="professorID"
                     placeholder="Selecione uma série"
                     onChange={handleChange}
-                    value={values.professorID || 0}
+                    value={values.professorID}
                   >
                     <option disabled hidden value="0">
                       Selecione o professor da turma
