@@ -125,7 +125,10 @@ Recomendamos o JDK da Azul, que você pode encontrar aqui: https://www.azul.com/
 ✅ Você precisa ter instalado e configurado em sua máquina um banco de dados Postgres para a correta inicialização do sistema.
  - Você tem duas formas de realizar tal instalação:<br>
 1. Por meio da instalação do Postgres de forma normal em sua máquina, por meio do link (note que é recomendável que o usuário do postgres chame-se: 'postgres'): https://www.postgresql.org/download/ 
-3. (Recomendada) Por meio da instalação do Container Postgres em seu Docker, utilizando o comando ```docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres``` 
+3. (Recomendada) Por meio da instalação do Container Postgres em seu Docker, utilizando o comando 
+	```
+	docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+	``` 
 
 ✅ Para agilizar o processo de configuração e execução da aplicação, recomendamos o uso de uma IDEA. Nós utilizamos o Intellij e Spring Tools Suite para tal. Entretanto, esse tutorial somente abordará a segunda opção. Para execuar a IDEA, descompacte a pasta e abra o arquivo executável.
 	
@@ -169,6 +172,9 @@ Após a realização de todos os passos, a inicialização do projeto é bem sim
 2. Clique com o botão direito em 'trailsProject' no STS.
 3. Vá na opção  'Run As' e clique em 'Run as SpringBootApplication' 
 4. Observe no console. Assim que a mensagem 'Started TrailsProjectApplication in X.XXX seconds (JVM running for X.XXX)', aparecer, o projeto estará completamente inicializado e pronto para receber requisições.
+5. Popule o banco de dados por meio do .sql na pasta /docs do repositório. Ele funcionará corretamente após a execução de todos os passos e te permitirá utilizar a carga de teste.
+Esse script foi testado com o pgAdmin e o DBeaver. Vá em Query Tool ou "Editor de SQL" de sua ferramenta e cole exatamente o .sql de população do banco.
+
 Note que as requisições devem ser direcionadas para a porta 8080 da sua máquina.
 ## :memo: Licença
 
