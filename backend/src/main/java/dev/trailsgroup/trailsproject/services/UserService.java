@@ -5,15 +5,14 @@ import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.entities.enums.UserType;
 import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
-import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -35,8 +34,9 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Lazy
     @Autowired
-    private UserCourseRepository userCourseRepository;
+    private UserCourseService userCourseService;
 
 
 
@@ -44,9 +44,13 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User findById(Integer id){
+    protected User findById(Integer id){
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
 
-        UserSS user = UserService.authenticated();
+    public User findByIdAndVerify(Integer id){
+        UserSS user = authenticated();
+
         if(user==null || !user.hasRole(UserProfiles.ADMIN) && !id.equals(user.getId())){
             throw new AuthorizationException("Acesso negado!");
         }
@@ -56,9 +60,8 @@ public class UserService {
     }
 
     public User findBySession(){
-        return repository.findById(authenticated().getId()).orElseThrow(() -> new ResourceNotFoundException("Houve" +
-                "um problema!"));
-
+        return repository.findById(authenticated().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Houve um problema!"));
     }
 
     public static UserSS authenticated(){
@@ -74,7 +77,7 @@ public class UserService {
         UserCoursePK userCoursePK = new UserCoursePK();
         userCoursePK.setCourse(course);
         userCoursePK.setUser(user);
-        return userCourseRepository.findById(userCoursePK).isPresent();
+        return userCourseService.findByIdOptional(userCoursePK).isEmpty();
     }
 
     public User insert(UserDTO obj){
@@ -82,8 +85,13 @@ public class UserService {
             if(verifyEmailAvailability(obj.getEmail()))
                 throw new DatabaseException("O email já foi cadastrado no sistema! Informe outro email.");
 
-            User user = new User(null, obj.getName(), pe.encode(obj.getPassword()), obj.getEmail(), obj.getStatus());
+            User user = new User(null,
+                    obj.getName(),
+                    pe.encode(obj.getPassword()),
+                    obj.getEmail(),
+                    obj.getStatus());
             return repository.save(user);
+
         }catch (DataIntegrityViolationException e ){
             throw new DatabaseException(e.getMessage());
         }
@@ -123,11 +131,12 @@ public class UserService {
     //Solution:
     //https://stackoverflow.com/questions/37749559/conversion-of-list-to-page-in-spring
     public Page<Course> getCourses(Integer id, Pageable pageable){
-        UserSS user = UserService.authenticated();
+        UserSS user = authenticated();
 
         if(user == null || !Objects.equals(user.getId(), id) && !user.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Acesso negado!");
         }
+
         List<Course> courses = new ArrayList<>(repository.getById(id).getCourses());
         int start = (int)pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), courses.size());
@@ -149,5 +158,13 @@ public class UserService {
             }
         }
         return professorDTOList;
+    }
+
+    public User findByEmail(String userEmail) {
+        return repository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("Identificador "+ userEmail +" para usuário não encontrado!"));
+    }
+
+    public void save(User user) {
+        repository.save(user);
     }
 }

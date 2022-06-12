@@ -50,12 +50,12 @@
     .buttons-container {
       display: flex;
       flex-direction: row;
-      width: 100%;
+      width: 70%;
       max-width: 1200px;
       justify-content: space-between;
 
       button {
-        width: 370px;
+        width: 45%;
         max-width: 90%;
 
         &:first-of-type {
@@ -72,9 +72,14 @@
   @media (max-width: 800px) {
     form {
       .buttons-container {
+        width: 100%;
         flex-direction: column;
         align-items: center;
         justify-content:center;
+
+        button{
+          width: 370px;
+        }
 
         button:first-of-type{
           margin-bottom: 20px;

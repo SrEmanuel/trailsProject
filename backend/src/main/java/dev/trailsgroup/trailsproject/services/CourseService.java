@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.InputCourseDTO;
+import dev.trailsgroup.trailsproject.dto.LoggedOutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.OutputCourseDTO;
 import dev.trailsgroup.trailsproject.dto.TopicPositionDTO;
 import dev.trailsgroup.trailsproject.entities.*;
@@ -13,6 +14,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import dev.trailsgroup.trailsproject.services.utils.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -29,17 +31,16 @@ public class CourseService {
     @Autowired
     private UserService userService;
 
+    @Lazy
     @Autowired
     private TopicService topicService;
 
     @Autowired
     private CourseRepository repository;
 
+    @Lazy
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserCourseRepository userCourseRepository;
+    private UserCourseService userCourseService;
 
     @Autowired
     private StudentSubjectRepository studentSubjectRepository;
@@ -48,32 +49,57 @@ public class CourseService {
     private StaticFileService staticFileService;
 
     public Page<?> findAll(Pageable pageable) {
-        if(UserService.authenticated() == null)
-            return repository.findAll(pageable);
+        if(UserService.authenticated() == null) {
+           return normalFindAll(pageable);
+        }
 
+        return loggedFindAll(pageable);
+    }
+
+    private Page<?> normalFindAll(Pageable pageable){
+        List<Course> courses = repository.findAll();
+        List<OutputCourseDTO> outputCourseDTOList = new ArrayList<>();
+        for(Course x : courses){
+            List<User> professors = userCourseService.findProfessorsByCourse(x);
+            outputCourseDTOList.add(new OutputCourseDTO(x, professors));
+        }
+        return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
+    }
+
+    private Page<?> loggedFindAll(Pageable pageable){
         String email = UserService.authenticated().getUsername();
-        User user = userRepository.findByEmail(email).get();
+        User user = userService.findByEmail(email);
         Page<Course> all = repository.findAll(pageable);
-        List<OutputCourseDTO> coursesEnchanted = new ArrayList<>();
+        List<LoggedOutputCourseDTO> coursesEnchanted = new ArrayList<>();
 
         for (Course x : all) {
             UserCoursePK userCoursePK = new UserCoursePK();
             userCoursePK.setCourse(x);
             userCoursePK.setUser(user);
-            Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
+            Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
+            List<User> professors = userCourseService.findProfessorsByCourse(x);
 
-            boolean completed = false;
+            Integer count = 0;
+
             if (userCourse.isPresent()) {
-                completed = userCourse.get().isCompleted();
-                coursesEnchanted.add(new OutputCourseDTO(x, completed));
+                count = userCourse.get().getCountCompleted();
             }
-
+            coursesEnchanted.add(new LoggedOutputCourseDTO(x, count, professors));
         }
-        return new PageImpl<OutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
+        return new PageImpl<LoggedOutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
 
 
 
+    public Course findById(Integer courseId) {
+        return repository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException(courseId));
+    }
+
+    public OutputCourseDTO outputFindByName(String linkName){
+        Course course = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException(linkName));
+        List<User> professors = userCourseService.findProfessorsByCourse(course);
+        return new OutputCourseDTO(course, professors);
+    }
     public Course findByName(String linkName){
         Optional<Course> obj = repository.findByLinkName(linkName);
         return obj.orElseThrow(() -> new ResourceNotFoundException(linkName));
@@ -85,9 +111,9 @@ public class CourseService {
             if(verifyLinkNameAvailability(linkName))
                 throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe outro nome diferente.");
             String fileName = "default-course.png";
-            User user = userRepository.findById(obj.getProfessorID()).orElseThrow(() -> new ResourceNotFoundException("O ID de professor informado não existe."));
+            User user = userService.findById(obj.getProfessorID());
             Course course = repository.save(new Course(null, obj.getName(), fileName, linkName));
-            userCourseRepository.save(new UserCourse(course, user));
+            userCourseService.save(new UserCourse(course, user));
             return course;
         }catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
@@ -113,7 +139,7 @@ public class CourseService {
     }
 
 
-        public Course update(String linkName, InputCourseDTO obj){
+    public Course update(String linkName, InputCourseDTO obj){
         try{
             Course courseDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(courseDatabase);
@@ -144,7 +170,7 @@ public class CourseService {
 
     private void verifyUserPermission(Course obj) throws NullPointerException {
         UserSS userss = UserService.authenticated();
-        if(!userService.verifyPermission(obj) && !userss.hasRole(UserProfiles.ADMIN)){
+        if(userService.verifyPermission(obj) && !userss.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Você não é professor deste curso para realizar essa ação!");
         }
     }
@@ -168,7 +194,7 @@ public class CourseService {
     }
 
     public void verifyCourseCompleted(Course course){
-        User user = userService.findById(UserService.authenticated().getId());
+        User user = userService.findBySession();
         Integer counter=0;
         for(Topic x : course.getTopics()){
             for(Subject y : x.getSubjects()) {
@@ -181,26 +207,26 @@ public class CourseService {
             }
         }
         if(counter.equals(course.getSubjectsCount()))
-            markUserProgress(course, true);
+            markUserProgress(course, counter);
         else{
-            markUserProgress(course, false);
+            markUserProgress(course,  counter);
         }
     }
 
-    public UserCourse markUserProgress(Course course, boolean condition){
-        User user = userService.findById(UserService.authenticated().getId());
+    public UserCourse markUserProgress(Course course, Integer count){
+        User user = userService.findBySession();
         UserCoursePK userCoursePK = new UserCoursePK();
         userCoursePK.setCourse(course);
         userCoursePK.setUser(user);
-        Optional<UserCourse> userCourse = userCourseRepository.findById(userCoursePK);
+        Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
         if(userCourse.isPresent()){
             UserCourse userCourseGet = userCourse.get();
-            userCourseGet.setCompleted(condition);
-            return userCourseRepository.save(userCourseGet);
+            userCourseGet.setCountCompleted(count);
+            return userCourseService.save(userCourseGet);
         }else{
             UserCourse userCourseNew =  new UserCourse(course, user);
-            userCourseNew.setCompleted(condition);
-            return userCourseRepository.save(userCourseNew);
+            userCourseNew.setCountCompleted(count);
+            return userCourseService.save(userCourseNew);
         }
     }
 

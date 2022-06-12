@@ -40,8 +40,8 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{linkName}")
-    public ResponseEntity<Course> findByName(@PathVariable String linkName){
-        Course obj = service.findByName(linkName);
+    public ResponseEntity<OutputCourseDTO> findByName(@PathVariable String linkName){
+        OutputCourseDTO obj = service.outputFindByName(linkName);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -55,7 +55,7 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PostMapping(value = "/{linkName}/add-image")
     public ResponseEntity<Course> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable String linkName) {
         Course obj = service.insertImage(file, linkName);
@@ -64,7 +64,7 @@ public class CourseResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @PutMapping(value = "/{linkName}")
     public ResponseEntity<Course> update(@PathVariable String linkName, @Validated(CreateInfo.class) @RequestBody InputCourseDTO course){
         Course obj = service.update(linkName, course);
@@ -72,7 +72,7 @@ public class CourseResource {
     }
 
     @GetMapping(value = "/{linkName}/topics")
-    public ResponseEntity<Page<Topic>> getTopics(@PathVariable String linkName, Pageable pageable){
+    public ResponseEntity<Page<?>> getTopics(@PathVariable String linkName, Pageable pageable){
         return ResponseEntity.ok().body(topicService.getTopicsByCourse(linkName, pageable));
     }
 

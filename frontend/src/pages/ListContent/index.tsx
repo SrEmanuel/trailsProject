@@ -26,10 +26,9 @@ export const ListContent = memo(() => {
   const [isTeacher, setIsTeacher] = useState<boolean>();
   const [addNewSection, setAddNewSection] = useState<boolean>(false);
   const location = useLocation();
-
   const params = useParams();
   const navigate = useNavigate();
-  const title = isTeacher
+  const title = user
     ? `Bem vindo, ${user?.name}`
     : location.pathname === "/cursos"
     ? "Trilhas disponíveis"
@@ -46,7 +45,7 @@ export const ListContent = memo(() => {
     } catch (error: any) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
-  }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user?.id]);
+  }, [getIsTeacher, handleClearUserDataFromStorage, navigate, page, user]);
 
   const handleLoadTopics = useCallback(async () => {
     const response = await api.get(`/courses/${params.coursename}/topics`);
@@ -76,10 +75,7 @@ export const ListContent = memo(() => {
 
   useEffect(() => {
     loadData();
-  }, [
-    location,
-    loadData,
-  ]);
+  }, [location, loadData]);
 
   return (
     <div className="container">
@@ -96,13 +92,29 @@ export const ListContent = memo(() => {
       )}
       <div className="trails-grid-container">
         {location.pathname === "/cursos" &&
-          trails?.map((trail) => <Trail key={trail.id} trail={trail} />)}
+          trails?.map((trail) => (
+            <Trail
+              mode={
+                user?.roles.includes("ADMIN")
+                  ? "admin"
+                  : isTeacher
+                  ? "teacher"
+                  : user
+                  ? "student"
+                  : "guest"
+              }
+              onChange={loadData}
+              key={trail.id}
+              trail={trail}
+            />
+          ))}
       </div>
 
       {location.pathname !== "/cursos" &&
         !isTeacher &&
-        topics?.map((topic, index) => (
+        topics?.map((topic) => (
           <Topic
+            key={topic.id}
             topic={topic}
             params={params}
             enableAdminMode={false}
@@ -112,12 +124,18 @@ export const ListContent = memo(() => {
 
       {location.pathname !== "/cursos" && isTeacher && (
         <>
-          <DragDropTopicsList setTopics={setTopics} topics={topics as ITopic[]} params={params} onContentChange={loadData} />
+          <DragDropTopicsList
+            setTopics={setTopics}
+            topics={topics as ITopic[]}
+            params={params}
+            onContentChange={loadData}
+          />
           <FloatingPlusButton onClick={() => setAddNewSection(true)} />
         </>
       )}
 
       {(topics === undefined || (topics && topics.length === 0)) &&
+        isTeacher &&
         location.pathname !== "/cursos" && (
           <div className="empty-course-list">
             <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>

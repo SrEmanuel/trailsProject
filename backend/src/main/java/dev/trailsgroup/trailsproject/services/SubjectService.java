@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.OutputSubjectDTO;
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,13 +36,10 @@ public class SubjectService {
     private CourseService courseService;
 
     @Autowired
-    private TopicRepository topicRepository;
+    private TopicService topicService;
 
     @Autowired
-    private StudentSubjectRepository studentSubjectRepository;
-
-    @Autowired
-    private ProfessorSubjectRepository professorSubjectRepository;
+    private UserSubjectService userSubjectService;
 
     @Autowired
     private StaticFileService staticFileService;
@@ -52,25 +51,63 @@ public class SubjectService {
         return repository.findAll(pageable);
     }
 
-    public Subject findByName(String linkName){
-        Optional<Subject> obj = repository.findByLinkName(linkName);
-        return obj.orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+    protected List<?> findSubjectsByTopic(Topic topic){
+        Subject subject = new Subject();
+        subject.setTopic(topic);
+        List<Subject> subjects =  repository.findAll(Example.of(subject));
+
+        if(UserService.authenticated() == null)
+            return subjects;
+
+        String email = UserService.authenticated().getUsername();
+        User user = userService.findByEmail(email);
+
+        List<OutputSubjectDTO> outputSubjectDTOList = new ArrayList<>();
+        for(Subject x  : subjects){
+            StudentSubject studentSubject = userSubjectService.findStudentSubject(x, user);
+            outputSubjectDTOList.add(new OutputSubjectDTO(x, studentSubject.isCompleted()));
+        }
+
+        return outputSubjectDTOList;
     }
 
+    public <T extends Object> T findByNameOutput(String linkName){
+        Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
+                + linkName + "' não foi encontrado no sistema"));
+        if(UserService.authenticated() == null)
+            return (T)subject;
 
-    public void saveAll(List<Subject> subjectList){
+        String email = UserService.authenticated().getUsername();
+        User user = userService.findByEmail(email);
+
+        StudentSubject studentSubject = userSubjectService.findStudentSubject(subject, user);
+
+        return  (T) new OutputSubjectDTO(subject, studentSubject.isCompleted());
+    }
+
+    public Subject findByName(String linkName){
+        return repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '"
+                + linkName + "' não foi encontrado no sistema"));
+    }
+
+    protected void saveAll(List<Subject> subjectList){
         repository.saveAll(subjectList);
     }
 
     public Subject insert(SubjectDTO obj){
         try {
             String linkName = ClassUtils.createLinkName(obj.getName());
+
             if(verifyLinkNameAvailability(linkName))
-                throw new DatabaseException("O nome de assunto '"+ obj.getName() +"' já existe no sistema! Informe um nome diferente.");
-            Topic topic = topicRepository.findById(obj.getTopicId()).orElseThrow(() -> new ResourceNotFoundException(obj.getTopicId()));
-            Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(), obj.getHtmlContent(),obj.getPosition(), topic);
+                throw new DatabaseException("O nome de assunto '"+
+                        obj.getName() +"' já existe no sistema! Informe um nome diferente.");
+
+            Topic topic = topicService.findById(obj.getTopicId());
+            Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(),
+                    obj.getHtmlContent(),obj.getPosition(), topic);
             Subject savedSubject = repository.save(subject);
-            verifyUserPermission(savedSubject);
+
+            verifyUserPermission(savedSubject); //TODO verify that validation. Is that in the correct place?
             addProfessorName(savedSubject);
             return savedSubject;
         }catch(IllegalArgumentException | NullPointerException e){
@@ -81,15 +118,17 @@ public class SubjectService {
     public boolean verifyLinkNameAvailability(String name){
         return repository.findByLinkName(name).isPresent();
     }
+
     public Subject insertImage(MultipartFile multipartFile, String linkName){
-        Subject subject = repository.findByLinkName(linkName).orElseThrow(()-> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        Subject subject = findByName(linkName);
         subject.setImage(staticFileService.update(multipartFile, subject.getImageName()));
         repository.save(subject);
         return subject;
     }
+
     public void delete(String linkName){
         try{
-            Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+            Subject subject = findByName(linkName);
             verifyUserPermission(subject);
             staticFileService.delete(subject.getImageName());
             repository.delete(subject);
@@ -99,7 +138,7 @@ public class SubjectService {
     }
 
     public Subject update(String linkName, SubjectDTO obj){
-        Subject SubjectDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
+        Subject SubjectDatabase = findByName(linkName);
         verifyUserPermission(SubjectDatabase);
         addProfessorName(SubjectDatabase);
         subjectUpdateInformation(SubjectDatabase, obj);
@@ -121,7 +160,7 @@ public class SubjectService {
 
     private void verifyUserPermission(Subject obj) throws NullPointerException {
         UserSS userss = UserService.authenticated();
-        if(!userService.verifyPermission(obj.getTopic().getCourse()) && !userss.hasRole(UserProfiles.ADMIN)){
+        if(userService.verifyPermission(obj.getTopic().getCourse()) && !userss.hasRole(UserProfiles.ADMIN)){
             throw new AuthorizationException("Você não é professor do curso relacionado a este tópico para realizar essa ação");
         }
 
@@ -137,25 +176,26 @@ public class SubjectService {
         professorSubject.setUserName(name);
         professorSubject.setSubject(obj);
 
-        Example<ProfessorSubject> example = Example.of(professorSubject);
-        if(professorSubjectRepository.exists(example)){
-            ProfessorSubject professorSubject1 = professorSubjectRepository.findOne(example).get();
+        if(userSubjectService.existsProfessor(professorSubject)){
+            ProfessorSubject professorSubject1 = userSubjectService.findOneProfessor(professorSubject);
             professorSubject1.addCounter();
-            professorSubjectRepository.save(professorSubject1);
+            userSubjectService.saveProfessor(professorSubject1);
         }else {
             professorSubject.addCounter();
-            professorSubjectRepository.save(professorSubject);
+            userSubjectService.saveProfessor(professorSubject);
         }
     }
 
     public void markUserProgress(boolean state, String linkName) {
-        User user = userService.findById(UserService.authenticated().getId());
-        Subject subject = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador de Subject não encontrado: "+ linkName));
-        Optional<StudentSubject> studentSubject = studentSubjectRepository.findBySubjectAndUser(subject, user);
+        User user = userService.findBySession();
+        Subject subject = repository.findByLinkName(linkName)
+                .orElseThrow(() -> new ResourceNotFoundException("Identificador de Subject não encontrado: "+ linkName));
+        Optional<StudentSubject> studentSubject = userSubjectService.findBySubjectAndUser(subject, user);
+
         if(studentSubject.isEmpty()) {
             StudentSubject studentSubjectNew = new StudentSubject(null, subject, user);
             studentSubjectNew.setCompleted(state);
-            studentSubjectRepository.save(studentSubjectNew);
+            userSubjectService.saveStudent(studentSubjectNew);
             courseService.verifyCourseCompleted(subject.getTopic().getCourse());
         }else{
             StudentSubject studentSubjectDB = studentSubject.get();

@@ -58,7 +58,6 @@ public class User implements Serializable {
         this.email = email.toLowerCase();
         this.status = status == null || status;
         addProfile(UserProfiles.USER);
-        addProfile(UserProfiles.PROFESSOR);
     }
 
     public Integer getId() {

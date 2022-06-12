@@ -6,7 +6,7 @@ import dev.trailsgroup.trailsproject.entities.User;
 import java.time.Instant;
 import java.util.List;
 
-public class OutputCourseDTO {
+public class LoggedOutputCourseDTO {
 
     private Integer id;
 
@@ -20,17 +20,19 @@ public class OutputCourseDTO {
 
     private Integer subjectsCount;
 
+    private Integer completedCount;
 
     private List<User> professors;
 
     private String imagePath;
-    public OutputCourseDTO(Course course, List<User> professors) {
+    public LoggedOutputCourseDTO(Course course, Integer completedCount, List<User> professors) {
         this.id = course.getId();
         this.name = course.getName();
         this.linkName = course.getLinkName();
         this.createdDate = course.getCreatedDate();
         this.lastModifiedDate = course.getLastModifiedDate();
         this.subjectsCount = course.getSubjectsCount();
+        this.completedCount = completedCount;
         this.imagePath = course.getImagePath();
         this.professors = professors;
     }
@@ -91,6 +93,14 @@ public class OutputCourseDTO {
         this.subjectsCount = subjectsCount;
     }
 
+
+    public Integer getCompletedCount() {
+        return completedCount;
+    }
+
+    public void setCompletedCount(Integer completedCount) {
+        this.completedCount = completedCount;
+    }
 
     public List<User> getProfessors() {
         return professors;
