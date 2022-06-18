@@ -1,4 +1,3 @@
-import produce from "immer";
 import { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
@@ -52,10 +51,6 @@ export function DragDropTopicsList({
     return newArray;
   };
 
-  const addValue = (arr: any[]) => {
-    return arr.concat([1]);
-  };
-
   const updateList = async (
     linkName: string,
     data: UpdatePositionPayload[]
@@ -89,13 +84,12 @@ export function DragDropTopicsList({
 
     const data: UpdatePositionPayload[] = [];
 
-    newTopicList.forEach((topic) => {
-      topic.subjects.forEach((subject, index) =>
+      newTopic.subjects.forEach((subject, index) =>{
         data.push({ subjectId: subject.id, position: index })
+      }
       );
-    });
 
-    console.log(data);
+    setTopics(newTopicList);
 
     setDraggedItemDOMRect(undefined);
 
@@ -123,30 +117,31 @@ export function DragDropTopicsList({
           isDropDisabled={JSON.stringify(index) !== currentSourceId}
         >
           {(provided, snapshot) => (
-            <div
-              className="dropabble-wrapper"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              <Topic
-                topic={topic}
-                params={params}
-                enableAdminMode={true}
-                onDeleteSubject={onContentChange}
-              />
-
-              {provided.placeholder}
-              {draggedItemDOMRect && snapshot.isUsingPlaceholder && (
-                <div
-                  className="custom-placeholder card-container"
-                  style={{
-                    position: "absolute",
-                    top: draggedItemDOMRect.top + 40,
-                    left: draggedItemDOMRect.left,
-                  }}
-                ></div>
-              )}
-            </div>
+              <div
+                className="dropabble-wrapper"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <Topic
+                  topic={topic}
+                  params={params}
+                  enableAdminMode={true}
+                  onDeleteSubject={onContentChange}
+                />
+                {provided.placeholder}
+                {draggedItemDOMRect && snapshot.isUsingPlaceholder && (
+                  <div
+                    className="custom-placeholder card-container"
+                    style={{
+                      position: "absolute",
+                      top: draggedItemDOMRect.top,
+                      left: draggedItemDOMRect.left,
+                      width: draggedItemDOMRect.width,
+                      height: draggedItemDOMRect.height - 50,
+                    }}
+                  ></div>
+                )}
+              </div>
           )}
         </Droppable>
       ))}
