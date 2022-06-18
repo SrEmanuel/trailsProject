@@ -49,30 +49,30 @@ public class CourseService {
     private StaticFileService staticFileService;
 
     public Page<?> findAll(Pageable pageable) {
+        Page<Course> courses = repository.findAll(pageable);
+        List<Course> courseList = courses.toList();
+
         if(UserService.authenticated() == null) {
-           return normalFindAll(pageable);
+           return normalFindAll(courseList, pageable);
         }
 
-        return loggedFindAll(pageable);
+        return loggedFindAll(courseList, pageable);
     }
 
-    private Page<?> normalFindAll(Pageable pageable){
-        List<Course> courses = repository.findAll();
+    private Page<?> normalFindAll(List<Course> courseList,Pageable pageable){
         List<OutputCourseDTO> outputCourseDTOList = new ArrayList<>();
-        for(Course x : courses){
+        for(Course x : courseList){
             List<User> professors = userCourseService.findProfessorsByCourse(x);
             outputCourseDTOList.add(new OutputCourseDTO(x, professors));
         }
         return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
     }
 
-    private Page<?> loggedFindAll(Pageable pageable){
+    private Page<?> loggedFindAll(List<Course> courseList, Pageable pageable){
         String email = UserService.authenticated().getUsername();
         User user = userService.findByEmail(email);
-        Page<Course> all = repository.findAll(pageable);
         List<LoggedOutputCourseDTO> coursesEnchanted = new ArrayList<>();
-
-        for (Course x : all) {
+        for (Course x : courseList) {
             UserCoursePK userCoursePK = new UserCoursePK();
             userCoursePK.setCourse(x);
             userCoursePK.setUser(user);
