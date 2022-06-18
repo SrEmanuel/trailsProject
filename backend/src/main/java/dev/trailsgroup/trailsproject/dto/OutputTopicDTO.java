@@ -1,20 +1,10 @@
 package dev.trailsgroup.trailsproject.dto;
 
-import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
-import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
-import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.Topic;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class OutputTopicDTO {
@@ -96,7 +86,9 @@ public class OutputTopicDTO {
     }
 
     public List<OutputSubjectDTO> getSubjects() {
-        return subjects;
+        List<OutputSubjectDTO> sortedSubjects = subjects;
+        sortedSubjects.sort(Comparator.comparing(OutputSubjectDTO::getPosition));//Returning a sorted list of subjects by its position
+        return sortedSubjects;
     }
 
     public void setSubjects(List<OutputSubjectDTO> subjects) {
