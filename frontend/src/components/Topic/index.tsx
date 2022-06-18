@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ITopic } from "../../interfaces/topic";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
+import { reorderSubjects } from "../../utils/reoarderSubjects";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
@@ -62,7 +63,7 @@ export function Topic({
       {enableAdminMode ? (
         <>
           <div className="trails-grid-container">
-            {topic.subjects.map((subject, index) => (
+            {topic.subjects.sort(reorderSubjects).map((subject, index) => (
               <Draggable
                 draggableId={String(subject.id)}
                 index={index}
