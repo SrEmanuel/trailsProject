@@ -29,7 +29,6 @@ export function DragDropTopicsList({
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const [currentSourceId, setCurrentSourceId] = useState<string>();
-  const [draggedItemDOMRect, setDraggedItemDOMRect] = useState<DOMRect>();
 
   const reorder = (
     subjects: ISubject[],
@@ -91,20 +90,12 @@ export function DragDropTopicsList({
 
     setTopics(newTopicList);
 
-    setDraggedItemDOMRect(undefined);
-
     updateList(selectedTopic.linkName, data);
   };
 
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
-      onBeforeDragStart={(initial) => {
-        const draggableElement = document.getElementById(
-          `draggable-${initial.draggableId}`
-        );
-        setDraggedItemDOMRect(draggableElement?.getBoundingClientRect());
-      }}
       onDragUpdate={(initial, provided) => {
         setCurrentSourceId(initial.source?.droppableId);
       }}
@@ -129,18 +120,6 @@ export function DragDropTopicsList({
                   onDeleteSubject={onContentChange}
                 />
                 {provided.placeholder}
-                {draggedItemDOMRect && snapshot.isUsingPlaceholder && (
-                  <div
-                    className="custom-placeholder card-container"
-                    style={{
-                      position: "absolute",
-                      top: draggedItemDOMRect.top,
-                      left: draggedItemDOMRect.left,
-                      width: draggedItemDOMRect.width,
-                      height: draggedItemDOMRect.height - 50,
-                    }}
-                  ></div>
-                )}
               </div>
           )}
         </Droppable>
