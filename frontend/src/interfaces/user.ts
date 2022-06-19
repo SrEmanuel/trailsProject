@@ -5,4 +5,5 @@ export interface IUser {
   enabled: boolean;
   roles: string[];
   token: string;
+  password: string;
 }
