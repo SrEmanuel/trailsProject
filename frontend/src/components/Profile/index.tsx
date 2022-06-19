@@ -25,12 +25,13 @@ export function Profile({ isVisible, setIsVisible }: Props) {
             <Editable label="E-MAIL:" value={user?.email} onSubmit={() => {}} />
             <Editable
               label="SENHA:"
+              type="password"
               value={user?.password}
               onSubmit={() => {}}
             />
           </>
         )}
-        <button className="del-btn" >
+        <button type="button" className="del-btn" >
           <FiTrash2 color="var(--white)" size={24} />
          <span> Excluir conta</span>
         </button>
