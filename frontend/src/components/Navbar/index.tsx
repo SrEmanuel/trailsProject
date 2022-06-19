@@ -6,10 +6,12 @@ import { SideMenu } from "../SideMenu";
 import "./styles.scss";
 import { useAuth } from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
+import { Profile } from "../Profile";
 
 export function NavBar() {
   const { handleClearUserDataFromStorage, getUser } = useAuth();
   const [hasLoggedUser, setHasLoggedUser] = useState<boolean>(false);
+  const [showUserProfile, setShowUserProfile] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -33,6 +35,8 @@ export function NavBar() {
             </Link>
           </>
         ) : (
+         <>
+         <span className="nav-item" onClick={ () => setShowUserProfile(true)} > Meu perfil </span>
           <Link
             onClick={() => handleClearUserDataFromStorage()}
             className="logout-btn"
@@ -41,8 +45,10 @@ export function NavBar() {
             <FiLogOut color="var(--white)" size={18} />
             Sair
           </Link>
+         </>
         )}
         <SideMenu hasLoggedUser={hasLoggedUser} />
+        <Profile isVisible={showUserProfile} setIsVisible={setShowUserProfile} />
       </div>
     </nav>
   );
