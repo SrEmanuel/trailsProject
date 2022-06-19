@@ -111,9 +111,8 @@ public class CourseService {
             if(verifyLinkNameAvailability(linkName))
                 throw new DatabaseException("O nome de curso '"+ obj.getName() +"' já existe no sistema! Informe outro nome diferente.");
             String fileName = "default-course.png";
-            User user = userService.findById(obj.getProfessorID());
             Course course = repository.save(new Course(null, obj.getName(), fileName, linkName));
-            userCourseService.save(new UserCourse(course, user));
+            userCourseService.saveProfessors(obj.getProfessors(), course);
             return course;
         }catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
@@ -144,7 +143,10 @@ public class CourseService {
             Course courseDatabase = repository.findByLinkName(linkName).orElseThrow(() -> new ResourceNotFoundException("Identificador '" + linkName + "' não foi encontrado no sistema"));
             verifyUserPermission(courseDatabase);
             courseUpdateInformation(courseDatabase, obj);
-            return repository.save(courseDatabase);
+            Course updatedCourse = repository.save(courseDatabase);
+            userCourseService.saveProfessors(obj.getProfessors(), updatedCourse);
+            repository.flush();
+            return updatedCourse;
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException(linkName);
         }catch(DataIntegrityViolationException e){

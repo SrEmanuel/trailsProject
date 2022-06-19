@@ -1,5 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
+import dev.trailsgroup.trailsproject.dto.InputProfessorCourseDTO;
 import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
@@ -85,4 +86,37 @@ public class UserCourseService {
     }
 
 
+    public void saveProfessors(List<InputProfessorCourseDTO> professors, Course course){
+        UserCourse userCourse = new UserCourse();
+        userCourse.setCourse(course);
+        List<UserCourse> userCourseList = userCourseRepository.findAll(Example.of(userCourse));
+
+        List<User> updatedUserList = new ArrayList<>();
+        List<User> bdUserList = new ArrayList<>();
+
+        professors.forEach(x -> updatedUserList.add(userService.findById(x.getId())));
+        userCourseList.forEach(x -> bdUserList.add(x.getUser()));
+
+        for(User x : bdUserList){
+            if(!updatedUserList.contains(x)){
+                UserCourse us = new UserCourse();
+                us.setUser(x);
+                us.setCourse(course);
+                userCourseRepository.delete(us);
+                //TODO remove user professor role if he doesn't have more UserCourse relations as professor;
+            }
+        }
+        for(User x : updatedUserList){
+            if(!bdUserList.contains(x)){
+                userService.makeProfessor(x);
+                UserCourse us = new UserCourse();
+                us.setCourse(course);
+                us.setUser(x);
+                userCourseRepository.save(us);
+
+            }
+        }
+        userService.flush();
+        userCourseRepository.flush();
+    }
 }

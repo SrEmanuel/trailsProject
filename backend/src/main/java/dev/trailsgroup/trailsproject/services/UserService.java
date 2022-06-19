@@ -167,4 +167,13 @@ public class UserService {
     public void save(User user) {
         repository.save(user);
     }
+
+    public void makeProfessor(User user) {
+        user.addProfile(UserProfiles.PROFESSOR);
+        repository.save(user);
+    }
+
+    public void flush(){
+        repository.flush();
+    }
 }
