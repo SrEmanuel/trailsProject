@@ -11,3 +11,17 @@
   font-weight: 700;
   font-family: 'Inter', sans-serif;
 }
+
+.del-btn{
+  background: var(--red);
+  align-items: center;
+  justify-content: space-around;
+
+  &:hover{
+    background: var(--dark-red);
+  }
+
+  svg{
+    position: static;
+  }
+}
