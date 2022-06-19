@@ -101,6 +101,32 @@ body {
     font-size: 12px;
   }
 
+  .chip-stack{
+    max-width: 65%;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    .chip{
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media(max-width: 800px){
+      max-width: 100%;
+      .chip{
+        min-width: 40%;
+        max-width: 50%;
+      }
+    }
+    @media(max-width:500px){
+      .chip{
+        min-width: 90%;
+      }
+    }
+  }
+
   .custom-placeholder{
     border: 2px dashed var(--grey);
   }
