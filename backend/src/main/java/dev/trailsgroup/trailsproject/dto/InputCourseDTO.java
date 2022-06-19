@@ -6,6 +6,7 @@ import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class InputCourseDTO {
 
@@ -15,9 +16,10 @@ public class InputCourseDTO {
 
 
     @NotNull(message = "O id do tópico é obrigatório!", groups = UpdateInfo.class)
-    private Integer professorID;
+    private List<InputProfessorCourseDTO> professors;
 
     private String image;
+
 
 
     public InputCourseDTO(){
@@ -39,11 +41,11 @@ public class InputCourseDTO {
         this.image = image;
     }
 
-    public Integer getProfessorID() {
-        return professorID;
+    public List<InputProfessorCourseDTO> getProfessors() {
+        return professors;
     }
 
-    public void setProfessorID(Integer professorID) {
-        this.professorID = professorID;
+    public void setProfessors(List<InputProfessorCourseDTO> professors) {
+        this.professors = professors;
     }
 }
