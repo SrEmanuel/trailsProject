@@ -206,8 +206,6 @@ public class UserService {
         User user = findById(id);
         if(!pe.matches(obj.getOldPassword(), user.getPassword()))
             throw new AuthorizationException("A senha informada para autenticação da operação está errada!");
-        if(!obj.getPassword().equals(obj.getConfirmPassword()))
-            throw new AuthorizationException("As novas senhas informadas não condizem!");
 
         user.setPassword(pe.encode(obj.getPassword()));
         return save(user);

@@ -14,17 +14,13 @@ public class UserPasswordDTO {
     @NotEmpty(message = "A senha é obrigatória!")
     private String password;
 
-    @Size(min=8, message="A senha de confirmação tem que ter pelo menos 8 dígitos")
-    @Pattern(regexp="^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,64}$",message="A senha informada NÃO atende os padrões de segurança especificados")
-    @NotEmpty(message = "A senha de confirmação é obrigatória!")
-    private String confirmPassword;
 
     public UserPasswordDTO(){
     }
 
-    public UserPasswordDTO(String password, String confirmPassword) {
+    public UserPasswordDTO(String oldPassword, String password) {
+        this.oldPassword = oldPassword;
         this.password = password;
-        this.confirmPassword = confirmPassword;
     }
 
     public String getPassword() {
@@ -33,14 +29,6 @@ public class UserPasswordDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getOldPassword() {
