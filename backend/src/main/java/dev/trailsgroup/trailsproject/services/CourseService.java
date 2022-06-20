@@ -73,16 +73,16 @@ public class CourseService {
         User user = userService.findByEmail(email);
         List<LoggedOutputCourseDTO> coursesEnchanted = new ArrayList<>();
         for (Course x : courseList) {
-            UserCoursePK userCoursePK = new UserCoursePK();
-            userCoursePK.setCourse(x);
-            userCoursePK.setUser(user);
-            Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
             List<User> professors = userCourseService.findProfessorsByCourse(x);
+            StudentCourse studentCourseExample = new StudentCourse(x, user);
+            studentCourseExample.setCountCompleted(null);
+            Optional<StudentCourse> studentCourse = userCourseService.findStudentCourse(studentCourseExample);
+
 
             Integer count = 0;
 
-            if (userCourse.isPresent()) {
-                count = userCourse.get().getCountCompleted();
+            if (studentCourse.isPresent()) {
+                count = studentCourse.get().getCountCompleted();
             }
             coursesEnchanted.add(new LoggedOutputCourseDTO(x, count, professors));
         }
@@ -215,20 +215,18 @@ public class CourseService {
         }
     }
 
-    public UserCourse markUserProgress(Course course, Integer count){
+    public StudentCourse markUserProgress(Course course, Integer count){
         User user = userService.findBySession();
-        UserCoursePK userCoursePK = new UserCoursePK();
-        userCoursePK.setCourse(course);
-        userCoursePK.setUser(user);
-        Optional<UserCourse> userCourse = userCourseService.findByIdOptional(userCoursePK);
-        if(userCourse.isPresent()){
-            UserCourse userCourseGet = userCourse.get();
-            userCourseGet.setCountCompleted(count);
-            return userCourseService.save(userCourseGet);
+        StudentCourse studentCourse = new StudentCourse(course, user);
+        Optional<StudentCourse> studentCourseDB = userCourseService.findStudentCourse(studentCourse);
+        if(studentCourseDB.isPresent()){
+            StudentCourse studentCourseGet = studentCourseDB.get();
+            studentCourseGet.setCountCompleted(count);
+            return userCourseService.saveStudentCourse(studentCourseGet);
         }else{
-            UserCourse userCourseNew =  new UserCourse(course, user);
-            userCourseNew.setCountCompleted(count);
-            return userCourseService.save(userCourseNew);
+            StudentCourse studentCourseNew =  new StudentCourse(course, user);
+            studentCourseNew.setCountCompleted(count);
+            return userCourseService.saveStudentCourse(studentCourseNew);
         }
     }
 

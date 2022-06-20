@@ -37,7 +37,11 @@ public class User implements Serializable {
     private Boolean status;
 
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserCourse> items =  new HashSet<>();
+    private Set<ProfessorCourse> professorCourses =  new HashSet<>();
+
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentCourse> studentCourses =  new HashSet<>();
+
 
     @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(name="tb_profiles")    
@@ -138,7 +142,7 @@ public class User implements Serializable {
     @JsonIgnore
     public Set<Course> getCourses(){
         Set<Course> set = new HashSet<>();
-        for(UserCourse x : items){
+        for(ProfessorCourse x : professorCourses){
             set.add(x.getCourse());
         }
         return set;

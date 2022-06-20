@@ -1,12 +1,8 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
 import dev.trailsgroup.trailsproject.entities.*;
-import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
 import dev.trailsgroup.trailsproject.repositories.ProfessorSubjectRepository;
 import dev.trailsgroup.trailsproject.repositories.StudentSubjectRepository;
-import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
-import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;

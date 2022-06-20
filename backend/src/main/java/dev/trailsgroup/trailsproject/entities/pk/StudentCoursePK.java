@@ -2,18 +2,16 @@ package dev.trailsgroup.trailsproject.entities.pk;
 
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 
 
 @Embeddable
-public class UserCoursePK implements Serializable {
+public class StudentCoursePK implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -23,12 +21,12 @@ public class UserCoursePK implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    public UserCoursePK(User user, Course course) {
+    public StudentCoursePK(User user, Course course) {
         this.user = user;
         this.course = course;
     }
 
-    public UserCoursePK() {
+    public StudentCoursePK() {
 
     }
 
@@ -52,7 +50,7 @@ public class UserCoursePK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserCoursePK that = (UserCoursePK) o;
+        StudentCoursePK that = (StudentCoursePK) o;
         return user.equals(that.user) && course.equals(that.course);
     }
 

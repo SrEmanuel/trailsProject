@@ -3,6 +3,7 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.dto.ProfessorDTO;
 import dev.trailsgroup.trailsproject.dto.UserDTO;
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.ProfessorCourse;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
@@ -74,10 +75,8 @@ public class UserService {
 
     public boolean verifyPermission(Course course){
         User user = repository.findByEmail(authenticated().getUsername()).get();
-        UserCoursePK userCoursePK = new UserCoursePK();
-        userCoursePK.setCourse(course);
-        userCoursePK.setUser(user);
-        return userCourseService.findByIdOptional(userCoursePK).isEmpty();
+        ProfessorCourse professorCourse = new ProfessorCourse(course, user);
+        return userCourseService.findProfessorCourse(professorCourse).isEmpty();
     }
 
     public User insert(UserDTO obj){
@@ -109,6 +108,11 @@ public class UserService {
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    public void removeProfile(User user, UserProfiles profile){
+        user.removeProfile(profile);
+        save(user);
     }
 
     public User update(Integer id, UserDTO obj){

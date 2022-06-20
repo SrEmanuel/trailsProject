@@ -35,7 +35,10 @@ public class Course implements Serializable {
     private Instant lastModifiedDate;
 
     @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserCourse> items = new HashSet<>();
+    private Set<ProfessorCourse> professorCourses = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentCourse> studentCourses = new HashSet<>();
 
     public Course(){}
 
@@ -102,7 +105,7 @@ public class Course implements Serializable {
     @JsonIgnore
     public Set<User> getUsers(){
         Set<User> set = new HashSet<>();
-        for(UserCourse x : items){
+        for(ProfessorCourse x : professorCourses){
             set.add(x.getUser());
         }
         return set;

@@ -53,7 +53,7 @@ public class UserResource {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(value = "/{id}/add-course")
     public ResponseEntity<UserCourseDTO> addCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
-        UserCourseDTO obj = userCourseService.insert(id, courseId);
+        UserCourseDTO obj = userCourseService.insertProfessorCourse(id, courseId);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}/add-course")
                 .buildAndExpand(obj).toUri();
         return ResponseEntity.created(uri).body(obj);
@@ -62,7 +62,7 @@ public class UserResource {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}/remove-course")
     public ResponseEntity<Void> deleteCourse(@PathVariable Integer id, @RequestParam(name = "course") Integer courseId){
-        userCourseService.delete(id, courseId);
+        userCourseService.deleteProfessorCourse(id, courseId);
         return ResponseEntity.noContent().build();
     }
 

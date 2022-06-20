@@ -2,12 +2,11 @@ package dev.trailsgroup.trailsproject.services;
 
 import dev.trailsgroup.trailsproject.dto.InputProfessorCourseDTO;
 import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
-import dev.trailsgroup.trailsproject.entities.Course;
-import dev.trailsgroup.trailsproject.entities.User;
-import dev.trailsgroup.trailsproject.entities.UserCourse;
+import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
 import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
-import dev.trailsgroup.trailsproject.repositories.UserCourseRepository;
+import dev.trailsgroup.trailsproject.repositories.ProfessorCourseRepository;
+import dev.trailsgroup.trailsproject.repositories.StudentCourseRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserCourseService {
@@ -28,48 +26,45 @@ public class UserCourseService {
     private CourseService courseService;
 
     @Autowired
-    private UserCourseRepository userCourseRepository;
+    private ProfessorCourseRepository professorCourseRepository;
 
-    public UserCourseDTO insert(Integer userId, Integer courseId){
+    @Autowired
+    private StudentCourseRepository studentCourseRepository;
+
+    public UserCourseDTO insertProfessorCourse(Integer userId, Integer courseId){
         User user = userService.findById(userId);
         Course course = courseService.findById(courseId);
-        UserCourse userCourse = new UserCourse(course, user);
+        ProfessorCourse userCourse = new ProfessorCourse(course, user);
 
         user.addProfile(UserProfiles.PROFESSOR);
         userService.save(user);
-        userCourseRepository.save(userCourse);
+        professorCourseRepository.save(userCourse);
         UserCourseDTO response = new UserCourseDTO();
         response.setUserId(userId);
         response.setCourseId(courseId);
         return response;
     }
 
-    public void delete(Integer userId, Integer courseId){
-        UserCoursePK pk = new UserCoursePK();
-        pk.setUser(userService.findById(userId));
-        pk.setCourse(courseService.findById(courseId));
-
-        UserCourse userCourse = userCourseRepository.findById(pk)
-                .orElseThrow(() -> new ResourceNotFoundException("O curso "+
-                        courseId + " não está associado ao usuário " + userId));
-
-        userCourseRepository.delete(userCourse);
+    public void deleteProfessorCourse(Integer userId, Integer courseId){
+        ProfessorCourse professorCourse = new ProfessorCourse(courseService.findById(courseId), userService.findById(userId));
+        professorCourseRepository.delete(professorCourse);
     }
 
-    public UserCourse findById(UserCoursePK userCoursePK) {
-        return userCourseRepository.findById(userCoursePK).orElseThrow(()
-                -> new ResourceNotFoundException("Não foi possível encontrar a relação do usuário ID:"
+    public ProfessorCourse findProfessorCourseById(UserCoursePK userCoursePK) {
+        ProfessorCourse professorCourse = new ProfessorCourse(userCoursePK.getCourse(), userCoursePK.getUser());
+        return professorCourseRepository.findOne(Example.of(professorCourse)).orElseThrow(() -> new ResourceNotFoundException("Não foi possível encontrar a relação do usuário ID:"
                 + userCoursePK.getUser().getId()+ "com o Curso ID: "+
                 userCoursePK.getCourse().getId()));
     }
 
     public List<User> findProfessorsByCourse(Course course){
-        UserCourse userCourse = new UserCourse();
-        userCourse.setCourse(course);
-        List<UserCourse> userCourseList = userCourseRepository.findAll(Example.of(userCourse));
+        ProfessorCourse professorCourse = new ProfessorCourse();
+        professorCourse.setCourse(course);
+        professorCourse.setUser(null);
+        List<ProfessorCourse> professorCoursesList = professorCourseRepository.findAll(Example.of(professorCourse));
 
         List<User> users = new ArrayList<>();
-        for(UserCourse x : userCourseList){
+        for(ProfessorCourse x : professorCoursesList){
             if(x.getUser().getProfiles().contains(UserProfiles.PROFESSOR))
                 users.add(x.getUser());
         }
@@ -77,19 +72,28 @@ public class UserCourseService {
         return users;
     }
 
-    public Optional<UserCourse> findByIdOptional(UserCoursePK userCoursePK){
-        return userCourseRepository.findById(userCoursePK);
+    public Optional<StudentCourse> findStudentCourse(StudentCourse studentCourse){
+        return studentCourseRepository.findOne(Example.of(studentCourse));
     }
 
-    public UserCourse save(UserCourse userCourse) {
-        return userCourseRepository.save(userCourse);
+    public Optional<ProfessorCourse> findProfessorCourse(ProfessorCourse professorCourse) {
+        return professorCourseRepository.findOne(Example.of(professorCourse));
+    }
+
+
+    public ProfessorCourse saveProfessorCourse(ProfessorCourse professorCourse) {
+        return professorCourseRepository.save(professorCourse);
+    }
+
+    public StudentCourse saveStudentCourse(StudentCourse studentCourse) {
+        return studentCourseRepository.save(studentCourse);
     }
 
 
     public void saveProfessors(List<InputProfessorCourseDTO> professors, Course course){
-        UserCourse userCourse = new UserCourse();
-        userCourse.setCourse(course);
-        List<UserCourse> userCourseList = userCourseRepository.findAll(Example.of(userCourse));
+        ProfessorCourse professorCourse = new ProfessorCourse();
+        professorCourse.setCourse(course);
+        List<ProfessorCourse> userCourseList = professorCourseRepository.findAll(Example.of(professorCourse));
 
         List<User> updatedUserList = new ArrayList<>();
         List<User> bdUserList = new ArrayList<>();
@@ -99,24 +103,34 @@ public class UserCourseService {
 
         for(User x : bdUserList){
             if(!updatedUserList.contains(x)){
-                UserCourse us = new UserCourse();
+                ProfessorCourse us = new ProfessorCourse();
                 us.setUser(x);
                 us.setCourse(course);
-                userCourseRepository.delete(us);
-                //TODO remove user professor role if he doesn't have more UserCourse relations as professor;
+                professorCourseRepository.delete(us);
+                if(!verifyProfessorEligibility(x) && !x.getProfiles().contains(UserProfiles.ADMIN))
+                    userService.removeProfile(x, UserProfiles.PROFESSOR);
             }
         }
         for(User x : updatedUserList){
             if(!bdUserList.contains(x)){
                 userService.makeProfessor(x);
-                UserCourse us = new UserCourse();
+                ProfessorCourse us = new ProfessorCourse();
                 us.setCourse(course);
                 us.setUser(x);
-                userCourseRepository.save(us);
+                professorCourseRepository.save(us);
 
             }
         }
         userService.flush();
-        userCourseRepository.flush();
+        professorCourseRepository.flush();
     }
+
+    public boolean verifyProfessorEligibility(User user){
+        ProfessorCourse professorCourse = new ProfessorCourse();
+        professorCourse.setUser(user);
+
+        return professorCourseRepository.exists(Example.of(professorCourse));
+    }
+
+
 }
