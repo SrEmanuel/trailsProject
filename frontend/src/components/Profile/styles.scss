@@ -10,6 +10,7 @@
   color: var(--white);
   font-weight: 700;
   font-family: 'Inter', sans-serif;
+
 }
 
 .del-btn{
@@ -23,5 +24,14 @@
 
   svg{
     position: static;
+  }
+}
+
+.bottom{
+  margin-top: 10px;
+  max-width: 90%;
+
+  svg{
+    margin-right: 5px;
   }
 }
