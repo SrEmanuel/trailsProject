@@ -23,4 +23,12 @@
     margin-bottom: 5px;
     margin-top: 5px;
   }
+
+  svg{
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover{
+      filter: brightness(1.5)
+    }
+  }
 }
