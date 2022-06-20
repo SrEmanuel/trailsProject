@@ -1,4 +1,4 @@
-import { FiTrash2, FiX } from "react-icons/fi";
+import { FiLock, FiTrash2, FiX } from "react-icons/fi";
 import { useAuth } from "../../hooks/useAuth";
 import { Editable } from "../Editable";
 import { ModalContainer } from "../ModalContainer";
@@ -22,19 +22,19 @@ export function Profile({ isVisible, setIsVisible }: Props) {
         {user && (
           <>
             <Editable label="NOME:" value={user?.name} onSubmit={() => {}} />
-            <Editable label="E-MAIL:" value={user?.email} onSubmit={() => {}} />
-            <Editable
-              label="SENHA:"
-              type="password"
-              value={user?.password}
-              onSubmit={() => {}}
-            />
+            <Editable type="email" label="E-MAIL:" value={user?.username} onSubmit={() => {}} />
           </>
         )}
+        <div className="row-wrapper bottom">
         <button type="button" className="del-btn" >
-          <FiTrash2 color="var(--white)" size={24} />
+          <FiTrash2 color="var(--white)" size={20} />
          <span> Excluir conta</span>
         </button>
+        <button type="button">
+          <FiLock color="var(--white)" size={20} />
+         <span>Alterar senha</span>
+        </button>
+        </div>
       </ModalContainer>
     </Overlay>
   );
