@@ -1,8 +1,6 @@
 package dev.trailsgroup.trailsproject.resources;
 
-import dev.trailsgroup.trailsproject.dto.ProfessorDTO;
-import dev.trailsgroup.trailsproject.dto.UserCourseDTO;
-import dev.trailsgroup.trailsproject.dto.UserDTO;
+import dev.trailsgroup.trailsproject.dto.*;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.services.UserCourseService;
@@ -72,9 +70,20 @@ public class UserResource {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update( @PathVariable Integer id, @Valid @RequestBody UserDTO user){
-        User obj = service.update(id, user);
+    @PutMapping(value = "/{id}/update/email")
+    public ResponseEntity<User> updateEmail(@PathVariable Integer id, @RequestBody @Valid EmailDTO email){
+        User obj = service.updateEmail(id, email);
+        return ResponseEntity.ok().body(obj);
+    }
+    @PutMapping(value = "/{id}/update/name")
+    public ResponseEntity<User> updateName(@PathVariable Integer id, @RequestBody @Valid UserNameDTO nameDTO){
+        User obj = service.updateName(id, nameDTO);
+        return ResponseEntity.ok().body(obj);
+    }
+
+    @PutMapping(value = "/{id}/update/password")
+    public ResponseEntity<User> updateName(@PathVariable Integer id, @RequestBody @Valid UserPasswordDTO userPasswordDTO){
+        User obj = service.updatePassword(id, userPasswordDTO);
         return ResponseEntity.ok().body(obj);
     }
 

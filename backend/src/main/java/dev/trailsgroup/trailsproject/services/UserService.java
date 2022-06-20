@@ -1,7 +1,6 @@
 package dev.trailsgroup.trailsproject.services;
 
-import dev.trailsgroup.trailsproject.dto.ProfessorDTO;
-import dev.trailsgroup.trailsproject.dto.UserDTO;
+import dev.trailsgroup.trailsproject.dto.*;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.ProfessorCourse;
 import dev.trailsgroup.trailsproject.entities.User;
@@ -100,6 +99,13 @@ public class UserService {
         return repository.findByEmail(email).isPresent();
     }
 
+    private void verifyUpdateInformationPermission(Integer id){
+        UserSS user = authenticated();
+        if(user == null || !Objects.equals(user.getId(), id) && !user.hasRole(UserProfiles.ADMIN)){
+            throw new AuthorizationException("Acesso negado! Você não pode editar as informações deste usuário");
+        }
+    }
+
     public void delete(Integer id){
         try{
             repository.deleteById(id);
@@ -168,8 +174,8 @@ public class UserService {
         return repository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("Identificador "+ userEmail +" para usuário não encontrado!"));
     }
 
-    public void save(User user) {
-        repository.save(user);
+    public User save(User user) {
+        return repository.save(user);
     }
 
     public void makeProfessor(User user) {
@@ -179,5 +185,31 @@ public class UserService {
 
     public void flush(){
         repository.flush();
+    }
+
+    public User updateEmail(Integer id, EmailDTO obj) {
+        verifyUpdateInformationPermission(id);
+        User user = findById(id);
+        user.setEmail(obj.getEmail());
+        return save(user);
+    }
+
+    public User updateName(Integer id, UserNameDTO obj) {
+        verifyUpdateInformationPermission(id);
+        User user = findById(id);
+        user.setName(obj.getName());
+        return save(user);
+    }
+
+    public User updatePassword(Integer id, UserPasswordDTO obj) {
+        verifyUpdateInformationPermission(id);
+        User user = findById(id);
+        if(!pe.matches(obj.getOldPassword(), user.getPassword()))
+            throw new AuthorizationException("A senha informada para autenticação da operação está errada!");
+        if(!obj.getPassword().equals(obj.getConfirmPassword()))
+            throw new AuthorizationException("As novas senhas informadas não condizem!");
+
+        user.setPassword(pe.encode(obj.getPassword()));
+        return save(user);
     }
 }
