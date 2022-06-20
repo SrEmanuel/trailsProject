@@ -3,6 +3,7 @@ import { FiLock, FiTrash2, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
+import { EmailSchema, NameSchema } from "../../schemas/userUpdate.schema";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { ConfirmationModal } from "../ConfirmationModal";
@@ -45,12 +46,13 @@ export function Profile({ isVisible, setIsVisible }: Props) {
           <span className="profile">{user?.name.substring(0, 1)}</span>
           {user && (
             <>
-              <Editable label="NOME:" value={user?.name} onSubmit={() => {}} />
+              <Editable label="NOME:" value={user?.name} onSubmit={() => {}} validator={NameSchema} />
               <Editable
                 type="email"
                 label="E-MAIL:"
                 value={user?.username}
                 onSubmit={() => {}}
+                validator={EmailSchema}
               />
             </>
           )}
