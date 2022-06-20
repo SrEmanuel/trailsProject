@@ -16,7 +16,7 @@ export function Editable({ label, value, onSubmit, type }: Props) {
     <span className="label" >{label}</span>
     { isEdittingEnabled? (
       <div className="row-wrapper">
-        <input type={ type? type: "text" } value={value} />
+        <input type={ type? type: "text" } defaultValue={value} />
         <FiSave color="var(--grey)" size={20} onClick={()=> setIsEditingEnabled(false) } />
       </div>
     ) : (
