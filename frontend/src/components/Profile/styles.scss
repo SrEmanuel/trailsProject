@@ -1,0 +1,37 @@
+.profile{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--green);
+  border-radius: 50%;
+  font-size: 64px;
+  color: var(--white);
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+
+}
+
+.del-btn{
+  background: var(--red);
+  align-items: center;
+  justify-content: space-around;
+
+  &:hover{
+    background: var(--dark-red);
+  }
+
+  svg{
+    position: static;
+  }
+}
+
+.bottom{
+  margin-top: 10px;
+  max-width: 90%;
+
+  svg{
+    margin-right: 5px;
+  }
+}

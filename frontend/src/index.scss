@@ -127,6 +127,13 @@ body {
     }
   }
 
+  .row-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
   .custom-placeholder{
     border: 2px dashed var(--grey);
   }
