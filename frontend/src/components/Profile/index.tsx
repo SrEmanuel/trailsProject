@@ -68,7 +68,7 @@ export function Profile({ isVisible, setIsVisible }: Props) {
   return (
     <>
       <Overlay hidden={!isVisible}>
-        <ModalContainer>
+        <ModalContainer customStyle="profile-container" >
           <FiX
             color="var(--red)"
             size={24}

@@ -12,6 +12,23 @@
   font-family: 'Inter', sans-serif;
 }
 
+#profile-container{
+  @media(max-width:500px){
+    min-width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    >svg{
+      top: 10px;
+    }
+
+    .bottom{
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
+
 .del-btn{
   background: var(--red);
   align-items: center;
