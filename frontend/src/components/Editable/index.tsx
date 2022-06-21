@@ -19,7 +19,7 @@ export function Editable({ label, type, validator, value, onSubmit }: Props) {
       <span className="label">{label}</span>
       {isEdittingEnabled ? (
         <div className="row-wrapper">
-          <Formik initialValues={{ value: '' }} onSubmit={({ value }) => console.log(value) } validationSchema={validator}>
+          <Formik initialValues={{ value: '' }} onSubmit={({ value }) => onSubmit(value) } validationSchema={validator}>
             {({ handleChange, handleSubmit, errors, touched }) => (
               <>
                 <input type={type ? type : "text"} name="value" onChange={handleChange} defaultValue={value} />
