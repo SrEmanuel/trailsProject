@@ -1,11 +1,15 @@
 import { Formik } from "formik";
-import { useState } from "react";
-import { FiLock, FiTrash2, FiX } from "react-icons/fi";
+import { useRef, useState } from "react";
+import { FiLock, FiSave, FiTrash2, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
 import { IUser } from "../../interfaces/user";
-import { EmailSchema, NameSchema } from "../../schemas/userUpdate.schema";
+import {
+  EmailSchema,
+  NameSchema,
+  UpdatePasswordSchema,
+} from "../../schemas/userUpdate.schema";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { ConfirmationModal } from "../ConfirmationModal";
@@ -23,8 +27,16 @@ interface Props {
 export function Profile({ isVisible, setIsVisible }: Props) {
   const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
-  const { user, handleClearUserDataFromStorage, handleSavaUserDataToStorage } = useAuth();
+  const { user, handleClearUserDataFromStorage, handleSavaUserDataToStorage } =
+    useAuth();
+  const formRef = useRef() as any;
   const navigate = useNavigate();
+
+  function handleSubmit() {
+    if (formRef.current) {
+      formRef.current.handleSubmit();
+    }
+  }
 
   async function handleDeleteAccount() {
     try {
@@ -37,11 +49,17 @@ export function Profile({ isVisible, setIsVisible }: Props) {
     }
   }
 
-  async function handleUpdateAccount(data: Partial<IUser>, atribute: string) {
+  async function handleUpdateAccount(
+    data: Partial<IUser> | any,
+    atribute: string
+  ) {
     try {
-      const response = await api.put(`/users/${user?.id}/update/${atribute}`, data);
+      const response = await api.put(
+        `/users/${user?.id}/update/${atribute}`,
+        data
+      );
       toast.success("Atualizado com sucesso!");
-      await handleSavaUserDataToStorage(response.data, user?.token as string );
+      await handleSavaUserDataToStorage(response.data, user?.token as string);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -62,25 +80,74 @@ export function Profile({ isVisible, setIsVisible }: Props) {
               <Editable
                 label="NOME:"
                 value={user?.name}
-                onSubmit={(value) => handleUpdateAccount({ name: value }, 'name')}
+                onSubmit={(value) =>
+                  handleUpdateAccount({ name: value }, "name")
+                }
                 validator={NameSchema}
               />
               <Editable
                 type="email"
                 label="E-MAIL:"
                 value={user?.username}
-                onSubmit={(value) => handleUpdateAccount({ email: value }, 'email')}
+                onSubmit={(value) =>
+                  handleUpdateAccount({ email: value }, "email")
+                }
                 validator={EmailSchema}
               />
               {changePassword && (
                 <Formik
-                  initialValues={{}}
-                  onSubmit={(values) => console.log(values)}
+                  innerRef={formRef}
+                  initialValues={{
+                    oldPassword: "",
+                    password: "",
+                    confirmPassword: "",
+                  }}
+                  validationSchema={UpdatePasswordSchema}
+                  onSubmit={(values) =>
+                    handleUpdateAccount(
+                      {
+                        password: values.password,
+                        oldPassword: values.oldPassword,
+                      },
+                      "password"
+                    )
+                  }
                 >
-                  {({ handleChange, handleSubmit, errors, touched }) => (
-                    <>
-                      <input type="text" />
-                    </>
+                  {({ handleChange, errors, touched }) => (
+                    <form className="change-password">
+                      <span>Alterar senha</span>
+                      <label htmlFor="oldPassword">SENHA ANTIGA:</label>
+                      <input
+                        type="password"
+                        name="oldPassword"
+                        onChange={handleChange}
+                      />
+                      {errors.oldPassword && touched.oldPassword && (
+                        <span className="error text">{errors.oldPassword}</span>
+                      )}
+
+                      <label htmlFor="password">NOVA SENHA:</label>
+                      <input
+                        type="password"
+                        name="password"
+                        onChange={handleChange}
+                      />
+                      {errors.password && touched.password && (
+                        <span className="error text">{errors.password}</span>
+                      )}
+
+                      <label htmlFor="confirmPassword">CONFIRMAR:</label>
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        onChange={handleChange}
+                      />
+                      {errors.confirmPassword && touched.confirmPassword && (
+                        <span className="error text">
+                          {errors.confirmPassword}
+                        </span>
+                      )}
+                    </form>
                   )}
                 </Formik>
               )}
@@ -98,9 +165,23 @@ export function Profile({ isVisible, setIsVisible }: Props) {
               <FiTrash2 color="var(--white)" size={20} />
               <span> Excluir conta</span>
             </button>
-            <button type="button" onClick={() => setChangePassword(true)}>
-              <FiLock color="var(--white)" size={20} />
-              <span>Alterar senha</span>
+            <button
+              type="button"
+              onClick={() =>
+                !changePassword ? setChangePassword(true) : handleSubmit()
+              }
+            >
+              {!changePassword ? (
+                <>
+                  <FiLock color="var(--white)" size={20} />
+                  <span>Alterar senha</span>
+                </>
+              ) : (
+                <>
+                  <FiSave color="var(--white)" size={20} />
+                  <span>Salvar senha</span>
+                </>
+              )}
             </button>
           </div>
         </ModalContainer>
