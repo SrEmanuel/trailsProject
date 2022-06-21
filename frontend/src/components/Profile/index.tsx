@@ -23,7 +23,7 @@ interface Props {
 export function Profile({ isVisible, setIsVisible }: Props) {
   const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
-  const { user, handleClearUserDataFromStorage } = useAuth();
+  const { user, handleClearUserDataFromStorage, handleSavaUserDataToStorage } = useAuth();
   const navigate = useNavigate();
 
   async function handleDeleteAccount() {
@@ -38,10 +38,10 @@ export function Profile({ isVisible, setIsVisible }: Props) {
   }
 
   async function handleUpdateAccount(data: Partial<IUser>, atribute: string) {
-    console.log(data);
     try {
-      await api.put(`/users/${user?.id}/update/${atribute}`, data);
+      const response = await api.put(`/users/${user?.id}/update/${atribute}`, data);
       toast.success("Atualizado com sucesso!");
+      await handleSavaUserDataToStorage(response.data, user?.token as string );
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
