@@ -1,5 +1,6 @@
 import { FormEvent, Fragment, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
@@ -28,6 +29,7 @@ export function Topic({
 }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [isEditingEnabled, setIsEditingEnabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
 
@@ -54,12 +56,16 @@ export function Topic({
       <ConfirmationModal
         message="Deseja realmente excluir esse conteúdo?"
         confirmText="Deletar"
-        cancelText="cancelar"
+        cancelText="Cancelar"
         isVisible={isDeleteModalVisible}
         setIsVisible={setIsDeleteModalVisible}
         onConfirm={handleDeleteSubject}
       />
-      <h2 className="topic-title">{topic.name}</h2>
+      <div className="topic-header">
+        <h2 className="topic-title">{topic.name}</h2>
+        <FiEdit color="var(--grey)" size={20} />
+        <FiTrash2 color="var(--grey)" size={20} />
+      </div>
       {enableAdminMode ? (
         <>
           <div className="trails-grid-container">
