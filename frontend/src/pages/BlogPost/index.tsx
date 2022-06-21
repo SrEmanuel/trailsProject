@@ -10,7 +10,7 @@ import { useAuth } from "../../hooks/useAuth";
 export function BlogPost() {
   const [subject, setSubject] = useState<ISubject>();
   const navigate = useNavigate();
-  const { handleClearUserDataFromStorage } = useAuth();
+  const { handleClearUserDataFromStorage, getUser } = useAuth();
   const params = useParams();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function BlogPost() {
 
         const tempSubject: ISubject = response.data;
 
-        if (!tempSubject.completed) {
+        if (!tempSubject.completed &&  getUser() ) {
           const url = `/subjects/${tempSubject.linkName}/user/mark?state=true`;
           await api.put(url);
         }
@@ -32,7 +32,7 @@ export function BlogPost() {
     }
 
     handleLoadSubject();
-  }, [handleClearUserDataFromStorage, navigate, params]);
+  }, [getUser, handleClearUserDataFromStorage, navigate, params]);
 
   return (
     <div className="container">
