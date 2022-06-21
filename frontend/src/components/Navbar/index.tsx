@@ -47,7 +47,7 @@ export function NavBar() {
           </Link>
          </>
         )}
-        <SideMenu hasLoggedUser={hasLoggedUser} />
+        <SideMenu setShowUserProfile={setShowUserProfile} hasLoggedUser={hasLoggedUser} />
         <Profile isVisible={showUserProfile} setIsVisible={setShowUserProfile} />
       </div>
     </nav>
