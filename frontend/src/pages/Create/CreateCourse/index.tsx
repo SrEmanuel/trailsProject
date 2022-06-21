@@ -33,8 +33,9 @@ interface ICourse {
 export function CreateCourse() {
   const { getIsAdmin, handleClearUserDataFromStorage, user } = useAuth();
   const [initialValues, setInitialValues] = useState<ICourse>();
-  const [teachers, setTeachers] = useState<ITeacher[]>();
+  const [teachers, setTeachers] = useState<ITeacher[]>([]);
   const [selectedTeachers, setSelectedTeachers] = useState<ITeacher[]>([]);
+  const [hiddenTeachers, setHiddenTeachers] = useState<string[]>([]);
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,6 +53,7 @@ export function CreateCourse() {
       teacher,
     ]);
     teacher && setSelectedTeachers([...selectedTeachers, teacher]);
+    setHiddenTeachers([...hiddenTeachers, teacher.id]);
   }
 
   function handleRemoveTeacher(id: string) {
@@ -60,6 +62,7 @@ export function CreateCourse() {
       selectedTeachers.filter((t) => t.id !== id)
     );
     setSelectedTeachers(selectedTeachers.filter((t) => t.id !== id));
+    setHiddenTeachers(hiddenTeachers.filter( ht => ht !== id ));
   }
 
   const handleLoadUsers = useCallback(async () => {
@@ -189,7 +192,7 @@ export function CreateCourse() {
                       <option disabled hidden value="0">
                         Adicionar professor...
                       </option>
-                      {teachers?.map((teacher) => (
+                      {teachers?.filter(teacher => !hiddenTeachers.includes(teacher.id) ).map((teacher) => (
                         <option key={teacher.id} value={teacher.id}>
                           {teacher.name}
                         </option>

@@ -10,7 +10,23 @@
   color: var(--white);
   font-weight: 700;
   font-family: 'Inter', sans-serif;
+}
 
+#profile-container{
+  @media(max-width:500px){
+    min-width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    >svg{
+      top: 10px;
+    }
+
+    .bottom{
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
 }
 
 .del-btn{
@@ -33,5 +49,36 @@
 
   svg{
     margin-right: 5px;
+  }
+}
+
+.change-password{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin-top: 10px;
+
+  span:first-of-type{
+    color: var(--grey);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  span:not(:first-of-type){
+    align-self: flex-start;
+  }
+
+  label{
+    color: var(--grey);
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  input{
+    height: 40px;
   }
 }
