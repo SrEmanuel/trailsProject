@@ -59,7 +59,13 @@ export function Profile({ isVisible, setIsVisible }: Props) {
         data
       );
       toast.success("Atualizado com sucesso!");
-      await handleSavaUserDataToStorage(response.data, user?.token as string);
+      if(atribute === 'name'){
+        await handleSavaUserDataToStorage(response.data, user?.token as string);
+      } else {
+        toast.info('Faço login novamente com as novas credenciais');
+        await handleClearUserDataFromStorage();
+        navigate('/login');
+      }
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
