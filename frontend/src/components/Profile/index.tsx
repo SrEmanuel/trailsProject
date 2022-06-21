@@ -1,8 +1,10 @@
+import { Formik } from "formik";
 import { useState } from "react";
 import { FiLock, FiTrash2, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
+import { IUser } from "../../interfaces/user";
 import { EmailSchema, NameSchema } from "../../schemas/userUpdate.schema";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
@@ -20,6 +22,7 @@ interface Props {
 
 export function Profile({ isVisible, setIsVisible }: Props) {
   const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
+  const [changePassword, setChangePassword] = useState<boolean>(false);
   const { user, handleClearUserDataFromStorage } = useAuth();
   const navigate = useNavigate();
 
@@ -28,7 +31,17 @@ export function Profile({ isVisible, setIsVisible }: Props) {
       await api.delete(`users/${user?.id}`);
       toast.success("Conta removida com sucesso");
       await handleClearUserDataFromStorage();
-      navigate('/')
+      navigate("/");
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
+  }
+
+  async function handleUpdateAccount(data: Partial<IUser>, atribute: string) {
+    console.log(data);
+    try {
+      await api.put(`/users/${user?.id}/update/${atribute}`, data);
+      toast.success("Atualizado com sucesso!");
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -46,14 +59,31 @@ export function Profile({ isVisible, setIsVisible }: Props) {
           <span className="profile">{user?.name.substring(0, 1)}</span>
           {user && (
             <>
-              <Editable label="NOME:" value={user?.name} onSubmit={() => {}} validator={NameSchema} />
+              <Editable
+                label="NOME:"
+                value={user?.name}
+                onSubmit={(value) => handleUpdateAccount({ name: value }, 'name')}
+                validator={NameSchema}
+              />
               <Editable
                 type="email"
                 label="E-MAIL:"
                 value={user?.username}
-                onSubmit={() => {}}
+                onSubmit={(value) => handleUpdateAccount({ email: value }, 'email')}
                 validator={EmailSchema}
               />
+              {changePassword && (
+                <Formik
+                  initialValues={{}}
+                  onSubmit={(values) => console.log(values)}
+                >
+                  {({ handleChange, handleSubmit, errors, touched }) => (
+                    <>
+                      <input type="text" />
+                    </>
+                  )}
+                </Formik>
+              )}
             </>
           )}
           <div className="row-wrapper bottom">
@@ -68,7 +98,7 @@ export function Profile({ isVisible, setIsVisible }: Props) {
               <FiTrash2 color="var(--white)" size={20} />
               <span> Excluir conta</span>
             </button>
-            <button type="button">
+            <button type="button" onClick={() => setChangePassword(true)}>
               <FiLock color="var(--white)" size={20} />
               <span>Alterar senha</span>
             </button>
