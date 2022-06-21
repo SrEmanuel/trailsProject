@@ -3,6 +3,7 @@ package dev.trailsgroup.trailsproject.resources;
 import dev.trailsgroup.trailsproject.dto.*;
 import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.User;
+import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.UserCourseService;
 import dev.trailsgroup.trailsproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,19 +72,19 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}/update/email")
-    public ResponseEntity<User> updateEmail(@PathVariable Integer id, @RequestBody @Valid EmailDTO email){
-        User obj = service.updateEmail(id, email);
+    public ResponseEntity<UserSS> updateEmail(@PathVariable Integer id, @RequestBody @Valid EmailDTO email){
+        UserSS obj = service.updateEmail(id, email);
         return ResponseEntity.ok().body(obj);
     }
     @PutMapping(value = "/{id}/update/name")
-    public ResponseEntity<User> updateName(@PathVariable Integer id, @RequestBody @Valid UserNameDTO nameDTO){
-        User obj = service.updateName(id, nameDTO);
+    public ResponseEntity<UserSS> updateName(@PathVariable Integer id, @RequestBody @Valid UserNameDTO nameDTO){
+        UserSS obj = service.updateName(id, nameDTO);
         return ResponseEntity.ok().body(obj);
     }
 
     @PutMapping(value = "/{id}/update/password")
-    public ResponseEntity<User> updateName(@PathVariable Integer id, @RequestBody @Valid UserPasswordDTO userPasswordDTO){
-        User obj = service.updatePassword(id, userPasswordDTO);
+    public ResponseEntity<UserSS> updateName(@PathVariable Integer id, @RequestBody @Valid UserPasswordDTO userPasswordDTO){
+        UserSS obj = service.updatePassword(id, userPasswordDTO);
         return ResponseEntity.ok().body(obj);
     }
 

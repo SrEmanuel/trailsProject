@@ -187,27 +187,31 @@ public class UserService {
         repository.flush();
     }
 
-    public User updateEmail(Integer id, EmailDTO obj) {
+    public UserSS updateEmail(Integer id, EmailDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setEmail(obj.getEmail());
-        return save(user);
+        return convertUsertoUserSS(save(user));
     }
 
-    public User updateName(Integer id, UserNameDTO obj) {
+    public UserSS updateName(Integer id, UserNameDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setName(obj.getName());
-        return save(user);
+        return convertUsertoUserSS(save(user));
     }
 
-    public User updatePassword(Integer id, UserPasswordDTO obj) {
+    public UserSS updatePassword(Integer id, UserPasswordDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         if(!pe.matches(obj.getOldPassword(), user.getPassword()))
             throw new AuthorizationException("A senha informada para autenticação da operação está errada!");
 
         user.setPassword(pe.encode(obj.getPassword()));
-        return save(user);
+        return convertUsertoUserSS(save(user));
+    }
+
+    private UserSS convertUsertoUserSS(User user ){
+        return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus());
     }
 }
