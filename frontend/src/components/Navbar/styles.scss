@@ -52,7 +52,7 @@
     @media (max-width: 720px) {
       justify-content: flex-end;
 
-      > a,
+      > a, .nav-item,
       > .login-btn, .logout-btn {
         display: none;
       }
