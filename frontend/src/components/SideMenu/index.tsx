@@ -6,9 +6,10 @@ import "./styles.scss";
 
 interface Props {
   hasLoggedUser: boolean;
+  setShowUserProfile: (arg: boolean) => void;
 }
 
-export function SideMenu({ hasLoggedUser }: Props) {
+export function SideMenu({ hasLoggedUser, setShowUserProfile }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const { handleClearUserDataFromStorage } = useAuth();
 
@@ -46,14 +47,19 @@ export function SideMenu({ hasLoggedUser }: Props) {
             </Link>
           </>
         ) : (
-          <Link
-            onClick={() => handleClearUserDataFromStorage()}
-            className="logout-btn"
-            to="/"
-          >
-            <FiLogOut color="var(--white)" size={18} />
-            Sair
-          </Link>
+          <>
+            <span className="nav-item" onClick={() => setShowUserProfile(true)}>
+              Meu perfil
+            </span>
+            <Link
+              onClick={() => handleClearUserDataFromStorage()}
+              className="logout-btn"
+              to="/"
+            >
+              <FiLogOut color="var(--white)" size={18} />
+              Sair
+            </Link>
+          </>
         )}
       </aside>
     </>
