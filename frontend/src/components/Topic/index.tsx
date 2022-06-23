@@ -22,12 +22,7 @@ interface Props {
   onChange: () => void;
 }
 
-export function Topic({
-  topic,
-  params,
-  enableAdminMode,
-  onChange,
-}: Props) {
+export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [isEditingEnabled, setIsEditingEnabled] = useState<boolean>(false);
@@ -62,10 +57,21 @@ export function Topic({
         setIsVisible={setIsDeleteModalVisible}
         onConfirm={handleDeleteSubject}
       />
-      <AddOrUpdateSection isVisible={isEditingEnabled} currentCourse={params.coursename} setIsVisible={setIsEditingEnabled} setTopics={onChange} />
+      <AddOrUpdateSection
+        mode="update"
+        isVisible={isEditingEnabled}
+        currentCourseLinkName={params.coursename}
+        setIsVisible={setIsEditingEnabled}
+        setTopics={onChange}
+        linkName={topic.linkName}
+      />
       <div className="topic-header">
         <h2 className="topic-title">{topic.name}</h2>
-        <FiEdit color="var(--grey)" size={20} />
+        <FiEdit
+          color="var(--grey)"
+          size={20}
+          onClick={() => setIsEditingEnabled(true)}
+        />
         <FiTrash2 color="var(--grey)" size={20} />
       </div>
       {enableAdminMode ? (
