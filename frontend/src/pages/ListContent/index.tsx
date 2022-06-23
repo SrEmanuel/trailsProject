@@ -118,7 +118,7 @@ export const ListContent = memo(() => {
             topic={topic}
             params={params}
             enableAdminMode={false}
-            onDeleteSubject={loadData}
+            onChange={loadData}
           />
         ))}
 

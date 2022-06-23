@@ -117,7 +117,7 @@ export function DragDropTopicsList({
                   topic={topic}
                   params={params}
                   enableAdminMode={true}
-                  onDeleteSubject={onContentChange}
+                  onChange={onContentChange}
                 />
                 {provided.placeholder}
               </div>
