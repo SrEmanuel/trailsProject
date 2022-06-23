@@ -3,3 +3,20 @@
   flex-direction: column;
   min-width: 100%;
 }
+
+.topic-header{
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+
+  svg{
+    display: none;
+    cursor: pointer;
+  }
+
+  &:hover{
+    svg{
+      display: block;
+    }
+  }
+}

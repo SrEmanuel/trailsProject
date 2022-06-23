@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiMenu, FiBookOpen, FiInfo, FiLogIn, FiLogOut } from "react-icons/fi";
+import { FiMenu, FiBookOpen, FiInfo, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import "./styles.scss";
@@ -48,7 +48,8 @@ export function SideMenu({ hasLoggedUser, setShowUserProfile }: Props) {
           </>
         ) : (
           <>
-            <span className="nav-item" onClick={() => setShowUserProfile(true)}>
+            <span className="nav-item" onClick={() => { setShowUserProfile(true); setIsVisible(false) }}>
+              <FiUser color="var(--green)" size={24}  />
               Meu perfil
             </span>
             <Link

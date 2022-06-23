@@ -19,8 +19,8 @@ export function Routes(){
              <Route path="/login" element={<Login></Login>} />
              <Route path="/cadastro" element={<Register></Register>} />
              <Route path="/sobre" element={<About></About>} />
-             <Route path="/esqueci-minha-senha" element={<ForgotPassword></ForgotPassword>} />
              <Route path="/nova-senha" element={<ResetPassword></ResetPassword>} />
+             <Route path="/esqueci-minha-senha" element={<ForgotPassword></ForgotPassword>} />
              <Route path="/cursos" element={<ListContent></ListContent>} />
              <Route path="/cursos/:coursename" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />

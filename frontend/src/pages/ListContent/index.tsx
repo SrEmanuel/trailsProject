@@ -9,7 +9,7 @@ import { ITopic } from "../../interfaces/topic";
 import { ITrails } from "../../interfaces/Trail";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
-import { AddNewSection } from "./components/addNewSection";
+import { AddOrUpdateSection } from "../../components/AddOrUpdateSection";
 
 import { ReactComponent as AddNewContent } from "../../assets/images/AddNewContent.svg";
 import "./styles.scss";
@@ -24,7 +24,7 @@ export const ListContent = memo(() => {
   const [totalPages, setTotalPages] = useState(1);
   const { user, handleClearUserDataFromStorage, getIsTeacher } = useAuth();
   const [isTeacher, setIsTeacher] = useState<boolean>();
-  const [addNewSection, setAddNewSection] = useState<boolean>(false);
+  const [addOrUpdateSection, setAddOrUpdateSection] = useState<boolean>(false);
   const location = useLocation();
   const params = useParams();
   const navigate = useNavigate();
@@ -79,11 +79,12 @@ export const ListContent = memo(() => {
 
   return (
     <div className="container">
-      <AddNewSection
-        setIsVisible={setAddNewSection}
+      <AddOrUpdateSection
+        mode="create"
+        setIsVisible={setAddOrUpdateSection}
         setTopics={setTopics}
         currentCourse={currentCourse as ITrails}
-        isVisible={addNewSection}
+        isVisible={addOrUpdateSection}
       />
       <NavBar />
       <h1>{title}</h1>
@@ -118,7 +119,7 @@ export const ListContent = memo(() => {
             topic={topic}
             params={params}
             enableAdminMode={false}
-            onDeleteSubject={loadData}
+            onChange={loadData}
           />
         ))}
 
@@ -130,7 +131,7 @@ export const ListContent = memo(() => {
             params={params}
             onContentChange={loadData}
           />
-          <FloatingPlusButton onClick={() => setAddNewSection(true)} />
+          <FloatingPlusButton onClick={() => setAddOrUpdateSection(true)} />
         </>
       )}
 
@@ -139,7 +140,7 @@ export const ListContent = memo(() => {
         location.pathname !== "/cursos" && (
           <div className="empty-course-list">
             <h2>Clique para adicionar sua primeira sessão de conteúdos</h2>
-            <AddNewContent onClick={() => setAddNewSection(true)} />
+            <AddNewContent onClick={() => setAddOrUpdateSection(true)} />
           </div>
         )}
     </div>

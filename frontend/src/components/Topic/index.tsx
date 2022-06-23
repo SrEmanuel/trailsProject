@@ -1,5 +1,6 @@
 import { FormEvent, Fragment, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
@@ -7,6 +8,7 @@ import { ITopic } from "../../interfaces/topic";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { reorderSubjects } from "../../utils/reoarderSubjects";
+import { AddOrUpdateSection } from "../AddOrUpdateSection";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
@@ -17,17 +19,13 @@ interface Props {
   topic: ITopic;
   params: any;
   enableAdminMode: boolean;
-  onDeleteSubject: () => void;
+  onChange: () => void;
 }
 
-export function Topic({
-  topic,
-  params,
-  enableAdminMode,
-  onDeleteSubject,
-}: Props) {
+export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [isEditingEnabled, setIsEditingEnabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
 
@@ -45,7 +43,7 @@ export function Topic({
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     } finally {
-      onDeleteSubject();
+      onChange();
     }
   };
 
@@ -54,12 +52,28 @@ export function Topic({
       <ConfirmationModal
         message="Deseja realmente excluir esse conteúdo?"
         confirmText="Deletar"
-        cancelText="cancelar"
+        cancelText="Cancelar"
         isVisible={isDeleteModalVisible}
         setIsVisible={setIsDeleteModalVisible}
         onConfirm={handleDeleteSubject}
       />
-      <h2 className="topic-title">{topic.name}</h2>
+      <AddOrUpdateSection
+        mode="update"
+        isVisible={isEditingEnabled}
+        currentCourseLinkName={params.coursename}
+        setIsVisible={setIsEditingEnabled}
+        setTopics={onChange}
+        linkName={topic.linkName}
+      />
+      <div className="topic-header">
+        <h2 className="topic-title">{topic.name}</h2>
+        <FiEdit
+          color="var(--grey)"
+          size={20}
+          onClick={() => setIsEditingEnabled(true)}
+        />
+        <FiTrash2 color="var(--grey)" size={20} />
+      </div>
       {enableAdminMode ? (
         <>
           <div className="trails-grid-container">
