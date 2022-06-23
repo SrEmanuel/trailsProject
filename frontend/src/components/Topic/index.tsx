@@ -8,6 +8,7 @@ import { ITopic } from "../../interfaces/topic";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { reorderSubjects } from "../../utils/reoarderSubjects";
+import { AddOrUpdateSection } from "../AddOrUpdateSection";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { PlusButton } from "../PlusButton";
 import { Subject } from "../Subject";
@@ -18,14 +19,14 @@ interface Props {
   topic: ITopic;
   params: any;
   enableAdminMode: boolean;
-  onDeleteSubject: () => void;
+  onChange: () => void;
 }
 
 export function Topic({
   topic,
   params,
   enableAdminMode,
-  onDeleteSubject,
+  onChange,
 }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
@@ -47,7 +48,7 @@ export function Topic({
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     } finally {
-      onDeleteSubject();
+      onChange();
     }
   };
 
@@ -61,6 +62,7 @@ export function Topic({
         setIsVisible={setIsDeleteModalVisible}
         onConfirm={handleDeleteSubject}
       />
+      <AddOrUpdateSection isVisible={isEditingEnabled} currentCourse={params.coursename} setIsVisible={setIsEditingEnabled} setTopics={onChange} />
       <div className="topic-header">
         <h2 className="topic-title">{topic.name}</h2>
         <FiEdit color="var(--grey)" size={20} />
