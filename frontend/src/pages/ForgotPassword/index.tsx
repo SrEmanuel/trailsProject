@@ -20,7 +20,12 @@ export function ForgotPassword() {
       const response = await api.post("/auth/forgot", value);
       toast.success(response.data.message);
     } catch (error: any) {
-      toast.error(error.message);
+      console.log(error.message)
+      if(error.data?.message){
+        toast.error(error.data.message);
+      } else {
+        toast.error('Ops! Algo de errado ocorreu. Verifique seu e-mail e tente novamente, por favor.')
+      }
     }
   }
 
