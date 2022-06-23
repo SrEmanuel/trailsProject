@@ -80,6 +80,7 @@ export const ListContent = memo(() => {
   return (
     <div className="container">
       <AddOrUpdateSection
+        mode="create"
         setIsVisible={setAddOrUpdateSection}
         setTopics={setTopics}
         currentCourse={currentCourse as ITrails}
