@@ -21,7 +21,7 @@ public class Topic implements Serializable {
     private Integer id;
     private String name;
 
-    private Integer position; //variable to show in witch position this topic really is
+    //private Integer position; //variable to show in witch position this topic really is
 
     @Column(unique=true)
     private String linkName;
@@ -40,10 +40,10 @@ public class Topic implements Serializable {
 
 
 
-    public Topic(Integer id, String name, Integer position, Course course, String linkName) {
+    public Topic(Integer id, String name, Course course, String linkName) {
         this.id = id;
         this.name = name;
-        this.position = position;
+        //this.position = position;
         this.course = course;
         this.linkName = linkName;
     }
@@ -67,13 +67,13 @@ public class Topic implements Serializable {
         this.name = name;
     }
 
-    public Integer getPosition() {
+    /*public Integer getPosition() {
         return position;
     }
 
     public void setPosition(Integer position) {
         this.position = position;
-    }
+    }*/
 
     @JsonIgnore
     public Course getCourse() {

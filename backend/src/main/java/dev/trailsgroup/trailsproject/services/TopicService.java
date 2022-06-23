@@ -65,7 +65,7 @@ public class TopicService {
           //  throw new DatabaseException("Já existe um topico com essa posição!");
 
         Course course = courseService.findById(obj.getCourseId());
-        Topic topic = new Topic(null, obj.getName(), obj.getPosition(), course, linkName);
+        Topic topic = new Topic(null, obj.getName(), course, linkName);
         verifyUserPermission(topic);
 
         return repository.save(topic);
@@ -102,7 +102,7 @@ public class TopicService {
 
         topicDataBase.setLinkName(linkName);
         topicDataBase.setName(obj.getName());
-        topicDataBase.setPosition(obj.getPosition());
+        //topicDataBase.setPosition(obj.getPosition());
     }
 
     public Page<?> getTopicsByCourse(String linkName, Pageable pageable){

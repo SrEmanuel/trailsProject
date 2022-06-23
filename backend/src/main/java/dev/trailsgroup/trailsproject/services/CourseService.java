@@ -177,7 +177,7 @@ public class CourseService {
         }
     }
 
-    public List<Topic> updateTopicPositions(String linkname, List<TopicPositionDTO> topicPositionDTO) {
+    /*public List<Topic> updateTopicPositions(String linkname, List<TopicPositionDTO> topicPositionDTO) {
         Optional<Course> course = repository.findByLinkName(linkname);
         if(course.isEmpty()) {
             throw new ResourceNotFoundException("Recurso não encontrado: " + linkname);
@@ -193,7 +193,7 @@ public class CourseService {
             topicService.saveAll(topics);
             return course.get().getTopics();
         }
-    }
+    }*/
 
     public void verifyCourseCompleted(Course course){
         User user = userService.findBySession();

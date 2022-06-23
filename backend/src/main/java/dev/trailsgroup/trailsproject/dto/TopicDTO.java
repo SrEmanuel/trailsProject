@@ -34,13 +34,13 @@ public class TopicDTO {
         this.name = name;
     }
 
-    public Integer getPosition() {
+    /*public Integer getPosition() {
         return position;
     }
 
     public void setPosition(Integer position) {
         this.position = position;
-    }
+    }*/
 
     public Integer getCourseId() {
         return courseId;

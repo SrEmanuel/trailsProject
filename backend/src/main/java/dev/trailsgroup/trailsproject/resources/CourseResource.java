@@ -76,12 +76,12 @@ public class CourseResource {
         return ResponseEntity.ok().body(topicService.getTopicsByCourse(linkName, pageable));
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    /*@PreAuthorize("hasAnyRole('PROFESSOR')")
     @PostMapping(value = "/{linkName}/update-positions")
     public ResponseEntity<List<Topic>> updateSubjectPositions(@Valid @RequestBody List<TopicPositionDTO> topicPositionDTO, @PathVariable String linkName){
         List<Topic> obj = service.updateTopicPositions(linkName, topicPositionDTO);
         return ResponseEntity.ok().body(obj);
-    }
+    }*/
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{linkName}")

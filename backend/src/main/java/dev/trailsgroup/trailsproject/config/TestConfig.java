@@ -69,12 +69,12 @@ public class TestConfig implements CommandLineRunner {
 
                 courseRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6));
 
-                Topic t1 = new Topic(null, "Matemática Aplicada", 1, c1, "matematica-aplicada");
-                Topic t2 = new Topic(null, "Matemática para o Ensino Médio", 2, c1, "matematica-para-o-ensino-medio");
-                Topic t3 = new Topic(null, "Literatura", 1, c2, "literatura");
-                Topic t4 = new Topic(null, "Arte Moderna", 2, c2, "arte-moderna");
-                Topic t5 = new Topic(null, "História Antiga", 1, c3, "historia-moderna");
-                Topic t6 = new Topic(null, "Idade media", 1, c3, "idade-media");
+                Topic t1 = new Topic(null, "Matemática Aplicada", c1, "matematica-aplicada");
+                Topic t2 = new Topic(null, "Matemática para o Ensino Médio", c1, "matematica-para-o-ensino-medio");
+                Topic t3 = new Topic(null, "Literatura", c2, "literatura");
+                Topic t4 = new Topic(null, "Arte Moderna", c2, "arte-moderna");
+                Topic t5 = new Topic(null, "História Antiga", c3, "historia-moderna");
+                Topic t6 = new Topic(null, "Idade media", c3, "idade-media");
 
                 topicRepository.saveAll(Arrays.asList(t1, t2, t3, t4, t5, t6));
 
