@@ -65,6 +65,7 @@ public class CourseService {
             List<User> professors = userCourseService.findProfessorsByCourse(x);
             outputCourseDTOList.add(new OutputCourseDTO(x, professors));
         }
+        outputCourseDTOList.removeIf(x -> x.getSubjectsCount() == 0);
         return new PageImpl<OutputCourseDTO>(outputCourseDTOList, pageable, outputCourseDTOList.size());
     }
 
@@ -86,6 +87,8 @@ public class CourseService {
             }
             coursesEnchanted.add(new LoggedOutputCourseDTO(x, count, professors));
         }
+        if(!user.getProfiles().contains(UserProfiles.ADMIN) || !user.getProfiles().contains(UserProfiles.PROFESSOR))
+            coursesEnchanted.removeIf(x -> x.getSubjectsCount() == 0);
         return new PageImpl<LoggedOutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
 
