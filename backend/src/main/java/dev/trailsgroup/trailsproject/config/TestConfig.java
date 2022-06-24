@@ -46,13 +46,13 @@ public class TestConfig implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
 
-                User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins284@gmail.com",
+                User u1 = new User(null, "Emanuel", pe.encode("Aa1234567+"), "emanuelmartins284@gmail.com", "default-user.png",
                                  true);
-                User u2 = new User(null, "João", pe.encode("Aa1234567+"), "joao@gmail.com",  true);
-                User u3 = new User(null, "Edmarcos", pe.encode("Aa1234567+"), "edmarcosfilho2015@gmail.com",
+                User u2 = new User(null, "João", pe.encode("Aa1234567+"), "joao@gmail.com","default-user.png",  true);
+                User u3 = new User(null, "Edmarcos", pe.encode("Aa1234567+"), "edmarcosfilho2015@gmail.com", "default-user.png",
                                  true);
-                User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com",  true);
-                User u5 = new User(null, "Tatiane", pe.encode("123"), "Tatiane@gmail.com", true);
+                User u4 = new User(null, "Giulian", pe.encode("123"), "Giulian@gmail.com","default-user.png",  true);
+                User u5 = new User(null, "Tatiane", pe.encode("123"), "Tatiane@gmail.com","default-user.png", true);
 
                 u3.addProfile(UserProfiles.PROFESSOR);
                 u1.addProfile(UserProfiles.ADMIN);

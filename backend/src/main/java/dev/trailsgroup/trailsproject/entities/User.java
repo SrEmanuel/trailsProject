@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
+import dev.trailsgroup.trailsproject.services.StaticFileService;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,6 +28,8 @@ public class User implements Serializable {
     private Integer id;
 
     private String name;
+
+    private String image;
 
     @JsonIgnore
     private String password;
@@ -55,11 +58,12 @@ public class User implements Serializable {
         addProfile(UserProfiles.PROFESSOR);
     }
 
-    public User(Integer id, String name, String password, String email, Boolean status) {
+    public User(Integer id, String name, String password, String email, String image, Boolean status) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email.toLowerCase();
+        this.image = image;
         this.status = status == null || status;
         addProfile(UserProfiles.USER);
     }
@@ -114,6 +118,19 @@ public class User implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getImagePath() {
+        return  StaticFileService.getInstance().getIp() + "/uploads/" + image;
+    }
+
+    @JsonIgnore
+    public String getImageName(){
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @JsonIgnore
