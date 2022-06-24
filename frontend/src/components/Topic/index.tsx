@@ -24,6 +24,8 @@ interface Props {
 
 export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isTopicBeingDeleted, setIsTopicBeingDeleted] =
+    useState<boolean>(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [isEditingEnabled, setIsEditingEnabled] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -47,6 +49,16 @@ export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
     }
   };
 
+  const handleDeleteTopic = async () => {
+    try {
+      await api.delete(`/topics/${topic.linkName}`);
+      setIsTopicBeingDeleted(false)
+      onChange();
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
+  };
+
   return (
     <Fragment key={topic.id}>
       <ConfirmationModal
@@ -55,7 +67,9 @@ export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
         cancelText="Cancelar"
         isVisible={isDeleteModalVisible}
         setIsVisible={setIsDeleteModalVisible}
-        onConfirm={handleDeleteSubject}
+        onConfirm={
+          isTopicBeingDeleted ? handleDeleteTopic : handleDeleteSubject
+        }
       />
       <AddOrUpdateSection
         mode="update"
@@ -63,7 +77,7 @@ export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
         currentCourseLinkName={params.coursename}
         setIsVisible={setIsEditingEnabled}
         setTopics={onChange}
-        linkName={topic.linkName}
+        topic={topic}
       />
       <div className="topic-header">
         <h2 className="topic-title">{topic.name}</h2>
@@ -72,7 +86,14 @@ export function Topic({ topic, params, enableAdminMode, onChange }: Props) {
           size={20}
           onClick={() => setIsEditingEnabled(true)}
         />
-        <FiTrash2 color="var(--grey)" size={20} />
+        <FiTrash2
+          color="var(--grey)"
+          size={20}
+          onClick={() => {
+            setIsTopicBeingDeleted(true);
+            setIsDeleteModalVisible(true);
+          }}
+        />
       </div>
       {enableAdminMode ? (
         <>
