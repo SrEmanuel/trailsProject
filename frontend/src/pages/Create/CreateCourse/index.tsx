@@ -62,7 +62,7 @@ export function CreateCourse() {
       selectedTeachers.filter((t) => t.id !== id)
     );
     setSelectedTeachers(selectedTeachers.filter((t) => t.id !== id));
-    setHiddenTeachers(hiddenTeachers.filter( ht => ht !== id ));
+    setHiddenTeachers(hiddenTeachers.filter((ht) => ht !== id));
   }
 
   const handleLoadUsers = useCallback(async () => {
@@ -123,6 +123,7 @@ export function CreateCourse() {
         });
 
         setSelectedTeachers(course.professors);
+        setHiddenTeachers(course.professors.map((t) => t.id));
 
         fetch(course.imagePath).then(async (response) => {
           const blob = await response.blob();
@@ -192,11 +193,15 @@ export function CreateCourse() {
                       <option disabled hidden value="0">
                         Adicionar professor...
                       </option>
-                      {teachers?.filter(teacher => !hiddenTeachers.includes(teacher.id) ).map((teacher) => (
-                        <option key={teacher.id} value={teacher.id}>
-                          {teacher.name}
-                        </option>
-                      ))}
+                      {teachers
+                        ?.filter(
+                          (teacher) => !hiddenTeachers.includes(teacher.id)
+                        )
+                        .map((teacher) => (
+                          <option key={teacher.id} value={teacher.id}>
+                            {teacher.name}
+                          </option>
+                        ))}
                     </select>
                     <Stack className="chip-stack" direction="row" spacing={1}>
                       {selectedTeachers.map((teacher) => (
