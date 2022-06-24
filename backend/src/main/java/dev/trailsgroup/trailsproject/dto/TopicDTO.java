@@ -15,9 +15,9 @@ public class TopicDTO {
     @NotEmpty(message = "O nome é obrigatório!", groups = UpdateInfo.class)
     private String name;
 
-    @NotNull(message = "A posição é obrigatória!", groups = UpdateInfo.class)
+    /*@NotNull(message = "A posição é obrigatória!", groups = UpdateInfo.class)
     @Min(value= 1, message = "A posição tem que ser maior que 1", groups = UpdateInfo.class)
-    private Integer position;
+    private Integer position;*/
 
     @NotNull(message ="O id do curso é obrigatório!", groups = CreateInfo.class)
     @Min(value= 1, message = "O id do curso tem que ser maior que 1", groups = CreateInfo.class)
