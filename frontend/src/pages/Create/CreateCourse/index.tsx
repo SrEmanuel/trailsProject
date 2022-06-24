@@ -152,7 +152,7 @@ export function CreateCourse() {
       </span>
       <main className="create-container">
         <h1>
-          {location.pathname === "novo-curso"
+          {location.pathname === "/novo-curso"
             ? "Criar novo curso"
             : "Atualizar curso"}
         </h1>
