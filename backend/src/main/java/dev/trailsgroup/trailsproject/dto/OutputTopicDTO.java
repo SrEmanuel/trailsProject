@@ -12,7 +12,7 @@ public class OutputTopicDTO {
     private Integer id;
     private String name;
 
-    private Integer position;
+    //private Integer position;
 
 
     private String linkName;
@@ -29,7 +29,7 @@ public class OutputTopicDTO {
     public OutputTopicDTO(Topic topic, List<OutputSubjectDTO> subjects) {
         this.id = topic.getId();
         this.name = topic.getName();
-        this.position = topic.getPosition();
+        //this.position = topic.getPosition();
         this.linkName = topic.getLinkName();
         this.createdDate = topic.getCreatedDate();
         this.lastModifiedDate = topic.getLastModifiedDate();
@@ -53,13 +53,13 @@ public class OutputTopicDTO {
         this.name = name;
     }
 
-    public Integer getPosition() {
+    /*public Integer getPosition() {
         return position;
     }
 
     public void setPosition(Integer position) {
         this.position = position;
-    }
+    }*/
 
     public String getLinkName() {
         return linkName;
