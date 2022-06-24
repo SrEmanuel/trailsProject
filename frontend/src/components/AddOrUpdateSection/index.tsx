@@ -42,7 +42,6 @@ export function AddOrUpdateSection({
       if (mode === "create") {
         const data = {
           name: name,
-          position: 100,
           courseId: currentCourse?.id,
         };
         await api.post("/topics", data);
@@ -51,7 +50,7 @@ export function AddOrUpdateSection({
         );
         setTopics(response.data.content);
       } else {
-        const data = { name, position: 100 }
+        const data = { name }
         await api.put(`/topics/${topic?.linkName}`, data);
         const response = await api.get(
           `/courses/${currentCourseLinkName}/topics`
