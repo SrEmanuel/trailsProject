@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.*;
 import dev.trailsgroup.trailsproject.entities.Course;
+import dev.trailsgroup.trailsproject.entities.Subject;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.UserCourseService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -92,6 +94,16 @@ public class UserResource {
     public ResponseEntity<Page<Course>> getCourses(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok().body(service.getCourses(id, pageable));
     }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping(value = "/{id}/add-image")
+    public ResponseEntity<User> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
+        User obj = service.insertImage(file, id);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
+    }
+
 
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "/me")

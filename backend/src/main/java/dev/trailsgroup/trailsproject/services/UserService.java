@@ -5,7 +5,6 @@ import dev.trailsgroup.trailsproject.entities.Course;
 import dev.trailsgroup.trailsproject.entities.ProfessorCourse;
 import dev.trailsgroup.trailsproject.entities.User;
 import dev.trailsgroup.trailsproject.entities.enums.UserProfiles;
-import dev.trailsgroup.trailsproject.entities.pk.UserCoursePK;
 import dev.trailsgroup.trailsproject.repositories.UserRepository;
 import dev.trailsgroup.trailsproject.security.UserSS;
 import dev.trailsgroup.trailsproject.services.exceptions.AuthorizationException;
@@ -21,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -33,6 +33,9 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private StaticFileService staticFileService;
 
     @Lazy
     @Autowired
@@ -87,6 +90,7 @@ public class UserService {
                     obj.getName(),
                     pe.encode(obj.getPassword()),
                     obj.getEmail(),
+                    "default-user.png",
                     obj.getStatus());
             return repository.save(user);
 
@@ -213,5 +217,13 @@ public class UserService {
 
     private UserSS convertUsertoUserSS(User user ){
         return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus());
+    }
+
+    public User insertImage(MultipartFile multipartFile, Integer id){
+        verifyUpdateInformationPermission(id);
+        User user = findById(id);
+        user.setImage(staticFileService.update(multipartFile, user.getImageName()));
+        save(user);
+        return user;
     }
 }
