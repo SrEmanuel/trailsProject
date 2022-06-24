@@ -4,8 +4,11 @@ import Trails from "../../assets/images/trails.svg";
 
 import "./styles.scss";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 export function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="container">
       <NavBar />
@@ -17,7 +20,7 @@ export function Home() {
             <div>
               <FiLogIn color="var(--white)" size={24} />
             </div>
-            <Link to="/cadastro" >Cadastre-se</Link>
+            <Link to={ user? "/cursos" : "/cadastro"} >{ user? "Acessar trilhas" : "Cadastre-se"}</Link>
           </div>
         </section>
         <img src={Trails} alt="imagem de homem perdido em trilha" />
