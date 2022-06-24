@@ -87,7 +87,7 @@ public class CourseService {
             }
             coursesEnchanted.add(new LoggedOutputCourseDTO(x, count, professors));
         }
-        if(!user.getProfiles().contains(UserProfiles.ADMIN) || !user.getProfiles().contains(UserProfiles.PROFESSOR))
+        if(!user.getProfiles().contains(UserProfiles.ADMIN) && !user.getProfiles().contains(UserProfiles.PROFESSOR))
             coursesEnchanted.removeIf(x -> x.getSubjectsCount() == 0);
         return new PageImpl<LoggedOutputCourseDTO>(coursesEnchanted, pageable, coursesEnchanted.size());
     }
