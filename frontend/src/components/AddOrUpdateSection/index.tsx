@@ -19,7 +19,7 @@ interface Props {
   currentCourse?: ITrails;
   currentCourseLinkName?: string;
   mode: "create" | "update";
-  linkName?: string;
+  topic?: ITopic;
   setIsVisible: (arg: boolean) => void;
   setTopics: React.Dispatch<React.SetStateAction<ITopic[] | undefined>>;
 }
@@ -29,7 +29,7 @@ export function AddOrUpdateSection({
   currentCourse,
   currentCourseLinkName,
   mode,
-  linkName,
+  topic,
   setIsVisible,
   setTopics,
 }: Props) {
@@ -40,19 +40,19 @@ export function AddOrUpdateSection({
   async function handleSumitValuesAndClose(name: string) {
     try {
       if (mode === "create") {
-        const topic = {
+        const data = {
           name: name,
           position: 100,
           courseId: currentCourse?.id,
         };
-        await api.post("/topics", topic);
+        await api.post("/topics", data);
         const response = await api.get(
           `/courses/${currentCourse?.linkName}/topics`
         );
         setTopics(response.data.content);
       } else {
-        const topic = { name, position: 100 }
-        await api.put(`/topics/${linkName}`, topic);
+        const data = { name, position: 100 }
+        await api.put(`/topics/${topic?.linkName}`, data);
         const response = await api.get(
           `/courses/${currentCourseLinkName}/topics`
         );
@@ -65,8 +65,8 @@ export function AddOrUpdateSection({
   }
 
   useEffect(() => {
-    formikRef.current.setFieldValue("name", linkName);
-  }, [linkName]);
+    formikRef.current.setFieldValue("name", topic?.name);
+  }, [topic]);
 
   return (
     <Overlay hidden={!isVisible}>
