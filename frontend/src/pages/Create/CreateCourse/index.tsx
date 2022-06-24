@@ -17,25 +17,20 @@ import {
 import api from "../../../services/api";
 import { handleNotifyError } from "../../../utils/handleNotifyError";
 import "../styles.scss";
-
-interface ITeacher {
-  id: string;
-  name: string;
-  email: string;
-}
+import { IUser } from "../../../interfaces/user";
 
 interface ICourse {
   image: string;
   name: string;
-  professors?: ITeacher[];
+  professors?: IUser[];
 }
 
 export function CreateCourse() {
   const { getIsAdmin, handleClearUserDataFromStorage, user } = useAuth();
   const [initialValues, setInitialValues] = useState<ICourse>();
-  const [teachers, setTeachers] = useState<ITeacher[]>([]);
-  const [selectedTeachers, setSelectedTeachers] = useState<ITeacher[]>([]);
-  const [hiddenTeachers, setHiddenTeachers] = useState<string[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
+  const [hiddenUsers, setHiddenUsers] = useState<string[]>([]);
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,28 +42,28 @@ export function CreateCourse() {
 
   function handleAddTeacher(e: ChangeEvent<HTMLSelectElement>) {
     const teacher =
-      teachers && teachers[(e.target.value as unknown as number) - 1];
+      users && users[(e.target.value as unknown as number) - 1];
     formikRef.current.setFieldValue("professors", [
-      ...selectedTeachers,
+      ...selectedUsers,
       teacher,
     ]);
-    teacher && setSelectedTeachers([...selectedTeachers, teacher]);
-    setHiddenTeachers([...hiddenTeachers, teacher.id]);
+    teacher && setSelectedUsers([...selectedUsers, teacher]);
+    setHiddenUsers([...hiddenUsers, teacher.id]);
   }
 
   function handleRemoveTeacher(id: string) {
     formikRef.current.setFieldValue(
       "professors",
-      selectedTeachers.filter((t) => t.id !== id)
+      selectedUsers.filter((t) => t.id !== id)
     );
-    setSelectedTeachers(selectedTeachers.filter((t) => t.id !== id));
-    setHiddenTeachers(hiddenTeachers.filter((ht) => ht !== id));
+    setSelectedUsers(selectedUsers.filter((t) => t.id !== id));
+    setHiddenUsers(hiddenUsers.filter((ht) => ht !== id));
   }
 
   const handleLoadUsers = useCallback(async () => {
     try {
       const response = await api.get("/users/");
-      setTeachers(response.data);
+      setUsers(response.data);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -122,8 +117,8 @@ export function CreateCourse() {
           professors: course.professors,
         });
 
-        setSelectedTeachers(course.professors);
-        setHiddenTeachers(course.professors.map((t) => t.id));
+        setSelectedUsers(course.professors);
+        setHiddenUsers(course.professors.map((t) => t.id));
 
         fetch(course.imagePath).then(async (response) => {
           const blob = await response.blob();
@@ -193,18 +188,18 @@ export function CreateCourse() {
                       <option disabled hidden value="0">
                         Adicionar professor...
                       </option>
-                      {teachers
+                      {users
                         ?.filter(
-                          (teacher) => !hiddenTeachers.includes(teacher.id)
+                          (user:any) => !hiddenUsers.includes(user.id) && !user.profiles.includes('ADMIN')
                         )
-                        .map((teacher) => (
-                          <option key={teacher.id} value={teacher.id}>
-                            {teacher.name}
+                        .map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
                           </option>
                         ))}
                     </select>
                     <Stack className="chip-stack" direction="row" spacing={1}>
-                      {selectedTeachers.map((teacher) => (
+                      {selectedUsers.map((teacher) => (
                         <Chip
                           key={teacher.id}
                           className="chip"
