@@ -11,6 +11,7 @@ import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -92,5 +93,12 @@ public class QuestionService {
             outputAnswerDTO.setIsCorrect(false);
         }
         return outputAnswerDTO;
+    }
+
+    public Page<Question> getQuestionsBySubject(String linkName, Pageable pageable) {
+        Subject subject = subjectService.findByName(linkName);
+        Question question = new Question();
+        question.setSubject(subject);
+        return repository.findAll(Example.of(question), pageable);
     }
 }
