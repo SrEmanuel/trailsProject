@@ -31,7 +31,7 @@ export function Question({ data, currentQuestion, totalQuestions, handleNextQues
 
   function handleSubmitAnswer(){
     setIsAnswered(true);
-    
+
   }
 
   return (
@@ -51,7 +51,7 @@ export function Question({ data, currentQuestion, totalQuestions, handleNextQues
         ))}
       </div>
       <div className="controls">
-        <button>Enviar Resposta</button>
+        <button disabled={!selectedOption} onClick={handleSubmitAnswer} >Enviar Resposta</button>
         <button disabled={ !(currentQuestion < totalQuestions ) || !isAnswered } onClick={nextQuestion} >Próximo</button>
       </div>  
     </div>
