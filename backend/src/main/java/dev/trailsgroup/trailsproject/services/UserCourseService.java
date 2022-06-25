@@ -101,6 +101,13 @@ public class UserCourseService {
         professors.forEach(x -> updatedUserList.add(userService.findById(x.getId())));
         userCourseList.forEach(x -> bdUserList.add(x.getUser()));
 
+
+        /*This code makes two For.
+        * The first one is to remove the ProfessorCourse relation from users that was not informed in the new UserList but
+        * exists in the database.
+        * The second one is to add the new professors that was informed in the updated UserList but was not found in the database.
+        * In the first for, the code make a verification to see if the professor is still eligible to maintain the Professor role.
+        */
         for(User x : bdUserList){
             if(!updatedUserList.contains(x)){
                 ProfessorCourse us = new ProfessorCourse();
@@ -113,12 +120,13 @@ public class UserCourseService {
         }
         for(User x : updatedUserList){
             if(!bdUserList.contains(x)){
-                userService.makeProfessor(x);
-                ProfessorCourse us = new ProfessorCourse();
-                us.setCourse(course);
-                us.setUser(x);
-                professorCourseRepository.save(us);
-
+                if(!x.getProfiles().contains(UserProfiles.ADMIN)) {
+                    userService.makeProfessor(x);
+                    ProfessorCourse us = new ProfessorCourse();
+                    us.setCourse(course);
+                    us.setUser(x);
+                    professorCourseRepository.save(us);
+                }
             }
         }
         userService.flush();
@@ -126,10 +134,15 @@ public class UserCourseService {
     }
 
     public boolean verifyProfessorEligibility(User user){
+        //This code verifies if a User is still able to maintain its Professor role.
+        //He can still be eligible if he still has courses associated to him.
+        //If not, his role will be removed.
+        //Returns true if still there is a Professor Course relation with that user.
         ProfessorCourse professorCourse = new ProfessorCourse();
         professorCourse.setUser(user);
 
         return professorCourseRepository.exists(Example.of(professorCourse));
+
     }
 
 
