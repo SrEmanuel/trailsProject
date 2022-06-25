@@ -7,4 +7,5 @@ export interface IUser {
   roles: string[];
   token: string;
   password: string;
+  imagePath: string;
 }
