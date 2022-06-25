@@ -1,0 +1,100 @@
+[
+  {
+    "question": {
+      "htmlContent": "<p>(ENEM 2014) O potencial brasileiro para transformar lixo em energia permanece subutilizado — apenas pequena parte dos resíduos brasileiros é utilizada para gerar energia. Contudo, bons exemplos são os aterros sanitários, que utilizam a principal fonte de energia ali produzida. Alguns aterros vendem créditos de carbono com base no Mecanismo de Desenvolvimento Limpo (MDL), do Protocolo de Kyoto. Essa fonte de energia subutilizada, citada no texto, é</p>",
+      "alternatives": [
+        {
+          "text": "etanol, obtido a partir da decomposição da matéria orgânica por bactérias.",
+          "correct": false,
+          "id": 23213
+        },
+        {
+          "text": "gás natural, formado pela ação de fungos decompositores da matéria orgânica.",
+          "correct": false,
+          "id": 12356
+        },
+        {
+          "text": "óleo de xisto, obtido pela decomposição da matéria orgânica bactérias anaeróbias.",
+          "correct": false,
+          "id": 10984
+        },
+        {
+          "text": "gás metano, obtido pela atividade de bactérias anaeróbias na decomposição da matéria orgânica.",
+          "correct": true,
+          "id": 12950
+        },
+        {
+          "text": "gás liquefeito de petróleo, obtido pela decomposição de vegetais presentes nos restos de comida.",
+          "correct": false,
+          "id": 10485
+        }
+      ],
+      "id": 1
+    }
+  },
+  {
+    "question": {
+      "htmlContent": "<p>(ENEM 2014) O potencial brasileiro para transformar lixo em energia permanece subutilizado — apenas pequena parte dos resíduos brasileiros é utilizada para gerar energia. Contudo, bons exemplos são os aterros sanitários, que utilizam a principal fonte de energia ali produzida. Alguns aterros vendem créditos de carbono com base no Mecanismo de Desenvolvimento Limpo (MDL), do Protocolo de Kyoto. Essa fonte de energia subutilizada, citada no texto, é</p>",
+      "alternatives": [
+        {
+          "text": "etanol, obtido a partir da decomposição da matéria orgânica por bactérias.",
+          "correct": false,
+          "id": 23211
+        },
+        {
+          "text": "gás natural, formado pela ação de fungos decompositores da matéria orgânica.",
+          "correct": false,
+          "id": 12355
+        },
+        {
+          "text": "óleo de xisto, obtido pela decomposição da matéria orgânica bactérias anaeróbias.",
+          "correct": false,
+          "id": 10982
+        },
+        {
+          "text": "gás metano, obtido pela atividade de bactérias anaeróbias na decomposição da matéria orgânica.",
+          "correct": true,
+          "id": 12952
+        },
+        {
+          "text": "gás liquefeito de petróleo, obtido pela decomposição de vegetais presentes nos restos de comida.",
+          "correct": false,
+          "id": 10480
+        }
+      ],
+      "id": 2
+    }
+  },{
+    "question": {
+      "htmlContent": "<p>(ENEM 2014) O potencial brasileiro para transformar lixo em energia permanece subutilizado — apenas pequena parte dos resíduos brasileiros é utilizada para gerar energia. Contudo, bons exemplos são os aterros sanitários, que utilizam a principal fonte de energia ali produzida. Alguns aterros vendem créditos de carbono com base no Mecanismo de Desenvolvimento Limpo (MDL), do Protocolo de Kyoto. Essa fonte de energia subutilizada, citada no texto, é</p>",
+      "alternatives": [
+        {
+          "text": "etanol, obtido a partir da decomposição da matéria orgânica por bactérias.",
+          "correct": false,
+          "id": 23243
+        },
+        {
+          "text": "gás natural, formado pela ação de fungos decompositores da matéria orgânica.",
+          "correct": false,
+          "id": 12756
+        },
+        {
+          "text": "óleo de xisto, obtido pela decomposição da matéria orgânica bactérias anaeróbias.",
+          "correct": false,
+          "id": 17984
+        },
+        {
+          "text": "gás metano, obtido pela atividade de bactérias anaeróbias na decomposição da matéria orgânica.",
+          "correct": true,
+          "id": 12050
+        },
+        {
+          "text": "gás liquefeito de petróleo, obtido pela decomposição de vegetais presentes nos restos de comida.",
+          "correct": false,
+          "id": 12485
+        }
+      ],
+      "id": 3
+    }
+  }
+]
