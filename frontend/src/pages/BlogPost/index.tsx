@@ -6,9 +6,12 @@ import { ISubject } from "../../interfaces/subject";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { useAuth } from "../../hooks/useAuth";
+import { Question } from "../../components/Question";
+import questions from "./db.json";
 
 export function BlogPost() {
   const [subject, setSubject] = useState<ISubject>();
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage, getUser } = useAuth();
   const params = useParams();
@@ -20,7 +23,7 @@ export function BlogPost() {
 
         const tempSubject: ISubject = response.data;
 
-        if (!tempSubject.completed &&  getUser() ) {
+        if (!tempSubject.completed && getUser()) {
           const url = `/subjects/${tempSubject.linkName}/user/mark?state=true`;
           await api.put(url);
         }
@@ -42,6 +45,7 @@ export function BlogPost() {
         className="html-content"
         dangerouslySetInnerHTML={{ __html: subject?.htmlContent as string }}
       ></div>
+      <Question data={questions[currentQuestion].question} currentQuestion={currentQuestion} totalQuestions={questions.length - 1} handleNextQuestion={setCurrentQuestion} />
     </div>
   );
 }

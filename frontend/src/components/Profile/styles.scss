@@ -1,64 +1,110 @@
-.profile{
+.profile {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 80px;
   height: 80px;
   background: var(--green);
   border-radius: 50%;
-  font-size: 64px;
-  color: var(--white);
-  font-weight: 700;
-  font-family: 'Inter', sans-serif;
+  span {
+    font-size: 64px;
+    color: var(--white);
+    font-weight: 700;
+    font-family: "Inter", sans-serif;
+  }
+
+  #profile-picture {
+    position: absolute;
+    height: 230px;
+    opacity: 0;
+  }
+
+  label,
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    bottom: -10px;
+    right: -10px;
+    transition: 0.2s;
+    cursor: pointer;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  label {
+    background: var(--purple);
+    &:hover {
+      background: var(--dark-purple);
+    }
+  }
+
+  button{
+    z-index: 5;
+  }
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
 }
 
-#profile-container{
-  @media(max-width:500px){
+#profile-container {
+  @media (max-width: 500px) {
     min-width: 100%;
     height: 100%;
     justify-content: center;
 
-    >svg{
+    > svg {
       top: 10px;
     }
 
-    .bottom{
+    .bottom {
       flex-direction: column;
       gap: 10px;
     }
   }
 }
 
-.del-btn{
+.del-btn {
   background: var(--red);
   align-items: center;
   justify-content: space-around;
 
-  &:hover{
+  &:hover {
     background: var(--dark-red);
   }
 
-  svg{
+  svg {
     position: static;
   }
 }
 
-.bottom{
+.bottom {
   margin-top: 10px;
   max-width: 90%;
 
-  svg{
+  svg {
     margin-right: 5px;
   }
 }
 
-.change-password{
+.change-password {
   display: flex;
   flex-direction: column;
   width: 90%;
   margin-top: 10px;
 
-  span:first-of-type{
+  span:first-of-type {
     color: var(--grey);
     font-size: 18px;
     font-weight: 600;
@@ -67,18 +113,18 @@
     margin-top: 10px;
   }
 
-  span:not(:first-of-type){
+  span:not(:first-of-type) {
     align-self: flex-start;
   }
 
-  label{
+  label {
     color: var(--grey);
     font-size: 10px;
     font-weight: 600;
     margin-bottom: 10px;
   }
 
-  input{
+  input {
     height: 40px;
   }
 }

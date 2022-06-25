@@ -1,6 +1,6 @@
 import { Formik } from "formik";
-import { useRef, useState } from "react";
-import { FiLock, FiSave, FiTrash2, FiX } from "react-icons/fi";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { FiCamera, FiCheck, FiLock, FiSave, FiTrash2, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
@@ -25,6 +25,8 @@ interface Props {
 }
 
 export function Profile({ isVisible, setIsVisible }: Props) {
+  const [selectedFile, setSelectedFile] = useState<File>();
+  const [selectedFilePreview, setSelectedFilePreview] = useState<string>();
   const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const { user, handleClearUserDataFromStorage, handleSavaUserDataToStorage } =
@@ -35,6 +37,31 @@ export function Profile({ isVisible, setIsVisible }: Props) {
   function handleSubmit() {
     if (formRef.current) {
       formRef.current.handleSubmit();
+    }
+  }
+
+  function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
+      setSelectedFilePreview(URL.createObjectURL(e.target.files[0]));
+    }
+  }
+
+  function handleClearFileSelection(){
+    setSelectedFile(undefined);
+    setSelectedFilePreview(undefined);
+  }
+
+  async function handleUpdateProfilePicture(e: FormEvent ){
+    e.stopPropagation();
+    const data = new FormData();
+    data.append('image', selectedFile as File );
+    try {
+      const response = await api.post(`/users/${user?.id}/add-image`, data);
+      handleClearFileSelection();
+      handleSavaUserDataToStorage(response.data, user?.token as string );
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage)
     }
   }
 
@@ -59,12 +86,12 @@ export function Profile({ isVisible, setIsVisible }: Props) {
         data
       );
       toast.success("Atualizado com sucesso!");
-      if(atribute === 'name'){
+      if (atribute === "name") {
         await handleSavaUserDataToStorage(response.data, user?.token as string);
       } else {
-        toast.info('Faço login novamente com as novas credenciais');
+        toast.info("Faço login novamente com as novas credenciais");
         await handleClearUserDataFromStorage();
-        navigate('/login');
+        navigate("/login");
       }
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
@@ -74,13 +101,29 @@ export function Profile({ isVisible, setIsVisible }: Props) {
   return (
     <>
       <Overlay hidden={!isVisible}>
-        <ModalContainer customStyle="profile-container" >
+        <ModalContainer customStyle="profile-container">
           <FiX
             color="var(--red)"
             size={24}
             onClick={() => setIsVisible(false)}
           />
-          <span className="profile">{user?.name.substring(0, 1)}</span>
+          <div className="profile">
+           { selectedFile ? (
+            <button onClick={handleUpdateProfilePicture}>
+              <FiCheck />
+            </button>
+           ) : (
+             <label htmlFor="profile-picture" >
+             <FiCamera color="var(--white)" size={24} />
+           </label>
+           ) }
+            <input id="profile-picture" type="file" accept="image/*" onChange={handleFileUpload} />
+            { selectedFile || user?.imagePath ? (
+              <img src={selectedFilePreview || user?.imagePath } alt={selectedFile?.name} />
+            ) : (
+              <span>{user?.name.substring(0, 1)}</span>
+            ) }
+          </div>
           {user && (
             <>
               <Editable
