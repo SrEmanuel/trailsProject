@@ -6,6 +6,8 @@ import { ISubject } from "../../interfaces/subject";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { useAuth } from "../../hooks/useAuth";
+import { Question } from "../../components/Question";
+import questions from "./db.json";
 
 export function BlogPost() {
   const [subject, setSubject] = useState<ISubject>();
@@ -20,7 +22,7 @@ export function BlogPost() {
 
         const tempSubject: ISubject = response.data;
 
-        if (!tempSubject.completed &&  getUser() ) {
+        if (!tempSubject.completed && getUser()) {
           const url = `/subjects/${tempSubject.linkName}/user/mark?state=true`;
           await api.put(url);
         }
@@ -42,6 +44,14 @@ export function BlogPost() {
         className="html-content"
         dangerouslySetInnerHTML={{ __html: subject?.htmlContent as string }}
       ></div>
+      <h2>Exercícios</h2>
+      <ol>
+        {questions.map((question) => (
+          <li key={question.question.id}>
+            <Question data={question.question} />
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
