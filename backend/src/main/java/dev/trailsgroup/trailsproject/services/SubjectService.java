@@ -112,7 +112,6 @@ public class SubjectService {
             return savedSubject;
         }catch(IllegalArgumentException | NullPointerException e){
             throw new DatabaseException(e.getMessage());
-
         }
     }
     public boolean verifyLinkNameAvailability(String name){

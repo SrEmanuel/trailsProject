@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/subjects/**",
             "/resources/**",
             "/uploads/**",
-            "/auth/verify-token"
+            "/auth/verify-token",
+            "/questions/**"
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
