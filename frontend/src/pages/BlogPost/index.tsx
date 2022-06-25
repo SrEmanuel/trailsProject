@@ -11,6 +11,7 @@ import questions from "./db.json";
 
 export function BlogPost() {
   const [subject, setSubject] = useState<ISubject>();
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage, getUser } = useAuth();
   const params = useParams();
@@ -44,14 +45,7 @@ export function BlogPost() {
         className="html-content"
         dangerouslySetInnerHTML={{ __html: subject?.htmlContent as string }}
       ></div>
-      <h2>Exercícios</h2>
-      <ol>
-        {questions.map((question) => (
-          <li key={question.question.id}>
-            <Question data={question.question} />
-          </li>
-        ))}
-      </ol>
+      <Question data={questions[currentQuestion].question} currentQuestion={currentQuestion} totalQuestions={questions.length - 1} handleNextQuestion={setCurrentQuestion} />
     </div>
   );
 }
