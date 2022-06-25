@@ -17,6 +17,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)); //TODO change or handle this exception when a valid JWT token is informed but the related user doest not exits
-        return new UserSS(user.getId(), user.getEmail(), user.getName(), user.getPassword(), user.getProfiles(), user.getStatus());
+        return new UserSS(user.getId(), user.getEmail(), user.getName(), user.getPassword(), user.getProfiles(), user.getStatus(), user.getImagePath());
     }
 }
