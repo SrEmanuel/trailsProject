@@ -97,8 +97,8 @@ public class UserResource {
 
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "/{id}/add-image")
-    public ResponseEntity<User> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
-        User obj = service.insertImage(file, id);
+    public ResponseEntity<UserSS> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
+        UserSS obj = service.insertImage(file, id);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);

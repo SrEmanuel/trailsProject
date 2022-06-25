@@ -216,14 +216,14 @@ public class UserService {
     }
 
     private UserSS convertUsertoUserSS(User user ){
-        return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus());
+        return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus(), user.getImagePath());
     }
 
-    public User insertImage(MultipartFile multipartFile, Integer id){
+    public UserSS insertImage(MultipartFile multipartFile, Integer id){
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setImage(staticFileService.update(multipartFile, user.getImageName()));
         save(user);
-        return user;
+        return convertUsertoUserSS(user);
     }
 }

@@ -17,6 +17,8 @@ public class UserSS implements UserDetails {
     private String email;
     private String name;
 
+    private String image;
+
     @JsonIgnore
     private String password;
 
@@ -27,13 +29,14 @@ public class UserSS implements UserDetails {
 
     }
 
-    public UserSS(Integer id, String email, String name, String password, Set<UserProfiles> profiles, Boolean status) {
+    public UserSS(Integer id, String email, String name, String password, Set<UserProfiles> profiles, Boolean status, String image) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
         this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
         this.status = status;
+        this.image = image;
     }
 
     public Integer getId() {
@@ -46,6 +49,14 @@ public class UserSS implements UserDetails {
 
     public boolean hasRole(UserProfiles profile) {
         return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @JsonIgnore
