@@ -12,23 +12,31 @@
   display: flex;
   flex-direction: column;
   max-width: 95%;
+  text-align: justify;
 
-  p, li {
+  p,
+  li {
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 18px;
+    line-height: 36px;
     color: #525256;
+    margin: 10px 0;
   }
 
-  a{
-      text-decoration: none;
-      color: var(--dark-green);
+  ul{
+    margin: 5px 0;
   }
 
-  img{
-      max-width: 100%;
-      height: auto;
+  a {
+    text-decoration: none;
+    color: var(--dark-green);
   }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
 }
