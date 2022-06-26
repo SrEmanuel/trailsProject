@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class SubjectDTO {
     
@@ -31,6 +32,8 @@ public class SubjectDTO {
     @NotNull(message = "A posição é obrigatória!", groups = CreateInfo.class)
     @Min(value= 1, message = "A posição tem que ser maior que 1", groups = CreateInfo.class)
     private Integer position;
+
+    private List<InputQuestionOnSubjectDTO> questions;
 
     public SubjectDTO(){
     }
@@ -81,5 +84,13 @@ public class SubjectDTO {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public List<InputQuestionOnSubjectDTO> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<InputQuestionOnSubjectDTO> questions) {
+        this.questions = questions;
     }
 }

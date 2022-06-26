@@ -45,7 +45,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StudentCourse> studentCourses =  new HashSet<>();
 
-
     @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(name="tb_profiles")    
     private Set<Integer> profiles =  new HashSet<>();

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_question")
@@ -25,6 +25,9 @@ public class Question {
 
     @Column(columnDefinition="TEXT")
     private String htmlContent;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuestionCompetence> competences =  new HashSet<>();
 
     @JsonIgnore
     private String correct;

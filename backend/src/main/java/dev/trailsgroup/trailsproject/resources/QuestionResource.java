@@ -3,9 +3,12 @@ package dev.trailsgroup.trailsproject.resources;
 
 import dev.trailsgroup.trailsproject.dto.InputQuestionAnswerDTO;
 import dev.trailsgroup.trailsproject.dto.OutputQuestionAnswerDTO;
+import dev.trailsgroup.trailsproject.dto.QuestionCompetenceDTO;
 import dev.trailsgroup.trailsproject.dto.QuestionDTO;
 
 import dev.trailsgroup.trailsproject.entities.Question;
+import dev.trailsgroup.trailsproject.entities.QuestionCompetence;
+import dev.trailsgroup.trailsproject.services.QuestionCompetenceService;
 import dev.trailsgroup.trailsproject.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,9 @@ public class QuestionResource {
 
     @Autowired
     private QuestionService service;
+
+    @Autowired
+    private QuestionCompetenceService questionCompetenceService;
 
     @GetMapping
     public ResponseEntity<Page<Question>> findAll(Pageable pageable){
@@ -64,4 +70,14 @@ public class QuestionResource {
         OutputQuestionAnswerDTO obj = service.verifyAnswer(id, answerDTO);
         return ResponseEntity.ok().body(obj);
     }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR')")
+    @PostMapping(value = "/{id}/addCompetence")
+    public ResponseEntity<QuestionCompetence> addCompetence(@PathVariable Integer id, @RequestBody QuestionCompetenceDTO questionCompetence){
+        QuestionCompetence obj = questionCompetenceService.save(id, questionCompetence);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
+    }
+
 }

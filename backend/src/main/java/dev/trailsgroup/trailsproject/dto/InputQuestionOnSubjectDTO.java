@@ -1,50 +1,29 @@
 package dev.trailsgroup.trailsproject.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.validation.constraints.NotEmpty;
 
-public class QuestionDTO {
-
+public class InputQuestionOnSubjectDTO {
+    @NotEmpty(message = "O ID do Question é obrigatório!")
     private Integer id;
 
-    @NotEmpty(message = "O ID do Subject é obrigatório!")
-    private String subjectLinkName;
+    @NotEmpty(message = "A operação a ser realizada é obrigatória")
+    private String operation;
 
-    @NotEmpty(message = "O conteúdo HTML é obrigatório!")
     private String htmlContent;
 
-    @NotEmpty(message = "A alternativa correta é obrigatória")
     private String correct;
 
-    @NotEmpty(message = "A resposta A obrigatória")
     private String answerA;
 
-    @NotEmpty(message = "A resposta B obrigatória")
     private String answerB;
 
-    @NotEmpty(message = "A resposta C obrigatória")
     private String answerC;
 
-    @NotEmpty(message = "A resposta D obrigatória")
     private String answerD;
 
-    @NotEmpty(message = "A resposta E obrigatória")
     private String answerE;
 
-    public QuestionDTO(){};
-
-    public QuestionDTO(Integer id, String subjectLinkName, String htmlContent, String correct, String answerA, String answerB, String answerC, String answerD, String answerE) {
-        this.id = id;
-        this.subjectLinkName = subjectLinkName;
-        this.htmlContent = htmlContent;
-        this.correct = correct;
-        this.answerA = answerA;
-        this.answerB = answerB;
-        this.answerC = answerC;
-        this.answerD = answerD;
-        this.answerE = answerE;
-    }
+    public InputQuestionOnSubjectDTO(){};
 
     public Integer getId() {
         return id;
@@ -54,12 +33,12 @@ public class QuestionDTO {
         this.id = id;
     }
 
-    public String getSubjectLinkName() {
-        return subjectLinkName;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setSubjectId(String subjectLinkName) {
-        this.subjectLinkName = subjectLinkName;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public String getHtmlContent() {
