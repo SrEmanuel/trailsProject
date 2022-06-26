@@ -1,0 +1,94 @@
+.goBack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  color: var(--dark-green);
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 35px;
+  transition: 0.2s;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--green);
+
+    * {
+      color: var(--green);
+    }
+  }
+}
+
+.post-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  align-self: center;
+  width: 100%;
+
+  h1 {
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin-top: 40px;
+
+    input {
+      width: 100%;
+    }
+
+    span {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 32px;
+      color: var(--grey);
+      margin-bottom: 23px;
+    }
+
+    .radio-selection {
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 23px;
+      input,
+      span {
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+
+    .alternatives-radio-selection{
+      width: 100%;
+      label{
+        min-width: 100%;
+        input{
+          max-width: 90%;
+          width: 90%;
+        }
+      }
+    }
+
+    .dropzone-container {
+      width: 100%;
+      max-width: 100%;
+
+      label {
+        width: 100%;
+      }
+    }
+
+    .editor{
+      margin-bottom: 23px;
+    }
+  }
+}
+
+.tox-notifications-container{
+  display: none;
+}
