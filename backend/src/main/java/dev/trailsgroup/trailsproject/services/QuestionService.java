@@ -2,6 +2,7 @@ package dev.trailsgroup.trailsproject.services;
 
 
 import dev.trailsgroup.trailsproject.dto.InputQuestionAnswerDTO;
+import dev.trailsgroup.trailsproject.dto.InputQuestionOnSubjectDTO;
 import dev.trailsgroup.trailsproject.dto.OutputQuestionAnswerDTO;
 import dev.trailsgroup.trailsproject.dto.QuestionDTO;
 import dev.trailsgroup.trailsproject.entities.Question;
@@ -15,6 +16,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingPathVariableException;
+
+import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -100,5 +105,48 @@ public class QuestionService {
         Question question = new Question();
         question.setSubject(subject);
         return repository.findAll(Example.of(question), pageable);
+    }
+
+    public void updateArray(List<InputQuestionOnSubjectDTO> questions, Subject subject) {
+        if(questions != null) {
+            questions.forEach(x -> {
+                if(x.getOperation().equalsIgnoreCase("UPDATE") || x.getOperation().equalsIgnoreCase("DELETE")) {
+                    if (!Objects.equals(findById(x.getId()).getId(), subject.getId())) {
+                        throw new DatabaseException("Você tentou modificar uma pergunta que não faz parte desse conteúdo. Operação cancelada.");
+                    }
+                }
+            });
+            for (InputQuestionOnSubjectDTO x : questions) {
+                if (x.getOperation().equalsIgnoreCase("DELETE")) {
+                    delete(x.getId());
+                }else {
+                    if (x.getOperation().equalsIgnoreCase("UPDATE")) {
+                        if ((x.getId() != null) && (subject.getLinkName() != null) && (x.getHtmlContent() != null) && (x.getCorrect() != null)
+                                && (x.getAnswerA() != null) && (x.getAnswerB() != null) && (x.getAnswerC() != null) && x.getAnswerD() != null && x.getAnswerE() != null) {
+                            update(x.getId(), new QuestionDTO(x.getId(), subject.getLinkName(), x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
+                                    x.getAnswerB(), x.getAnswerC(), x.getAnswerD(), x.getAnswerE()));
+                        } else {
+                            throw new DatabaseException("Você tentou realizar uma atualização de salvamento de perguntas entretanto não foram informados" +
+                                    "todos os dados obrigatórios. Operação cancelada.");
+                        }
+                    }else{
+                        if (x.getOperation().equalsIgnoreCase("CREATE")) {
+                            if((subject.getLinkName() != null) && (x.getHtmlContent() != null) && (x.getCorrect() != null)
+                                    && (x.getAnswerA() != null) && (x.getAnswerB() != null) &&
+                                    (x.getAnswerC() != null) && x.getAnswerD() != null && x.getAnswerE() != null) {
+                                save(new Question(null, subject, x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
+                                        x.getAnswerB(), x.getAnswerC(), x.getAnswerD(), x.getAnswerE()));
+                            }else{
+                                throw new DatabaseException("Você tentou realizar uma atualização de criação de pergunta entretanto não foram informados" +
+                                        "todos os dados obrigatórios. Operação cancelada.");
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+        }
     }
 }

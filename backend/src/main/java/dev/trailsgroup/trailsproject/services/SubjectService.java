@@ -47,6 +47,10 @@ public class SubjectService {
     @Autowired
     private UserService userService;
 
+    @Lazy
+    @Autowired
+    private QuestionService questionService;
+
     public Page<Subject> findAll(Pageable pageable){
         return repository.findAll(pageable);
     }
@@ -105,6 +109,7 @@ public class SubjectService {
             Topic topic = topicService.findById(obj.getTopicId());
             Subject subject = new Subject(null, obj.getName(), "default-subject.png", linkName, obj.getGrade(),
                     obj.getHtmlContent(),obj.getPosition(), topic);
+
             Subject savedSubject = repository.save(subject);
 
             verifyUserPermission(savedSubject); //TODO verify that validation. Is that in the correct place?
@@ -139,9 +144,12 @@ public class SubjectService {
     public Subject update(String linkName, SubjectDTO obj){
         Subject SubjectDatabase = findByName(linkName);
         verifyUserPermission(SubjectDatabase);
+        questionService.updateArray(obj.getQuestions(), SubjectDatabase);
         addProfessorName(SubjectDatabase);
         subjectUpdateInformation(SubjectDatabase, obj);
-        return repository.save(SubjectDatabase);
+        Subject subject = repository.save(SubjectDatabase);
+        repository.flush();
+        return subject;
     }
 
     public void subjectUpdateInformation(Subject subjectDataBase, SubjectDTO obj){
