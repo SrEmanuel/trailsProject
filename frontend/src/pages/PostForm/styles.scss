@@ -65,11 +65,33 @@
 
     .alternatives-radio-selection{
       width: 100%;
-      label{
-        min-width: 100%;
-        input{
-          max-width: 90%;
-          width: 90%;
+
+      .radio-wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+
+        *{
+          margin:0;
+        }
+      }
+    }
+
+    .buttons-container{
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 50px;
+
+      button{
+        height: 50px;
+      }
+
+      @media(max-width: 800px){
+        button{
+          width: 100%;
         }
       }
     }
