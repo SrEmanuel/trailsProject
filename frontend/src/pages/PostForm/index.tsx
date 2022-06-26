@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiArrowLeft, FiInfo } from "react-icons/fi";
+import { FiArrowLeft, FiInfo, FiPlus } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dropzone } from "../../components/Dropzone";
 import "./styles.scss";
@@ -302,6 +302,11 @@ export function PostForm() {
                     ))}
                   </Select>
                 </FormControl>
+
+                <button className="add-question">
+                  <FiPlus color="var(--dark-purple)" size={24} />
+                  Adicionar exercício
+                  </button>
 
                 <div className="buttons-container">
                   <button type="button" onClick={() => navigate(-1)}>
