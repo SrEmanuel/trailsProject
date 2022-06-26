@@ -3,7 +3,9 @@ package dev.trailsgroup.trailsproject.resources;
 import dev.trailsgroup.trailsproject.dto.SubjectDTO;
 import dev.trailsgroup.trailsproject.dto.validationGroups.CreateInfo;
 import dev.trailsgroup.trailsproject.dto.validationGroups.UpdateInfo;
+import dev.trailsgroup.trailsproject.entities.Question;
 import dev.trailsgroup.trailsproject.entities.Subject;
+import dev.trailsgroup.trailsproject.services.QuestionService;
 import dev.trailsgroup.trailsproject.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,9 @@ public class SubjectResource {
 
     @Autowired
     private SubjectService service;
+
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping
     public ResponseEntity<Page<Subject>> findAll(Pageable pageable){
@@ -72,5 +77,10 @@ public class SubjectResource {
     public ResponseEntity<Void> markUserProgress(@PathVariable String linkName, @RequestParam(name = "state") boolean state){
         service.markUserProgress(state, linkName);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{linkName}/questions")
+    public ResponseEntity<Page<Question>> getQuestions(@PathVariable String linkName, Pageable pageable){
+        return ResponseEntity.ok().body(questionService.getQuestionsBySubject(linkName, pageable));
     }
 }

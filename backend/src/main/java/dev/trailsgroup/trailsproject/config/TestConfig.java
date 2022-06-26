@@ -56,6 +56,7 @@ public class TestConfig implements CommandLineRunner {
 
                 u3.addProfile(UserProfiles.PROFESSOR);
                 u1.addProfile(UserProfiles.ADMIN);
+                u1.addProfile(UserProfiles.PROFESSOR);
                 u2.removeProfile(UserProfiles.PROFESSOR);
                 userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, u5));
 

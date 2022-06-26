@@ -43,6 +43,10 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSubject> students = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfessorSubject> authors = new ArrayList<>();
 
@@ -138,6 +142,14 @@ public class Subject implements Serializable {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     public List<ProfessorSubject> getAuthors(){
