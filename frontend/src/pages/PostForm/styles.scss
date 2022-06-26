@@ -53,6 +53,12 @@
       margin-bottom: 23px;
     }
 
+    .obs{
+      font-weight: 400;
+      font-size: 14px;
+      align-self: flex-end;
+    }
+
     .radio-selection {
       justify-content: space-around;
       width: 100%;
@@ -76,6 +82,17 @@
         *{
           margin:0;
         }
+      }
+    }
+
+    .custom-input{
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+     justify-content: center;
+      * {
+        outline: none;
+        border: none;
       }
     }
 
