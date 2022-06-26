@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiInfo } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dropzone } from "../../components/Dropzone";
 import "./styles.scss";
@@ -10,10 +10,16 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
+  ListItemText,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
+  SelectChangeEvent,
+  OutlinedInput,
 } from "@mui/material";
 import { CustomEditor } from "../../components/CustomEditor";
 
@@ -25,8 +31,33 @@ interface PostData {
   imagePath?: string;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
+
 export function PostForm() {
   const [initialValues, setInitialValues] = useState<PostData>();
+  const [personName, setPersonName] = useState<string[]>([]);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const formikRef = useRef() as any;
@@ -73,6 +104,16 @@ export function PostForm() {
   function imgHandler(event: any) {
     formikRef?.current?.setFieldValue("image", event.target.files[0]);
   }
+
+  const handleSelectionChange = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
@@ -232,6 +273,34 @@ export function PostForm() {
                       <input placeholder="Adicione o texto da alternativa aqui..." />
                     </div>
                   </RadioGroup>
+                </FormControl>
+
+                <span className="obs">
+                  * Selecione a que será a resposta correta clicando sobre o
+                  marcador circular.
+                </span>
+
+                <div className="row-wrapper">
+                  <span>Competências BNCC:</span>
+                  <FiInfo color="var(--grey)" size={24} />
+                </div>
+
+                <FormControl sx={{ m: 1, width: 300 }} className="custom-input">
+                  <Select
+                    multiple
+                    value={personName}
+                    onChange={handleSelectionChange}
+                    input={<OutlinedInput />}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}
+                  >
+                    {names.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={personName.indexOf(name) > -1} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
 
                 <div className="buttons-container">
