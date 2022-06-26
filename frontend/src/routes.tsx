@@ -8,6 +8,7 @@ import { ForgotPassword } from './pages/ForgotPassword';
 import { Home } from './pages/Landing';
 import { ListContent } from './pages/ListContent';
 import { Login } from './pages/Login';
+import { PostForm } from './pages/PostForm';
 import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
 
@@ -25,6 +26,7 @@ export function Routes(){
              <Route path="/cursos/:coursename" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
+             <Route path="/cursos/adicionar" element={<PostForm></PostForm>} />
              <Route path="/cursos/atualizar/:coursename" element={<CreateCourse></CreateCourse>} />
              <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
              <Route path="/cursos/:coursename/:topicId/:contentname/atualizar" element={<CreateContent></CreateContent>} />
