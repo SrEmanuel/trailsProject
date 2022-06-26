@@ -12,7 +12,7 @@ export function CustomEditor({onChange}: Props) {
     <div className="editor">
       <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
-        onChange={onChange}
+        onEditorChange={onChange}
         init={{
           height: 500,
           menubar: true,
