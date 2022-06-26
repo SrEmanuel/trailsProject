@@ -1,13 +1,18 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef } from "react";
 
+interface Props{
+  onChange?: (...args: any) => void;
+}
 
-export function CustomEditor() {
+
+export function CustomEditor({onChange}: Props) {
   const editorRef = useRef() as any;
   return (
     <div className="editor">
       <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
+        onChange={onChange}
         init={{
           height: 500,
           menubar: true,
