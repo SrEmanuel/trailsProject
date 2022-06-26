@@ -20,13 +20,17 @@
   }
 }
 
-.post-form-container {
+#post-form-container{
+  max-width: calc(100vw - 106px);
+}
+
+.post-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   align-self: center;
-  width: 100%;
+  width: 90%;
 
   h1 {
     text-align: center;

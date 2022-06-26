@@ -139,11 +139,11 @@ export function PostForm() {
   }, [loadCurrentSubject, location]);
 
   return (
-    <div className="container">
+    <div className="container" id="post-form-container">
       <span className="goBack" onClick={() => navigate(-1)}>
         <FiArrowLeft size={24} color="var(--dark-green)" /> Voltar
       </span>
-      <main className="post-form-container">
+      <main className="post-form">
         <h1>Formulário de postagem</h1>
         {initialValues && (
           <Formik
