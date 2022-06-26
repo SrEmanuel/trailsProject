@@ -105,8 +105,8 @@ export function PostForm() {
     }
   }
 
-  function inputHandler(event: any) {
-    formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
+  function postHtmlContentInputHandler(value: string) {
+    formikRef?.current?.setFieldValue("htmlContent", value);
   }
 
   function imgHandler(event: any) {
@@ -225,7 +225,7 @@ export function PostForm() {
                   mídias de sua preferência.
                 </span>
 
-                <CustomEditor onChange={inputHandler} />
+                <CustomEditor onChange={postHtmlContentInputHandler} />
                 {errors.htmlContent && touched.htmlContent && (
                   <p className="error text">{errors.htmlContent}</p>
                 )}
