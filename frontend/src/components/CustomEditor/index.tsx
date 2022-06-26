@@ -12,7 +12,7 @@ export function CustomEditor() {
           height: 500,
           menubar: true,
           plugins: [
-            "advlist autolink lists link image imagetools charmap print preview anchor",
+            "advlist autolink lists link image charmap print preview anchor",
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media image table paste code help wordcount",
           ],
