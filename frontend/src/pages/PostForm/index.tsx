@@ -300,7 +300,7 @@ export function PostForm() {
 
                 <div className="row-wrapper">
                   <span>Competências BNCC:</span>
-                  <FiInfo color="var(--grey)" size={24} />
+                  <FiInfo color="var(--grey)" size={30} />
                 </div>
 
                 <FormControl sx={{ m: 1, width: 300 }} className="custom-input">
@@ -322,7 +322,7 @@ export function PostForm() {
                 </FormControl>
 
                 <button className="add-question">
-                  <FiPlus color="var(--dark-purple)" size={24} />
+                  <FiPlus color="var(--dark-purple)" size={30} />
                   Adicionar exercício
                   </button>
 
