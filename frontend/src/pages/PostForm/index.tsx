@@ -66,9 +66,9 @@ export function PostForm() {
     }
   }
 
-  function inputHandler(event: any) {
+  /*function inputHandler(event: any) {
     formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
-  }
+  }*/
 
   function imgHandler(event: any) {
     formikRef?.current?.setFieldValue("image", event.target.files[0]);
@@ -188,31 +188,49 @@ export function PostForm() {
                     value={values.grade}
                     onChange={handleChange}
                   >
-                    <FormControlLabel
-                      value="a"
-                      control={<Radio />}
-                      label={<input placeholder="Digite o texto da alternativa aqui..."/>}
-                    />
-                    <FormControlLabel
-                      value="b"
-                      control={<Radio />}
-                      label={<input placeholder="Digite o texto da alternativa aqui..."/>}
-                    />
-                    <FormControlLabel
-                      value="c"
-                      control={<Radio />}
-                      label={<input placeholder="Digite o texto da alternativa aqui..."/>}
-                    />
-                    <FormControlLabel
-                      value="d"
-                      control={<Radio />}
-                      label={<input placeholder="Digite o texto da alternativa aqui..."/>}
-                    />
-                    <FormControlLabel
-                      value="e"
-                      control={<Radio />}
-                      label={<input placeholder="Digite o texto da alternativa aqui..."/>}
-                    />
+                    <div className="radio-wrapper">
+                      <FormControlLabel
+                        value="A"
+                        control={<Radio />}
+                        label={<div></div>}
+                      />
+                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                    </div>
+
+                    <div className="radio-wrapper">
+                      <FormControlLabel
+                        value="B"
+                        control={<Radio />}
+                        label={<div></div>}
+                      />
+                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                    </div>
+
+                    <div className="radio-wrapper">
+                      <FormControlLabel
+                        value="C"
+                        control={<Radio />}
+                        label={<div></div>}
+                      />
+                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                    </div>
+                    <div className="radio-wrapper">
+                      <FormControlLabel
+                        value="D"
+                        control={<Radio />}
+                        label={<div></div>}
+                      />
+                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                    </div>
+
+                    <div className="radio-wrapper">
+                      <FormControlLabel
+                        value="E"
+                        control={<Radio />}
+                        label={<div></div>}
+                      />
+                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                    </div>
                   </RadioGroup>
                 </FormControl>
 
