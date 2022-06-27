@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dropzone } from "../../components/Dropzone";
 import "./styles.scss";
 import { Formik } from "formik";
-import { NewContentSchema } from "../../schemas/newcontent.schema";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
@@ -22,6 +21,14 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { CustomEditor } from "../../components/CustomEditor";
+import { IQuestion } from "../../interfaces/question";
+import { PostSchema } from "../../schemas/post.schema";
+
+interface IQuestionPayload{
+  id: string;
+  operation: string;
+  data?: IQuestion
+}
 
 interface PostData {
   name: string;
@@ -29,6 +36,7 @@ interface PostData {
   image?: File | string;
   htmlContent?: string;
   imagePath?: string;
+  questions?: IQuestionPayload[]
 }
 
 const ITEM_HEIGHT = 48;
@@ -97,9 +105,9 @@ export function PostForm() {
     }
   }
 
-  /*function inputHandler(event: any) {
-    formikRef?.current?.setFieldValue("htmlContent", event.editor.getData());
-  }*/
+  function postHtmlContentInputHandler(value: string) {
+    formikRef?.current?.setFieldValue("htmlContent", value);
+  }
 
   function imgHandler(event: any) {
     formikRef?.current?.setFieldValue("image", event.target.files[0]);
@@ -149,9 +157,9 @@ export function PostForm() {
           <Formik
             innerRef={formikRef}
             initialValues={initialValues}
-            validationSchema={NewContentSchema}
+            validationSchema={PostSchema}
             enableReinitialize
-            onSubmit={(values) => handleSubmit(values)}
+            onSubmit={(values) => console.log(values)}
           >
             {({ handleSubmit, handleChange, errors, touched, values }) => (
               <form>
@@ -163,7 +171,7 @@ export function PostForm() {
                   placeholder="Nome da sua postagem..."
                 />
                 {errors.name && touched.name && (
-                  <span className="error text">{errors.name}</span>
+                  <p className="error text">{errors.name}</p>
                 )}
 
                 <span>Para qual série é recomendada?</span>
@@ -198,6 +206,10 @@ export function PostForm() {
                   </RadioGroup>
                 </FormControl>
 
+                {errors.grade && touched.grade && (
+                  <p className="error text">{errors.grade}</p>
+                )}
+
                 <span>Que tal adicionar uma imagem de capa?</span>
 
                 <Dropzone
@@ -205,7 +217,7 @@ export function PostForm() {
                   preview={initialValues.imagePath}
                 />
                 {errors.image && touched.image && (
-                  <span className="error text">{errors.image}</span>
+                  <p className="error text">{errors.image}</p>
                 )}
 
                 <span>
@@ -213,7 +225,10 @@ export function PostForm() {
                   mídias de sua preferência.
                 </span>
 
-                <CustomEditor />
+                <CustomEditor onChange={postHtmlContentInputHandler} />
+                {errors.htmlContent && touched.htmlContent && (
+                  <p className="error text">{errors.htmlContent}</p>
+                )}
 
                 <span>Adicione exercicios ao final do conteúdo.</span>
 
@@ -274,6 +289,9 @@ export function PostForm() {
                     </div>
                   </RadioGroup>
                 </FormControl>
+                {errors.questions && touched.questions && (
+                  <p className="error text">{errors.questions}</p>
+                )}
 
                 <span className="obs">
                   * Selecione a que será a resposta correta clicando sobre o
@@ -282,7 +300,7 @@ export function PostForm() {
 
                 <div className="row-wrapper">
                   <span>Competências BNCC:</span>
-                  <FiInfo color="var(--grey)" size={24} />
+                  <FiInfo color="var(--grey)" size={30} />
                 </div>
 
                 <FormControl sx={{ m: 1, width: 300 }} className="custom-input">
@@ -304,7 +322,7 @@ export function PostForm() {
                 </FormControl>
 
                 <button className="add-question">
-                  <FiPlus color="var(--dark-purple)" size={24} />
+                  <FiPlus color="var(--dark-purple)" size={30} />
                   Adicionar exercício
                   </button>
 
