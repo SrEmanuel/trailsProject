@@ -41,25 +41,27 @@ public class UserService {
     @Autowired
     private UserCourseService userCourseService;
 
-
+    @Lazy
+    @Autowired
+    private StudentCompetenceService studentCompetenceService;
 
     public List<User> findAll(){
         return repository.findAll();
     }
 
     protected User findById(Integer id){
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return user;
     }
 
-    public User findByIdAndVerify(Integer id){
+    public UserSSDTO findByIdAndVerify(Integer id){
         UserSS user = authenticated();
 
         if(user==null || !user.hasRole(UserProfiles.ADMIN) && !id.equals(user.getId())){
             throw new AuthorizationException("Acesso negado!");
         }
 
-        Optional<User> obj =  repository.findById(id);
-        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+        return convertUsertoUserSS(findById(id));
     }
 
     public User findBySession(){
@@ -191,21 +193,21 @@ public class UserService {
         repository.flush();
     }
 
-    public UserSS updateEmail(Integer id, EmailDTO obj) {
+    public UserSSDTO updateEmail(Integer id, EmailDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setEmail(obj.getEmail());
         return convertUsertoUserSS(save(user));
     }
 
-    public UserSS updateName(Integer id, UserNameDTO obj) {
+    public UserSSDTO updateName(Integer id, UserNameDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setName(obj.getName());
         return convertUsertoUserSS(save(user));
     }
 
-    public UserSS updatePassword(Integer id, UserPasswordDTO obj) {
+    public UserSSDTO updatePassword(Integer id, UserPasswordDTO obj) {
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         if(!pe.matches(obj.getOldPassword(), user.getPassword()))
@@ -219,7 +221,7 @@ public class UserService {
         return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus(), user.getImagePath());
     }
 
-    public UserSS insertImage(MultipartFile multipartFile, Integer id){
+    public UserSSDTO insertImage(MultipartFile multipartFile, Integer id){
         verifyUpdateInformationPermission(id);
         User user = findById(id);
         user.setImage(staticFileService.update(multipartFile, user.getImageName()));

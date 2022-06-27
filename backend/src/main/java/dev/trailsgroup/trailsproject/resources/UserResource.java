@@ -38,8 +38,8 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Integer id){
-        User obj = service.findByIdAndVerify(id);
+    public ResponseEntity<UserSSDTO> findById(@PathVariable Integer id){
+        UserSSDTO obj = service.findByIdAndVerify(id);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -74,19 +74,19 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}/update/email")
-    public ResponseEntity<UserSS> updateEmail(@PathVariable Integer id, @RequestBody @Valid EmailDTO email){
-        UserSS obj = service.updateEmail(id, email);
+    public ResponseEntity<UserSSDTO> updateEmail(@PathVariable Integer id, @RequestBody @Valid EmailDTO email){
+        UserSSDTO obj = service.updateEmail(id, email);
         return ResponseEntity.ok().body(obj);
     }
     @PutMapping(value = "/{id}/update/name")
-    public ResponseEntity<UserSS> updateName(@PathVariable Integer id, @RequestBody @Valid UserNameDTO nameDTO){
-        UserSS obj = service.updateName(id, nameDTO);
+    public ResponseEntity<UserSSDTO> updateName(@PathVariable Integer id, @RequestBody @Valid UserNameDTO nameDTO){
+        UserSSDTO obj = service.updateName(id, nameDTO);
         return ResponseEntity.ok().body(obj);
     }
 
     @PutMapping(value = "/{id}/update/password")
-    public ResponseEntity<UserSS> updateName(@PathVariable Integer id, @RequestBody @Valid UserPasswordDTO userPasswordDTO){
-        UserSS obj = service.updatePassword(id, userPasswordDTO);
+    public ResponseEntity<UserSSDTO> updateName(@PathVariable Integer id, @RequestBody @Valid UserPasswordDTO userPasswordDTO){
+        UserSSDTO obj = service.updatePassword(id, userPasswordDTO);
         return ResponseEntity.ok().body(obj);
     }
 
@@ -97,13 +97,12 @@ public class UserResource {
 
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping(value = "/{id}/add-image")
-    public ResponseEntity<UserSS> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
-        UserSS obj = service.insertImage(file, id);
+    public ResponseEntity<UserSSDTO> insertImage(@RequestPart(value = "image") MultipartFile file, @PathVariable Integer id) {
+        UserSSDTO obj = service.insertImage(file, id);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
-
 
     @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "/me")
