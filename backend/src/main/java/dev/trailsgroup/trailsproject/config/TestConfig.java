@@ -35,6 +35,19 @@ public class TestConfig implements CommandLineRunner {
         private TopicRepository topicRepository;
 
         @Autowired
+        private CompetenceRepository competenceRepository;
+
+        @Autowired
+        private StudentCompetenceRepository studentCompetenceRepository;
+
+        @Autowired
+        private QuestionCompetenceRepository questionCompetenceRepository;
+
+        @Autowired
+        private QuestionRepository questionRepository;
+
+
+        @Autowired
         private SubjectRepository subjectRepository;
 
         @Autowired
@@ -128,6 +141,37 @@ public class TestConfig implements CommandLineRunner {
                 ProfessorCourse us10 = new ProfessorCourse(c6, u5);
 
                 professorCourseRepository.saveAll(Arrays.asList(us2, us3, us4, us5, us6, us7, us8, us9, us10));
+
+                Competence comp1 = new Competence(null, "1test1", "teste2");
+                Competence comp2 = new Competence(null, "2test1", "teste2");
+                Competence comp3 = new Competence(null, "3test1", "teste2");
+                Competence comp4 = new Competence(null, "4test1", "teste2");
+                Competence comp5 = new Competence(null, "5test1", "teste2");
+
+                competenceRepository.saveAll(Arrays.asList(comp1, comp2, comp3, comp4, comp5));
+                competenceRepository.flush();
+
+                Question question1 = new Question(null, s1, "dada", "D", "as", "as","as", "as","as");
+                Question question2 = new Question(null, s1, "dada", "D", "as", "as","as", "as","as");
+                Question question3 = new Question(null, s2, "dada", "D", "as", "as","as", "as","as");
+                Question question4 = new Question(null, s3, "dada", "D", "as", "as","as", "as","as");
+                Question question5 = new Question(null, s4, "dada", "D", "as", "as","as", "as","as");
+
+                questionRepository.saveAll(Arrays.asList(question1, question2, question3, question4, question5));
+                questionRepository.flush();
+
+                QuestionCompetence qC1 = new QuestionCompetence(null, question1, comp1);
+                QuestionCompetence qC2 = new QuestionCompetence(null, question1, comp2);
+                QuestionCompetence qC3 = new QuestionCompetence(null, question1, comp3);
+                QuestionCompetence qC4 = new QuestionCompetence(null, question2, comp2);
+                QuestionCompetence qC5 = new QuestionCompetence(null, question2, comp3);
+                QuestionCompetence qC6 = new QuestionCompetence(null, question3, comp5);
+                QuestionCompetence qC7 = new QuestionCompetence(null, question4, comp2);
+                QuestionCompetence qC8 = new QuestionCompetence(null, question5, comp3);
+                QuestionCompetence qC9 = new QuestionCompetence(null, question2, comp5);
+
+                questionCompetenceRepository.saveAll(Arrays.asList(qC1,qC2,qC3,qC4,qC5,qC6, qC7, qC8, qC9));
+                questionCompetenceRepository.flush();
         }
 
 }
