@@ -37,6 +37,13 @@ public class Competence {
 
     }
 
+    public Competence(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+
     public Integer getId() {
         return id;
     }
@@ -57,21 +64,7 @@ public class Competence {
         this.description = description;
     }
 
-    /*public Set<StudentCompetence> getStudents() {
-        return students;
-    }
 
-    public void setStudents(Set<StudentCompetence> students) {
-        this.students = students;
-    }
-
-    public Set<QuestionCompetence> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<QuestionCompetence> questions) {
-        this.questions = questions;
-    }*/
 
     @Override
     public boolean equals(Object o) {

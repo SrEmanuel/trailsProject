@@ -52,4 +52,12 @@ public class CompetenceService {
             throw new DatabaseException(e.getMessage());
         }
     }
+
+    public Competence update(Integer id, Competence competence) {
+        Competence bdCompetence = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso "+ id + " não encontrado"));
+
+        bdCompetence.setName(competence.getName());
+        bdCompetence.setDescription(competence.getDescription());
+        return save(bdCompetence);
+    }
 }
