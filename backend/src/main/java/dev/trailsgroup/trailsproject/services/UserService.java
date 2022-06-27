@@ -217,8 +217,11 @@ public class UserService {
         return convertUsertoUserSS(save(user));
     }
 
-    private UserSS convertUsertoUserSS(User user ){
-        return new UserSS(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus(), user.getImagePath());
+    private UserSSDTO convertUsertoUserSS(User user ){
+        List<CompetencePointsDTO> competencePointsDTO = studentCompetenceService.getUserPoints(user);
+        UserSSDTO userSSDTO = new UserSSDTO(user.getId(), user.getEmail(), user.getName(), "xxxxxx", user.getProfiles(), user.getStatus(), user.getImagePath());
+        userSSDTO.setCompetencePoints(competencePointsDTO);
+        return userSSDTO;
     }
 
     public UserSSDTO insertImage(MultipartFile multipartFile, Integer id){
