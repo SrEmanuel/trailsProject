@@ -64,6 +64,7 @@ public class QuestionResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "/{id}/verifyAnswer")
     public ResponseEntity<OutputQuestionAnswerDTO> verifyAnswer(@PathVariable Integer id,
                                                                 @Valid @RequestBody InputQuestionAnswerDTO answerDTO){

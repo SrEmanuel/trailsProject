@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,5 +64,19 @@ public class QuestionCompetenceService {
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    public List<Competence> getCompetences(Question question){
+        QuestionCompetence questionCompetence = new QuestionCompetence();
+        questionCompetence.setQuestion(question);
+        List<QuestionCompetence> questionCompetenceList = repository.findAll(Example.of(questionCompetence));
+
+        List<Competence> competences = new ArrayList<>();
+        questionCompetenceList.forEach(x -> competences.add(x.getCompetence()));
+        return competences;
+    }
+
+    public long countExample(Example<QuestionCompetence> of){
+        return repository.count(of);
     }
 }

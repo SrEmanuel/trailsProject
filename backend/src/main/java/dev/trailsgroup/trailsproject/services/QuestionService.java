@@ -11,6 +11,7 @@ import dev.trailsgroup.trailsproject.repositories.QuestionRepository;
 import dev.trailsgroup.trailsproject.services.exceptions.DatabaseException;
 import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,10 @@ public class QuestionService {
 
     @Autowired
     SubjectService subjectService;
+
+    @Lazy
+    @Autowired
+    StudentCompetenceService studentCompetenceService;
 
     public Page<Question> findAll(Pageable pageable){
         return repository.findAll(pageable);
@@ -93,6 +98,7 @@ public class QuestionService {
         outputAnswerDTO.setCorrectAnswer(question.getCorrect());
         if(question.getCorrect().equals(inputAnswerDTO.getAnswer().toUpperCase())){
             outputAnswerDTO.setIsCorrect(true);
+            studentCompetenceService.setLoggedUserPoint(question);
             return outputAnswerDTO;
         }else{
             outputAnswerDTO.setIsCorrect(false);
@@ -143,9 +149,6 @@ public class QuestionService {
                         }
                     }
                 }
-
-
-
             }
         }
     }
