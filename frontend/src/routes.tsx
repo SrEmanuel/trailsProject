@@ -26,8 +26,8 @@ export function Routes(){
              <Route path="/cursos/:coursename" element={<ListContent></ListContent>} />
              <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
-             <Route path="/cursos/adicionar" element={<PostForm></PostForm>} />
              <Route path="/cursos/atualizar/:coursename" element={<CreateCourse></CreateCourse>} />
+             <Route path="/cursos/:coursename/:topicid/adicionar" element={<PostForm></PostForm>} />
              <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
              <Route path="/cursos/:coursename/:topicId/:contentname/atualizar" element={<CreateContent></CreateContent>} />
              <Route path="*" element={<PageNotFound></PageNotFound>} />
