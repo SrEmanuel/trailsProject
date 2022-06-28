@@ -85,7 +85,7 @@ export function PostForm() {
     try {
       const image = values.image as File;
       delete values.image;
-      const subject = { ...values, topicId: params.topicId, position: 2 };
+      const subject = { ...values, topicId: params.topicid, position: 2 };
       const data = new FormData();
       data.append("image", image);
 
@@ -159,7 +159,7 @@ export function PostForm() {
             initialValues={initialValues}
             validationSchema={PostSchema}
             enableReinitialize
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values) => handleSubmit(values)}
           >
             {({ handleSubmit, handleChange, errors, touched, values }) => (
               <form>
