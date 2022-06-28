@@ -1,6 +1,7 @@
 package dev.trailsgroup.trailsproject.dto;
 
 import dev.trailsgroup.trailsproject.entities.ProfessorSubject;
+import dev.trailsgroup.trailsproject.entities.Question;
 import dev.trailsgroup.trailsproject.entities.Subject;
 
 import java.time.Instant;
@@ -27,6 +28,8 @@ public class OutputSubjectDTO {
 
     private List<ProfessorSubject> authors = new ArrayList<>();
 
+    private List<Question> questions = new ArrayList<>();
+
     private String linkName;
 
     private String imagePath;
@@ -48,6 +51,15 @@ public class OutputSubjectDTO {
         this.authors = subject.getAuthors();
         this.linkName = subject.getLinkName();
         this.imagePath = subject.getImagePath();
+        this.questions = subject.getQuestions();
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     public Integer getId() {

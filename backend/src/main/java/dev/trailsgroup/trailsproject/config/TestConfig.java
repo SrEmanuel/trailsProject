@@ -170,7 +170,7 @@ public class TestConfig implements CommandLineRunner {
                 QuestionCompetence qC8 = new QuestionCompetence(null, question5, comp3);
                 QuestionCompetence qC9 = new QuestionCompetence(null, question2, comp5);
 
-                questionCompetenceRepository.saveAll(Arrays.asList(qC1,qC2,qC3,qC4,qC5,qC6, qC7, qC8, qC9));
+                //questionCompetenceRepository.saveAll(Arrays.asList(qC1,qC2,qC3,qC4,qC5,qC6, qC7, qC8, qC9));
                 questionCompetenceRepository.flush();
         }
 
