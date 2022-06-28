@@ -45,7 +45,7 @@ public class UserService {
     @Autowired
     private StudentCompetenceService studentCompetenceService;
 
-    public List<User> findAll(){
+    public List<User> findAll(Pageable pageable){
         return repository.findAll();
     }
 
@@ -68,6 +68,7 @@ public class UserService {
         return repository.findById(authenticated().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Houve um problema!"));
     }
+
 
     public static UserSS authenticated(){
         try {

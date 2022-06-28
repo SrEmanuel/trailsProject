@@ -1,6 +1,11 @@
 package dev.trailsgroup.trailsproject.dto;
 
+import dev.trailsgroup.trailsproject.entities.Competence;
+import dev.trailsgroup.trailsproject.entities.QuestionCompetence;
+
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InputQuestionOnSubjectDTO {
     @NotEmpty(message = "O ID do Question é obrigatório!")
@@ -8,6 +13,8 @@ public class InputQuestionOnSubjectDTO {
 
     @NotEmpty(message = "A operação a ser realizada é obrigatória")
     private String operation;
+
+    private Set<CompetenceOnQuestionDTO> competences =  new HashSet<>();
 
     private String htmlContent;
 
@@ -95,5 +102,13 @@ public class InputQuestionOnSubjectDTO {
 
     public void setAnswerE(String answerE) {
         this.answerE = answerE;
+    }
+
+    public Set<CompetenceOnQuestionDTO> getCompetences() {
+        return competences;
+    }
+
+    public void setCompetences(Set<CompetenceOnQuestionDTO> competences) {
+        this.competences = competences;
     }
 }

@@ -36,6 +36,10 @@ public class QuestionService {
     @Autowired
     StudentCompetenceService studentCompetenceService;
 
+    @Lazy
+    @Autowired
+    QuestionCompetenceService questionCompetenceService;
+
     public Page<Question> findAll(Pageable pageable){
         return repository.findAll(pageable);
     }
@@ -75,6 +79,8 @@ public class QuestionService {
     public Question update(Integer id, QuestionDTO obj){
         Question questionDatabase = repository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Identificador '" + id + "' não foi encontrado no sistema"));
+
+
 
         //verifyUserPermission(topicDatabase);
         questionUpdateInformation(questionDatabase, obj);
@@ -117,7 +123,7 @@ public class QuestionService {
         if(questions != null) {
             questions.forEach(x -> {
                 if(x.getOperation().equalsIgnoreCase("UPDATE") || x.getOperation().equalsIgnoreCase("DELETE")) {
-                    if (!Objects.equals(findById(x.getId()).getId(), subject.getId())) {
+                    if (!Objects.equals(findById(x.getId()).getSubject().getId(), subject.getId())) {
                         throw new DatabaseException("Você tentou modificar uma pergunta que não faz parte desse conteúdo. Operação cancelada.");
                     }
                 }
@@ -129,8 +135,11 @@ public class QuestionService {
                     if (x.getOperation().equalsIgnoreCase("UPDATE")) {
                         if ((x.getId() != null) && (subject.getLinkName() != null) && (x.getHtmlContent() != null) && (x.getCorrect() != null)
                                 && (x.getAnswerA() != null) && (x.getAnswerB() != null) && (x.getAnswerC() != null) && x.getAnswerD() != null && x.getAnswerE() != null) {
-                            update(x.getId(), new QuestionDTO(x.getId(), subject.getLinkName(), x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
+
+                            Question question = update(x.getId(), new QuestionDTO(x.getId(), subject.getLinkName(), x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
                                     x.getAnswerB(), x.getAnswerC(), x.getAnswerD(), x.getAnswerE()));
+                            questionCompetenceService.updateRelations(question, x.getCompetences());
+
                         } else {
                             throw new DatabaseException("Você tentou realizar uma atualização de salvamento de perguntas entretanto não foram informados" +
                                     "todos os dados obrigatórios. Operação cancelada.");
@@ -140,8 +149,12 @@ public class QuestionService {
                             if((subject.getLinkName() != null) && (x.getHtmlContent() != null) && (x.getCorrect() != null)
                                     && (x.getAnswerA() != null) && (x.getAnswerB() != null) &&
                                     (x.getAnswerC() != null) && x.getAnswerD() != null && x.getAnswerE() != null) {
-                                save(new Question(null, subject, x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
+
+
+                                Question question = save(new Question(null, subject, x.getHtmlContent(), x.getCorrect(), x.getAnswerA(),
                                         x.getAnswerB(), x.getAnswerC(), x.getAnswerD(), x.getAnswerE()));
+                                questionCompetenceService.updateRelations(question, x.getCompetences());
+
                             }else{
                                 throw new DatabaseException("Você tentou realizar uma atualização de criação de pergunta entretanto não foram informados" +
                                         "todos os dados obrigatórios. Operação cancelada.");

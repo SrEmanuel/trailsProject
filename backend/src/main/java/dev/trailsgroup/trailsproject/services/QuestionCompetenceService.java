@@ -14,9 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -46,7 +44,10 @@ public class QuestionCompetenceService {
         }catch (IllegalArgumentException | NullPointerException e){
             throw new DatabaseException(e.getMessage());
         }
+    }
 
+    private QuestionCompetence internalSave(QuestionCompetence questionCompetence){
+        return repository.save(questionCompetence);
     }
 
     public QuestionCompetence save(Integer questionId, QuestionCompetenceDTO questionCompetence){
@@ -54,6 +55,49 @@ public class QuestionCompetenceService {
         Competence competence = competenceService.findById(questionId);
         QuestionCompetence questionCompetenceSave = new QuestionCompetence(null, question, competence);
         return repository.save(questionCompetenceSave);
+    }
+
+    public QuestionCompetence findOne(Example<QuestionCompetence> of){
+        return repository.findOne(of).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+    }
+    
+    public void updateRelations(Question question, Set<CompetenceOnQuestionDTO> competences) {
+
+        //This for is a method to verify if the competences informed are valid;
+        Set<Competence> dbCompetences = new HashSet<>();
+        competences.forEach(x -> {
+            dbCompetences.add(competenceService.findById(x.getId()));
+        });
+
+        competences.forEach(x -> {
+            if (x.getOperation().equalsIgnoreCase("ADD")) {
+                QuestionCompetence questionCompetence = new QuestionCompetence(null, question, competenceService.findById(x.getId()));
+                internalSave(questionCompetence);
+            }
+
+            if (x.getOperation().equalsIgnoreCase("REMOVE")) {
+                Competence competence = competenceService.findById(x.getId());
+                QuestionCompetence questionCompetence = new QuestionCompetence();
+                questionCompetence.setCompetence(competence);
+                questionCompetence.setQuestion(question);
+                delete(findOne(Example.of(questionCompetence)).getId());
+            }
+        });
+
+    }
+
+    public List<QuestionCompetence> saveAll(Integer questionId, List<QuestionCompetenceDTO> questionCompetence){
+        Competence competence = competenceService.findById(questionId);
+
+        List<QuestionCompetence> questionCompetenceList = new ArrayList<>();
+
+        questionCompetence.forEach(x -> {
+            Question question = questionService.findById(x.getCompetenceId());
+            QuestionCompetence questionCompetenceSave = new QuestionCompetence(null, question, competence);
+            questionCompetenceList.add(questionCompetenceSave);
+        });
+
+        return repository.saveAll(questionCompetenceList);
     }
 
     public void delete(Integer id){
@@ -65,6 +109,8 @@ public class QuestionCompetenceService {
             throw new DatabaseException(e.getMessage());
         }
     }
+    
+    
 
     public List<Competence> getCompetences(Question question){
         QuestionCompetence questionCompetence = new QuestionCompetence();
