@@ -141,6 +141,13 @@ body {
     width: 100%;
   }
 
+  .column-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
   .custom-placeholder{
     border: 2px dashed var(--grey);
   }
