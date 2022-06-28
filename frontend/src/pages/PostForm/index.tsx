@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiArrowLeft, FiInfo, FiPlus } from "react-icons/fi";
+import { FiArrowLeft, FiInfo } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dropzone } from "../../components/Dropzone";
 import "./styles.scss";
@@ -24,10 +24,10 @@ import { CustomEditor } from "../../components/CustomEditor";
 import { IQuestion } from "../../interfaces/question";
 import { PostSchema } from "../../schemas/post.schema";
 
-interface IQuestionPayload{
+interface IQuestionPayload {
   id: string;
   operation: string;
-  data?: IQuestion
+  data?: IQuestion;
 }
 
 interface PostData {
@@ -36,7 +36,13 @@ interface PostData {
   image?: File | string;
   htmlContent?: string;
   imagePath?: string;
-  questions?: IQuestionPayload[]
+  QuestionHtmlContent: string;
+  correct: string;
+  answerA: string;
+  answerB: string;
+  answerC: string;
+  answerD: string;
+  answerE: string;
 }
 
 const ITEM_HEIGHT = 48;
@@ -51,16 +57,16 @@ const MenuProps = {
 };
 
 const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
 ];
 
 export function PostForm() {
@@ -85,7 +91,24 @@ export function PostForm() {
     try {
       const image = values.image as File;
       delete values.image;
-      const subject = { ...values, topicId: params.topicid, position: 2 };
+
+      const subject = {
+        name: values.name,
+        grade: values.grade,
+        htmlContent: values.htmlContent,
+        topicId: params.topicid,
+        position: 2,
+        questions: [ {
+          htmlContent: values.QuestionHtmlContent,
+          operation: 'CREATE',
+          answerA: values.answerA,
+          answerB: values.answerB,
+          answerC: values.answerC,
+          answerD: values.answerD,
+          answerE: values.answerE,
+          correct: values.correct,
+        }],
+      };
       const data = new FormData();
       data.append("image", image);
 
@@ -99,7 +122,7 @@ export function PostForm() {
           location.pathname.includes("atualizar") ? "atualizado" : "criado"
         } com sucesso!`
       );
-      navigate(-1);
+      //navigate(-1);
     } catch (error: any) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -109,17 +132,23 @@ export function PostForm() {
     formikRef?.current?.setFieldValue("htmlContent", value);
   }
 
+  function QuestionHtmlContentInputHandler(value: string) {
+    formikRef?.current?.setFieldValue("QuestionHtmlContent", value);
+  }
+
   function imgHandler(event: any) {
     formikRef?.current?.setFieldValue("image", event.target.files[0]);
   }
 
-  const handleSelectionChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleSelectionChange = (
+    event: SelectChangeEvent<typeof personName>
+  ) => {
     const {
       target: { value },
     } = event;
     setPersonName(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
   };
 
@@ -142,6 +171,13 @@ export function PostForm() {
         name: "",
         image: "",
         htmlContent: "",
+        QuestionHtmlContent: "",
+        correct: "",
+        answerA: "",
+        answerB: "",
+        answerC: "",
+        answerD: "",
+        answerE: "",
       });
     }
   }, [loadCurrentSubject, location]);
@@ -230,18 +266,23 @@ export function PostForm() {
                   <p className="error text">{errors.htmlContent}</p>
                 )}
 
-                <span>Adicione exercicios ao final do conteúdo.</span>
+                <span>
+                  Adicione um exercico ao final do conteúdo (opcional) .
+                </span>
 
                 <span>Enunciado do exercicio:</span>
 
-                <CustomEditor />
+                <CustomEditor onChange={QuestionHtmlContentInputHandler} />
+                {errors.QuestionHtmlContent && touched.QuestionHtmlContent && (
+                  <p className="error text">{errors.QuestionHtmlContent}</p>
+                )}
 
                 <span>Alternativas</span>
 
                 <FormControl className="alternatives-radio-selection">
                   <RadioGroup
-                    name="grade"
-                    value={values.grade}
+                    name="correct"
+                    value={values.correct}
                     onChange={handleChange}
                   >
                     <div className="radio-wrapper">
@@ -250,7 +291,16 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          name="answerA"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerA && touched.answerA && (
+                          <p className="error text">{errors.answerA}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -259,7 +309,16 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          name="answerB"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerB && touched.answerB && (
+                          <p className="error text">{errors.answerB}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -268,7 +327,16 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          name="answerC"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerC && touched.answerC && (
+                          <p className="error text">{errors.answerC}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="radio-wrapper">
                       <FormControlLabel
@@ -276,7 +344,16 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          name="answerD"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerD && touched.answerD && (
+                          <p className="error text">{errors.answerD}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -285,13 +362,19 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          name="answerE"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerE && touched.answerE && (
+                          <p className="error text">{errors.answerE}</p>
+                        )}
+                      </div>
                     </div>
                   </RadioGroup>
                 </FormControl>
-                {errors.questions && touched.questions && (
-                  <p className="error text">{errors.questions}</p>
-                )}
 
                 <span className="obs">
                   * Selecione a que será a resposta correta clicando sobre o
@@ -320,11 +403,6 @@ export function PostForm() {
                     ))}
                   </Select>
                 </FormControl>
-
-                <button className="add-question">
-                  <FiPlus color="var(--dark-purple)" size={30} />
-                  Adicionar exercício
-                  </button>
 
                 <div className="buttons-container">
                   <button type="button" onClick={() => navigate(-1)}>
