@@ -49,7 +49,7 @@ public class UserSS implements UserDetails {
         return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
     }
 
-    public String getImage() {
+    public String getImagePath() {
         return image;
     }
 
