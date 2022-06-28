@@ -114,6 +114,9 @@ public class SubjectService {
 
             verifyUserPermission(savedSubject); //TODO verify that validation. Is that in the correct place?
             addProfessorName(savedSubject);
+
+            questionService.updateArray(obj.getQuestions(), savedSubject);
+
             return savedSubject;
         }catch(IllegalArgumentException | NullPointerException e){
             throw new DatabaseException(e.getMessage());
