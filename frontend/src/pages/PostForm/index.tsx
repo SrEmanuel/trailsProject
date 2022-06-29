@@ -21,14 +21,8 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { CustomEditor } from "../../components/CustomEditor";
-import { IQuestion } from "../../interfaces/question";
 import { PostSchema } from "../../schemas/post.schema";
-
-interface IQuestionPayload {
-  id: string;
-  operation: string;
-  data?: IQuestion;
-}
+import { ICompetence } from "../../interfaces/competence";
 
 interface PostData {
   name: string;
@@ -57,22 +51,10 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 export function PostForm() {
   const [initialValues, setInitialValues] = useState<PostData>();
-  const [personName, setPersonName] = useState<string[]>([]);
+  const [competences, setCompetences] = useState<ICompetence[]>();
+  const [selectedCompetences, setSelectedCompetences] = useState<string[]>([]);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const formikRef = useRef() as any;
@@ -88,11 +70,30 @@ export function PostForm() {
     }
   }, [handleClearUserDataFromStorage, navigate, params.contentname]);
 
+  const loadCompetences = useCallback(async () => {
+    try {
+      const response = await api.get("/competences");
+      console.log(response);
+      setCompetences(response.data.content);
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
+  }, [handleClearUserDataFromStorage, navigate]);
+
   async function handleSubmit(values: PostData) {
     try {
       const image = values.image as File;
       delete values.image;
 
+      const competencesPayload = competences
+        ?.filter((competence) => selectedCompetences.includes(competence.name))
+        .map((competence) => ({
+          id: competence.id,
+          operation: location.pathname.includes("atualizar")
+            ? "ADD"
+            : "CREATE",
+        }));
+      
       const subject = {
         name: values.name,
         grade: values.grade,
@@ -111,7 +112,8 @@ export function PostForm() {
             answerD: values.answerD,
             answerE: values.answerE,
             correct: values.correct,
-            id: values.id
+            id: values.id,
+            competences: competencesPayload
           },
         ],
       };
@@ -147,12 +149,12 @@ export function PostForm() {
   }
 
   const handleSelectionChange = (
-    event: SelectChangeEvent<typeof personName>
+    event: SelectChangeEvent<typeof selectedCompetences>
   ) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setSelectedCompetences(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -161,7 +163,6 @@ export function PostForm() {
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
-        console.log(subject);
         setInitialValues({
           htmlContent: subject.htmlContent,
           imagePath: subject.imagePath,
@@ -174,7 +175,7 @@ export function PostForm() {
           answerC: subject.questions[0].answerC,
           answerD: subject.questions[0].answerD,
           answerE: subject.questions[0].answerE,
-          id: subject.questions[0].id
+          id: subject.questions[0].id,
         });
         fetch(subject.imagePath).then(async (response) => {
           const blob = await response.blob();
@@ -200,7 +201,9 @@ export function PostForm() {
         answerE: "",
       });
     }
-  }, [loadCurrentSubject, location]);
+
+    loadCompetences();
+  }, [loadCompetences, loadCurrentSubject, location]);
 
   return (
     <div className="container" id="post-form-container">
@@ -420,16 +423,20 @@ export function PostForm() {
                 <FormControl sx={{ m: 1, width: 300 }} className="custom-input">
                   <Select
                     multiple
-                    value={personName}
+                    value={selectedCompetences}
                     onChange={handleSelectionChange}
                     input={<OutlinedInput />}
                     renderValue={(selected) => selected.join(", ")}
                     MenuProps={MenuProps}
                   >
-                    {names.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        <Checkbox checked={personName.indexOf(name) > -1} />
-                        <ListItemText primary={name} />
+                    {competences?.map((competence) => (
+                      <MenuItem key={competence.id} value={competence.name}>
+                        <Checkbox
+                          checked={selectedCompetences.includes(
+                            competence.name
+                          )}
+                        />
+                        <ListItemText primary={competence.name} />
                       </MenuItem>
                     ))}
                   </Select>
