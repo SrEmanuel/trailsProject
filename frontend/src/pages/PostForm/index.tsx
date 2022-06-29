@@ -43,6 +43,7 @@ interface PostData {
   answerC: string;
   answerD: string;
   answerE: string;
+  id?: string;
 }
 
 const ITEM_HEIGHT = 48;
@@ -110,6 +111,7 @@ export function PostForm() {
             answerD: values.answerD,
             answerE: values.answerE,
             correct: values.correct,
+            id: values.id
           },
         ],
       };
@@ -159,6 +161,7 @@ export function PostForm() {
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
+        console.log(subject);
         setInitialValues({
           htmlContent: subject.htmlContent,
           imagePath: subject.imagePath,
@@ -171,6 +174,7 @@ export function PostForm() {
           answerC: subject.questions[0].answerC,
           answerD: subject.questions[0].answerD,
           answerE: subject.questions[0].answerE,
+          id: subject.questions[0].id
         });
         fetch(subject.imagePath).then(async (response) => {
           const blob = await response.blob();
