@@ -131,8 +131,10 @@ public class Question {
         this.answerE = answerE;
     }
 
-    public Set<QuestionCompetence> getCompetences() {
-        return competences;
+    public Set<Competence> getCompetences() {
+        Set<Competence> competencesList = new HashSet<>();
+        competences.forEach(x -> competencesList.add(x.getCompetence()));
+        return competencesList;
     }
     @Override
     public boolean equals(Object o) {
