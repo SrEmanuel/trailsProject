@@ -98,16 +98,20 @@ export function PostForm() {
         htmlContent: values.htmlContent,
         topicId: params.topicid,
         position: 2,
-        questions: [ {
-          htmlContent: values.QuestionHtmlContent,
-          operation: 'CREATE',
-          answerA: values.answerA,
-          answerB: values.answerB,
-          answerC: values.answerC,
-          answerD: values.answerD,
-          answerE: values.answerE,
-          correct: values.correct,
-        }],
+        questions: [
+          {
+            htmlContent: values.QuestionHtmlContent,
+            operation: location.pathname.includes("atualizar")
+              ? "UPDATE"
+              : "CREATE",
+            answerA: values.answerA,
+            answerB: values.answerB,
+            answerC: values.answerC,
+            answerD: values.answerD,
+            answerE: values.answerE,
+            correct: values.correct,
+          },
+        ],
       };
       const data = new FormData();
       data.append("image", image);
@@ -122,7 +126,7 @@ export function PostForm() {
           location.pathname.includes("atualizar") ? "atualizado" : "criado"
         } com sucesso!`
       );
-      //navigate(-1);
+      navigate(-1);
     } catch (error: any) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
     }
@@ -155,7 +159,19 @@ export function PostForm() {
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
-        setInitialValues(subject);
+        setInitialValues({
+          htmlContent: subject.htmlContent,
+          imagePath: subject.imagePath,
+          name: subject.name,
+          grade: subject.grade,
+          QuestionHtmlContent: subject.questions[0].htmlContent,
+          correct: subject.questions[0].correct,
+          answerA: subject.questions[0].answerA,
+          answerB: subject.questions[0].answerB,
+          answerC: subject.questions[0].answerC,
+          answerD: subject.questions[0].answerD,
+          answerE: subject.questions[0].answerE,
+        });
         fetch(subject.imagePath).then(async (response) => {
           const blob = await response.blob();
           const file = new File(
@@ -169,7 +185,7 @@ export function PostForm() {
       setInitialValues({
         grade: "",
         name: "",
-        image: "",
+        imagePath: "",
         htmlContent: "",
         QuestionHtmlContent: "",
         correct: "",
@@ -220,19 +236,19 @@ export function PostForm() {
                     onChange={handleChange}
                   >
                     <FormControlLabel
-                      value="1º ano"
+                      value="1º Ano"
                       control={<Radio />}
-                      label="1º ano"
+                      label="1º Ano"
                     />
                     <FormControlLabel
-                      value="2º ano"
+                      value="2º Ano"
                       control={<Radio />}
-                      label="2º ano"
+                      label="2º Ano"
                     />
                     <FormControlLabel
-                      value="3º ano"
+                      value="3º Ano"
                       control={<Radio />}
-                      label="3º ano"
+                      label="3º Ano"
                     />
                     <FormControlLabel
                       value="outra"
@@ -261,7 +277,10 @@ export function PostForm() {
                   mídias de sua preferência.
                 </span>
 
-                <CustomEditor onChange={postHtmlContentInputHandler} />
+                <CustomEditor
+                  initialValue={values.htmlContent}
+                  onChange={postHtmlContentInputHandler}
+                />
                 {errors.htmlContent && touched.htmlContent && (
                   <p className="error text">{errors.htmlContent}</p>
                 )}
@@ -272,7 +291,10 @@ export function PostForm() {
 
                 <span>Enunciado do exercicio:</span>
 
-                <CustomEditor onChange={QuestionHtmlContentInputHandler} />
+                <CustomEditor
+                  initialValue={values.QuestionHtmlContent}
+                  onChange={QuestionHtmlContentInputHandler}
+                />
                 {errors.QuestionHtmlContent && touched.QuestionHtmlContent && (
                   <p className="error text">{errors.QuestionHtmlContent}</p>
                 )}
@@ -293,6 +315,7 @@ export function PostForm() {
                       />
                       <div className="column-wrapper">
                         <input
+                          value={values.answerA}
                           name="answerA"
                           onChange={handleChange}
                           placeholder="Adicione o texto da alternativa aqui..."
@@ -311,6 +334,7 @@ export function PostForm() {
                       />
                       <div className="column-wrapper">
                         <input
+                          value={values.answerB}
                           name="answerB"
                           onChange={handleChange}
                           placeholder="Adicione o texto da alternativa aqui..."
@@ -329,6 +353,7 @@ export function PostForm() {
                       />
                       <div className="column-wrapper">
                         <input
+                          value={values.answerC}
                           name="answerC"
                           onChange={handleChange}
                           placeholder="Adicione o texto da alternativa aqui..."
@@ -346,6 +371,7 @@ export function PostForm() {
                       />
                       <div className="column-wrapper">
                         <input
+                          value={values.answerD}
                           name="answerD"
                           onChange={handleChange}
                           placeholder="Adicione o texto da alternativa aqui..."
@@ -364,6 +390,7 @@ export function PostForm() {
                       />
                       <div className="column-wrapper">
                         <input
+                          value={values.answerE}
                           name="answerE"
                           onChange={handleChange}
                           placeholder="Adicione o texto da alternativa aqui..."
@@ -404,7 +431,7 @@ export function PostForm() {
                   </Select>
                 </FormControl>
 
-                <div className="buttons-container">
+                <div className="buttons-container btn-container">
                   <button type="button" onClick={() => navigate(-1)}>
                     Cancelar
                   </button>
