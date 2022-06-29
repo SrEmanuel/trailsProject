@@ -3,6 +3,7 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.entities.*;
 import dev.trailsgroup.trailsproject.repositories.ProfessorSubjectRepository;
 import dev.trailsgroup.trailsproject.repositories.StudentSubjectRepository;
+import dev.trailsgroup.trailsproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,21 @@ public class UserSubjectService {
     }
 
     public void saveStudent(StudentSubject studentSubject) {
-        studentSubjectRepository.save(studentSubject);
+        StudentSubject studentSubjectEx = new StudentSubject();
+        studentSubjectEx.setSubject(studentSubject.getSubject());
+        studentSubjectEx.setUser(studentSubject.getUser());
+
+        if(!studentSubjectRepository.exists(Example.of(studentSubjectEx))){
+            studentSubjectRepository.save(studentSubject);
+        }else{
+            StudentSubject studentSubjectDb = studentSubjectRepository.findBySubjectAndUser(studentSubject.getSubject(), studentSubject.getUser())
+                    .orElseThrow(() -> new ResourceNotFoundException("Recurso não encotrado na base StudentSubject"));
+            studentSubjectDb.setUser(studentSubject.getUser());
+            studentSubjectDb.setSubject(studentSubject.getSubject());
+            studentSubjectDb.setCompleted(studentSubject.isCompleted());
+            studentSubjectRepository.save(studentSubjectDb);
+        }
+
     }
 
     public StudentSubject findStudentSubject(Subject subject, User user) {
