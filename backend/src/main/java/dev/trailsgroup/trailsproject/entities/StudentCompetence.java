@@ -25,6 +25,10 @@ public class StudentCompetence {
     @JoinColumn(name = "competence_id", nullable = false)
     private Competence competence;
 
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
+
     @CreatedDate
     private Instant createdDate;
     @LastModifiedDate
