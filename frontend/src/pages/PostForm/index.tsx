@@ -55,6 +55,7 @@ export function PostForm() {
   const [initialValues, setInitialValues] = useState<PostData>();
   const [competences, setCompetences] = useState<ICompetence[]>();
   const [selectedCompetences, setSelectedCompetences] = useState<string[]>([]);
+  const [removedCompetences, setRemovedCompetences] = useState<string[]>([]);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const formikRef = useRef() as any;
@@ -73,7 +74,6 @@ export function PostForm() {
   const loadCompetences = useCallback(async () => {
     try {
       const response = await api.get("/competences");
-      console.log(response);
       setCompetences(response.data.content);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
@@ -93,6 +93,13 @@ export function PostForm() {
             ? "ADD"
             : "CREATE",
         }));
+
+      const deletedCompetencesPayloads = competences
+      ?.filter((competence) => removedCompetences.includes(competence.name))
+      .map((competence) => ({
+        id: competence.id,
+        operation: "REMOVE",
+      }));
       
       const subject = {
         name: values.name,
@@ -113,7 +120,7 @@ export function PostForm() {
             answerE: values.answerE,
             correct: values.correct,
             id: values.id,
-            competences: competencesPayload
+            competences: competencesPayload?.concat(deletedCompetencesPayloads || [])
           },
         ],
       };
@@ -154,6 +161,9 @@ export function PostForm() {
     const {
       target: { value },
     } = event;
+
+    const removedItem = selectedCompetences.filter( competence => !value.includes(competence) )
+    setRemovedCompetences([...removedCompetences, removedItem[0]]);
     setSelectedCompetences(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
@@ -185,6 +195,8 @@ export function PostForm() {
           );
           formikRef.current?.setFieldValue("image", file);
         });
+
+        setSelectedCompetences(subject.questions[0].competences.map((c:any) => c.name))
       });
     } else {
       setInitialValues({
