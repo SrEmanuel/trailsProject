@@ -60,6 +60,14 @@ public class StudentCompetence {
         return competence;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     public void setCompetence(Competence competence) {
         this.competence = competence;
     }
