@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiArrowLeft, FiInfo, FiPlus } from "react-icons/fi";
+import { FiArrowLeft, FiInfo } from "react-icons/fi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dropzone } from "../../components/Dropzone";
 import "./styles.scss";
@@ -21,14 +21,8 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { CustomEditor } from "../../components/CustomEditor";
-import { IQuestion } from "../../interfaces/question";
 import { PostSchema } from "../../schemas/post.schema";
-
-interface IQuestionPayload{
-  id: string;
-  operation: string;
-  data?: IQuestion
-}
+import { ICompetence } from "../../interfaces/competence";
 
 interface PostData {
   name: string;
@@ -36,7 +30,14 @@ interface PostData {
   image?: File | string;
   htmlContent?: string;
   imagePath?: string;
-  questions?: IQuestionPayload[]
+  QuestionHtmlContent: string;
+  correct: string;
+  answerA: string;
+  answerB: string;
+  answerC: string;
+  answerD: string;
+  answerE: string;
+  id?: string;
 }
 
 const ITEM_HEIGHT = 48;
@@ -50,22 +51,10 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
 export function PostForm() {
   const [initialValues, setInitialValues] = useState<PostData>();
-  const [personName, setPersonName] = useState<string[]>([]);
+  const [competences, setCompetences] = useState<ICompetence[]>();
+  const [selectedCompetences, setSelectedCompetences] = useState<string[]>([]);
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
   const formikRef = useRef() as any;
@@ -81,11 +70,53 @@ export function PostForm() {
     }
   }, [handleClearUserDataFromStorage, navigate, params.contentname]);
 
+  const loadCompetences = useCallback(async () => {
+    try {
+      const response = await api.get("/competences");
+      console.log(response);
+      setCompetences(response.data.content);
+    } catch (error) {
+      handleNotifyError(error, navigate, handleClearUserDataFromStorage);
+    }
+  }, [handleClearUserDataFromStorage, navigate]);
+
   async function handleSubmit(values: PostData) {
     try {
       const image = values.image as File;
       delete values.image;
-      const subject = { ...values, topicId: params.topicid, position: 2 };
+
+      const competencesPayload = competences
+        ?.filter((competence) => selectedCompetences.includes(competence.name))
+        .map((competence) => ({
+          id: competence.id,
+          operation: location.pathname.includes("atualizar")
+            ? "ADD"
+            : "CREATE",
+        }));
+      
+      const subject = {
+        name: values.name,
+        grade: values.grade,
+        htmlContent: values.htmlContent,
+        topicId: params.topicid,
+        position: 2,
+        questions: [
+          {
+            htmlContent: values.QuestionHtmlContent,
+            operation: location.pathname.includes("atualizar")
+              ? "UPDATE"
+              : "CREATE",
+            answerA: values.answerA,
+            answerB: values.answerB,
+            answerC: values.answerC,
+            answerD: values.answerD,
+            answerE: values.answerE,
+            correct: values.correct,
+            id: values.id,
+            competences: competencesPayload
+          },
+        ],
+      };
       const data = new FormData();
       data.append("image", image);
 
@@ -109,24 +140,43 @@ export function PostForm() {
     formikRef?.current?.setFieldValue("htmlContent", value);
   }
 
+  function QuestionHtmlContentInputHandler(value: string) {
+    formikRef?.current?.setFieldValue("QuestionHtmlContent", value);
+  }
+
   function imgHandler(event: any) {
     formikRef?.current?.setFieldValue("image", event.target.files[0]);
   }
 
-  const handleSelectionChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleSelectionChange = (
+    event: SelectChangeEvent<typeof selectedCompetences>
+  ) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setSelectedCompetences(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
   };
 
   useEffect(() => {
     if (location.pathname.includes("atualizar")) {
       loadCurrentSubject().then((subject) => {
-        setInitialValues(subject);
+        setInitialValues({
+          htmlContent: subject.htmlContent,
+          imagePath: subject.imagePath,
+          name: subject.name,
+          grade: subject.grade,
+          QuestionHtmlContent: subject.questions[0].htmlContent,
+          correct: subject.questions[0].correct,
+          answerA: subject.questions[0].answerA,
+          answerB: subject.questions[0].answerB,
+          answerC: subject.questions[0].answerC,
+          answerD: subject.questions[0].answerD,
+          answerE: subject.questions[0].answerE,
+          id: subject.questions[0].id,
+        });
         fetch(subject.imagePath).then(async (response) => {
           const blob = await response.blob();
           const file = new File(
@@ -140,11 +190,20 @@ export function PostForm() {
       setInitialValues({
         grade: "",
         name: "",
-        image: "",
+        imagePath: "",
         htmlContent: "",
+        QuestionHtmlContent: "",
+        correct: "",
+        answerA: "",
+        answerB: "",
+        answerC: "",
+        answerD: "",
+        answerE: "",
       });
     }
-  }, [loadCurrentSubject, location]);
+
+    loadCompetences();
+  }, [loadCompetences, loadCurrentSubject, location]);
 
   return (
     <div className="container" id="post-form-container">
@@ -184,19 +243,19 @@ export function PostForm() {
                     onChange={handleChange}
                   >
                     <FormControlLabel
-                      value="1º ano"
+                      value="1º Ano"
                       control={<Radio />}
-                      label="1º ano"
+                      label="1º Ano"
                     />
                     <FormControlLabel
-                      value="2º ano"
+                      value="2º Ano"
                       control={<Radio />}
-                      label="2º ano"
+                      label="2º Ano"
                     />
                     <FormControlLabel
-                      value="3º ano"
+                      value="3º Ano"
                       control={<Radio />}
-                      label="3º ano"
+                      label="3º Ano"
                     />
                     <FormControlLabel
                       value="outra"
@@ -225,23 +284,34 @@ export function PostForm() {
                   mídias de sua preferência.
                 </span>
 
-                <CustomEditor onChange={postHtmlContentInputHandler} />
+                <CustomEditor
+                  initialValue={values.htmlContent}
+                  onChange={postHtmlContentInputHandler}
+                />
                 {errors.htmlContent && touched.htmlContent && (
                   <p className="error text">{errors.htmlContent}</p>
                 )}
 
-                <span>Adicione exercicios ao final do conteúdo.</span>
+                <span>
+                  Adicione um exercico ao final do conteúdo (opcional) .
+                </span>
 
                 <span>Enunciado do exercicio:</span>
 
-                <CustomEditor />
+                <CustomEditor
+                  initialValue={values.QuestionHtmlContent}
+                  onChange={QuestionHtmlContentInputHandler}
+                />
+                {errors.QuestionHtmlContent && touched.QuestionHtmlContent && (
+                  <p className="error text">{errors.QuestionHtmlContent}</p>
+                )}
 
                 <span>Alternativas</span>
 
                 <FormControl className="alternatives-radio-selection">
                   <RadioGroup
-                    name="grade"
-                    value={values.grade}
+                    name="correct"
+                    value={values.correct}
                     onChange={handleChange}
                   >
                     <div className="radio-wrapper">
@@ -250,7 +320,17 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          value={values.answerA}
+                          name="answerA"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerA && touched.answerA && (
+                          <p className="error text">{errors.answerA}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -259,7 +339,17 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          value={values.answerB}
+                          name="answerB"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerB && touched.answerB && (
+                          <p className="error text">{errors.answerB}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -268,7 +358,17 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          value={values.answerC}
+                          name="answerC"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerC && touched.answerC && (
+                          <p className="error text">{errors.answerC}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="radio-wrapper">
                       <FormControlLabel
@@ -276,7 +376,17 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          value={values.answerD}
+                          name="answerD"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerD && touched.answerD && (
+                          <p className="error text">{errors.answerD}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="radio-wrapper">
@@ -285,13 +395,20 @@ export function PostForm() {
                         control={<Radio />}
                         label={<div></div>}
                       />
-                      <input placeholder="Adicione o texto da alternativa aqui..." />
+                      <div className="column-wrapper">
+                        <input
+                          value={values.answerE}
+                          name="answerE"
+                          onChange={handleChange}
+                          placeholder="Adicione o texto da alternativa aqui..."
+                        />
+                        {errors.answerE && touched.answerE && (
+                          <p className="error text">{errors.answerE}</p>
+                        )}
+                      </div>
                     </div>
                   </RadioGroup>
                 </FormControl>
-                {errors.questions && touched.questions && (
-                  <p className="error text">{errors.questions}</p>
-                )}
 
                 <span className="obs">
                   * Selecione a que será a resposta correta clicando sobre o
@@ -306,27 +423,26 @@ export function PostForm() {
                 <FormControl sx={{ m: 1, width: 300 }} className="custom-input">
                   <Select
                     multiple
-                    value={personName}
+                    value={selectedCompetences}
                     onChange={handleSelectionChange}
                     input={<OutlinedInput />}
                     renderValue={(selected) => selected.join(", ")}
                     MenuProps={MenuProps}
                   >
-                    {names.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        <Checkbox checked={personName.indexOf(name) > -1} />
-                        <ListItemText primary={name} />
+                    {competences?.map((competence) => (
+                      <MenuItem key={competence.id} value={competence.name}>
+                        <Checkbox
+                          checked={selectedCompetences.includes(
+                            competence.name
+                          )}
+                        />
+                        <ListItemText primary={competence.name} />
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
 
-                <button className="add-question">
-                  <FiPlus color="var(--dark-purple)" size={30} />
-                  Adicionar exercício
-                  </button>
-
-                <div className="buttons-container">
+                <div className="buttons-container btn-container">
                   <button type="button" onClick={() => navigate(-1)}>
                     Cancelar
                   </button>
