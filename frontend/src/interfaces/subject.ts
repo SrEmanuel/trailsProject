@@ -1,3 +1,5 @@
+import { IQuestion } from "./question";
+
 export interface ISubject{
     position: number;
     id: number;
@@ -7,4 +9,5 @@ export interface ISubject{
     htmlContent: string;
     linkName: string;
     completed: boolean;
+    questions: IQuestion[]
 }

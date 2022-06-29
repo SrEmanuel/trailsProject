@@ -3,8 +3,8 @@ export interface IQuestion{
   htmlContent: string;
   correct: string;
   answerA: string;
-  answerB: String
-  answerC: String
-  answerD: String
-  answerE: String
+  answerB: string
+  answerC: string
+  answerD: string
+  answerE: string
 }
