@@ -7,23 +7,24 @@ import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
 import { useAuth } from "../../hooks/useAuth";
 import { Question } from "../../components/Question";
-import questions from "./db.json";
+import { IQuestion } from "../../interfaces/question";
 
 export function BlogPost() {
   const [subject, setSubject] = useState<ISubject>();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
   const navigate = useNavigate();
-  const { handleClearUserDataFromStorage, getUser } = useAuth();
+  const { handleClearUserDataFromStorage, getUser, getIsTeacher } = useAuth();
   const params = useParams();
 
   useEffect(() => {
     async function handleLoadSubject() {
       try {
         const response = await api.get(`/subjects/${params.blogtitle}`);
-
+        setQuestions(response.data.questions);
         const tempSubject: ISubject = response.data;
 
-        if (!tempSubject.completed && getUser()) {
+        if (!tempSubject.completed && getUser() && !getIsTeacher ) {
           const url = `/subjects/${tempSubject.linkName}/user/mark?state=true`;
           await api.put(url);
         }
@@ -35,7 +36,7 @@ export function BlogPost() {
     }
 
     handleLoadSubject();
-  }, [getUser, handleClearUserDataFromStorage, navigate, params]);
+  }, [getIsTeacher, getUser, handleClearUserDataFromStorage, navigate, params]);
 
   return (
     <div className="container">
@@ -45,7 +46,7 @@ export function BlogPost() {
         className="html-content"
         dangerouslySetInnerHTML={{ __html: subject?.htmlContent as string }}
       ></div>
-      <Question data={questions[currentQuestion].question} currentQuestion={currentQuestion} totalQuestions={questions.length - 1} handleNextQuestion={setCurrentQuestion} />
+      { questions[0] && <Question data={questions[0]} currentQuestion={currentQuestion} totalQuestions={questions.length - 1} handleNextQuestion={setCurrentQuestion} /> }
     </div>
   );
 }
