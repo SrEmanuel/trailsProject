@@ -3,15 +3,17 @@ import { useRef } from "react";
 
 interface Props{
   onChange?: (...args: any) => void;
+  initialValue: string | undefined;
 }
 
 
-export function CustomEditor({onChange}: Props) {
+export function CustomEditor({onChange, initialValue}: Props) {
   const editorRef = useRef() as any;
   return (
     <div className="editor">
       <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
+        initialValue={initialValue}
         onEditorChange={onChange}
         init={{
           height: 500,
