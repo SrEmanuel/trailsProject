@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
 import { IQuestion } from "../../interfaces/question";
 import api from "../../services/api";
@@ -21,6 +22,7 @@ export function Question({
 }: Props) {
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [result, setResult] = useState<'right' | 'wrong'>();
   const navigate = useNavigate();
   const { handleClearUserDataFromStorage } = useAuth();
 
@@ -32,8 +34,14 @@ export function Question({
 
   async function handleSubmitAnswer() {
     try {
-      const response = await api.get(`/questions/${data.id}/verifyAnswer"`);
-      console.log(response.data);
+      const response = await api.post(`/questions/${data.id}/verifyAnswer`, { answer: selectedOption } );
+      if(response.data.isCorrect){
+        setResult('right')
+        toast.success('Parabens! Você acertou a questão.');
+      } else {
+        setResult('wrong')
+        toast.error('Que pena! Essa não é a opção correta.');
+      }
       setIsAnswered(true);
     } catch (error) {
       handleNotifyError(error, navigate, handleClearUserDataFromStorage);
@@ -51,62 +59,67 @@ export function Question({
       <div className="alternatives">
         <div className="alternative">
           <input
-            onClick={() => setSelectedOption(data.answerA)}
+            disabled={isAnswered}
+            onClick={() => setSelectedOption('A')}
             type="radio"
-            id={data.answerA}
+            id="A"
             name="alternative"
           />
-          <label htmlFor={data.answerA}>
+          <label className={ isAnswered && selectedOption === 'A'? result === 'right'? 'right' : 'wrong': 'normal' } htmlFor="A">
             {data.answerA}
           </label>
         </div>
         <div className="alternative">
           <input
-            onClick={() => setSelectedOption(data.answerB)}
+            disabled={isAnswered}
+            onClick={() => setSelectedOption("B")}
             type="radio"
-            id={data.answerB}
+            id="B"
             name="alternative"
           />
-          <label htmlFor={data.answerB}>
+          <label className={ isAnswered && selectedOption === 'B'? result === 'right'? 'right' : 'wrong': 'normal' } htmlFor="B">
             {data.answerB}
           </label>
         </div>
         <div className="alternative">
           <input
-            onClick={() => setSelectedOption(data.answerC)}
+            disabled={isAnswered}
+            onClick={() => setSelectedOption("C")}
             type="radio"
-            id={data.answerC}
+            id="C"
             name="alternative"
           />
-          <label htmlFor={data.answerC}>
+          <label className={ isAnswered && selectedOption === 'C'? result === 'right'? 'right' : 'wrong': 'normal' } htmlFor="C">
             {data.answerC}
           </label>
         </div>
         <div className="alternative">
           <input
-            onClick={() => setSelectedOption(data.answerD)}
+            disabled={isAnswered}
+            onClick={() => setSelectedOption("D")}
             type="radio"
-            id={data.answerD}
+            id="D"
             name="alternative"
           />
-          <label htmlFor={data.answerD}>
+          <label className={ isAnswered && selectedOption === 'D'? result === 'right'? 'right' : 'wrong': 'normal' } htmlFor="D">
             {data.answerD}
           </label>
         </div>
         <div className="alternative">
           <input
-            onClick={() => setSelectedOption(data.answerE)}
+            disabled={isAnswered}
+            onClick={() => setSelectedOption("E")}
             type="radio"
-            id={data.answerE}
+            id="E"
             name="alternative"
           />
-          <label htmlFor={data.answerE}>
+          <label className={ isAnswered && selectedOption === 'E'? result === 'right'? 'right' : 'wrong': 'normal' } htmlFor="E">
             {data.answerE}
           </label>
         </div>
       </div>
       <div className="controls">
-        <button disabled={!selectedOption} onClick={handleSubmitAnswer}>
+        <button disabled={!selectedOption || isAnswered} onClick={handleSubmitAnswer}>
           Enviar Resposta
         </button>
         <button
