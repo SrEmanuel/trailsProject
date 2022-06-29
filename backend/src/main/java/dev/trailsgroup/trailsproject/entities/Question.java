@@ -131,6 +131,9 @@ public class Question {
         this.answerE = answerE;
     }
 
+    public Set<QuestionCompetence> getCompetences() {
+        return competences;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
