@@ -25,6 +25,10 @@ public class StudentCompetence {
     @JoinColumn(name = "competence_id", nullable = false)
     private Competence competence;
 
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
+
     @CreatedDate
     private Instant createdDate;
     @LastModifiedDate
@@ -54,6 +58,14 @@ public class StudentCompetence {
 
     public Competence getCompetence() {
         return competence;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     public void setCompetence(Competence competence) {

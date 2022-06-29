@@ -75,8 +75,13 @@ public class StudentCompetenceService {
         competences.forEach(x -> {
             StudentCompetence studentCompetence = new StudentCompetence();
             studentCompetence.setCompetence(x);
+            studentCompetence.setQuestion(question);
             studentCompetence.setUser(user);
             list.add(studentCompetence);
+        });
+
+        list.removeIf(x -> {
+            return repository.exists(Example.of(x));
         });
 
         repository.saveAll(list);
