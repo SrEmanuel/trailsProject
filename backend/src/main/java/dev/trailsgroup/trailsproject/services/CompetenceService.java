@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class CompetenceService {
@@ -45,9 +47,8 @@ public class CompetenceService {
 
     public void delete(Integer id){
         try{
-            Competence competence = repository.findById(id).orElseThrow(()
-                    -> new ResourceNotFoundException("Identificador '" + id + "' para a pergunta não foi encontrado no sistema"));
-            repository.delete(competence);
+            Optional<Competence> competence = repository.findById(id);
+            competence.ifPresent(value -> repository.delete(value));
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
