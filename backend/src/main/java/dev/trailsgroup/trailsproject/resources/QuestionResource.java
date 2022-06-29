@@ -66,7 +66,7 @@ public class QuestionResource {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @GetMapping(value = "/{id}/verifyAnswer")
+    @PostMapping(value = "/{id}/verifyAnswer")
     public ResponseEntity<OutputQuestionAnswerDTO> verifyAnswer(@PathVariable Integer id,
                                                                 @Valid @RequestBody InputQuestionAnswerDTO answerDTO){
         OutputQuestionAnswerDTO obj = service.verifyAnswer(id, answerDTO);
