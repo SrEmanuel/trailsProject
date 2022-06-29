@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes as RoutesContainer } from 'react-router-do
 import { PageNotFound } from './pages/404';
 import { About } from './pages/About';
 import { BlogPost } from './pages/BlogPost';
-import { CreateContent } from './pages/Create/CreateContent';
 import { CreateCourse } from './pages/Create/CreateCourse';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { Home } from './pages/Landing';
@@ -27,9 +26,8 @@ export function Routes(){
              <Route path="/cursos/:courseid/:blogtitle" element={<BlogPost></BlogPost>} />
              <Route path="/novo-curso" element={<CreateCourse></CreateCourse>} />
              <Route path="/cursos/atualizar/:coursename" element={<CreateCourse></CreateCourse>} />
-             <Route path="/cursos/:coursename/:topicid/adicionar" element={<PostForm></PostForm>} />
-             <Route path="/cursos/:courseid/:topicId/novo-conteudo" element={<CreateContent></CreateContent>} />
-             <Route path="/cursos/:coursename/:topicId/:contentname/atualizar" element={<CreateContent></CreateContent>} />
+             <Route path="/cursos/:courseid/:topicid/novo-conteudo" element={<PostForm></PostForm>} />
+             <Route path="/cursos/:coursename/:topicId/:contentname/atualizar" element={<PostForm></PostForm>} />
              <Route path="*" element={<PageNotFound></PageNotFound>} />
             </RoutesContainer>
         </BrowserRouter>
