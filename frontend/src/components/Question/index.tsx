@@ -24,6 +24,7 @@ export function Question({
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [result, setResult] = useState<'right' | 'wrong'>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { handleClearUserDataFromStorage } = useAuth();
 
   function nextQuestion() {
@@ -59,7 +60,7 @@ export function Question({
       <div className="alternatives">
         <div className="alternative">
           <input
-            disabled={isAnswered}
+            disabled={isAnswered || user?.roles.includes('ROLE_PROFESSOR') || user?.roles.includes('ROLE_ADMIN') }
             onClick={() => setSelectedOption('A')}
             type="radio"
             id="A"
@@ -71,7 +72,7 @@ export function Question({
         </div>
         <div className="alternative">
           <input
-            disabled={isAnswered}
+            disabled={isAnswered || user?.roles.includes('ROLE_PROFESSOR') || user?.roles.includes('ROLE_ADMIN') }
             onClick={() => setSelectedOption("B")}
             type="radio"
             id="B"
@@ -83,7 +84,7 @@ export function Question({
         </div>
         <div className="alternative">
           <input
-            disabled={isAnswered}
+            disabled={isAnswered || user?.roles.includes('ROLE_PROFESSOR') || user?.roles.includes('ROLE_ADMIN') }
             onClick={() => setSelectedOption("C")}
             type="radio"
             id="C"
@@ -95,7 +96,7 @@ export function Question({
         </div>
         <div className="alternative">
           <input
-            disabled={isAnswered}
+            disabled={isAnswered || user?.roles.includes('ROLE_PROFESSOR') || user?.roles.includes('ROLE_ADMIN') }
             onClick={() => setSelectedOption("D")}
             type="radio"
             id="D"
@@ -107,7 +108,7 @@ export function Question({
         </div>
         <div className="alternative">
           <input
-            disabled={isAnswered}
+            disabled={isAnswered || user?.roles.includes('ROLE_PROFESSOR') || user?.roles.includes('ROLE_ADMIN') }
             onClick={() => setSelectedOption("E")}
             type="radio"
             id="E"
