@@ -14,12 +14,12 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 600px;
+    max-width: 700px;
 
     a, .nav-item {
       cursor: pointer;
       text-decoration: none;
-      text-align: center;
+      text-align: justify;
       color: var(--grey);
       font-size: 18px;
       line-height: 20px;
