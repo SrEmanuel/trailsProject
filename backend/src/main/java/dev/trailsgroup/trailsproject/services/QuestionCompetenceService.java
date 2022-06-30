@@ -102,9 +102,8 @@ public class QuestionCompetenceService {
 
     public void delete(Integer id){
         try{
-            QuestionCompetence questionCompetence = repository.findById(id).orElseThrow(()
-                    -> new ResourceNotFoundException("Identificador '" + id + "' para a pergunta não foi encontrado no sistema"));
-            repository.delete(questionCompetence);
+            Optional<QuestionCompetence> questionCompetence = repository.findById(id);
+            questionCompetence.ifPresent(value -> repository.delete(value));
         }catch  (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
