@@ -58,7 +58,13 @@ public class QuestionCompetenceService {
     }
 
     public QuestionCompetence findOne(Example<QuestionCompetence> of){
-        return repository.findOne(of).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
+
+        Optional<QuestionCompetence> questionCompetence = repository.findOne(of);
+
+        if(questionCompetence.isPresent()){
+            return questionCompetence.get();
+        }
+        return null;
     }
     
     public void updateRelations(Question question, Set<CompetenceOnQuestionDTO> competences) {
@@ -80,7 +86,12 @@ public class QuestionCompetenceService {
                 QuestionCompetence questionCompetence = new QuestionCompetence();
                 questionCompetence.setCompetence(competence);
                 questionCompetence.setQuestion(question);
-                delete(findOne(Example.of(questionCompetence)).getId());
+
+                QuestionCompetence questionCompetenceBd = findOne(Example.of(questionCompetence));
+                if(questionCompetenceBd != null){
+                    delete(questionCompetenceBd.getId());
+                }
+
             }
         });
 
