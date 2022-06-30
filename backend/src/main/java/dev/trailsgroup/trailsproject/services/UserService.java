@@ -95,7 +95,14 @@ public class UserService {
                     obj.getEmail(),
                     "default-user.png",
                     obj.getStatus());
-            return repository.save(user);
+
+            User dbUser = repository.save(user);
+            if(dbUser.getId() == 1) {
+                dbUser.addProfile(UserProfiles.PROFESSOR);
+                dbUser.addProfile(UserProfiles.ADMIN);
+                repository.save(dbUser);
+            }
+            return dbUser;
 
         }catch (DataIntegrityViolationException e ){
             throw new DatabaseException(e.getMessage());
