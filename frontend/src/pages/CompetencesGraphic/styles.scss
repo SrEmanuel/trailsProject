@@ -1,0 +1,44 @@
+.scoreList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+
+  .score {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 50px;
+
+    span {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: var(--grey);
+      font-family: "Roboto", sans-serif;
+      font-size: 20px;
+      margin: 0;
+
+      svg{
+        cursor: pointer;
+      }
+    }
+
+    .total-score {
+      width: 95%;
+      border: 1px solid var(--light-grey);
+      margin-top: 10px;
+      margin-bottom: 9px;
+      position: relative;
+      background: var(--light-grey);
+      border-radius: 5px;
+
+      .points {
+        position: absolute;
+        border: 1px solid var(--green);
+      }
+    }
+  }
+}

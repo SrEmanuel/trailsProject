@@ -37,6 +37,7 @@ export function NavBar() {
         ) : (
          <>
          <span className="nav-item" onClick={ () => setShowUserProfile(true)} > Meu perfil </span>
+         <Link to="/meu-desempenho">Meu desempenho</Link>
           <Link
             onClick={() => handleClearUserDataFromStorage()}
             className="logout-btn"
