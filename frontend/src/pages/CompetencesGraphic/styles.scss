@@ -11,10 +11,19 @@
     margin-top: 50px;
 
     span {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
       color: var(--grey);
       font-family: "Roboto", sans-serif;
       font-size: 20px;
       margin: 0;
+
+      svg{
+        cursor: pointer;
+      }
     }
 
     .total-score {
