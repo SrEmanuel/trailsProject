@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiMenu, FiBookOpen, FiInfo, FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
+import { FiMenu, FiBookOpen, FiInfo, FiLogIn, FiLogOut, FiUser, FiActivity } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import "./styles.scss";
@@ -52,6 +52,10 @@ export function SideMenu({ hasLoggedUser, setShowUserProfile }: Props) {
               <FiUser color="var(--green)" size={24}  />
               Meu perfil
             </span>
+            <Link to="/meu-desempenho">
+              <FiActivity color="var(--green)" size={24} />
+              Meu desempenho
+              </Link>
             <Link
               onClick={() => handleClearUserDataFromStorage()}
               className="logout-btn"
