@@ -37,7 +37,7 @@ export const ListContent = memo(() => {
   const handleLoadCourses = useCallback(async () => {
     const url = (await getIsTeacher())
       ? `/users/${user?.id}/courses?sort=name,asc`
-      : `/courses?size=12&page=${page - 1}`;
+      : `/courses`;
     try {
       const response = await api.get(url);
       setTrails(response.data.content);
