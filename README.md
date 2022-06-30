@@ -164,6 +164,7 @@ Com o projeto já importado, siga estes passos:
    | DATABASEPASS| {Senha do banco de dados postgres} |
    | EMAIl_AUTH_USERNAME |{Endereço de e-mail do g-mail para o envio de mensagens}
    |EMAIL_AUTH_PASSWORD | {Senha de app gerada no g-mail para o acesso do projeto ao e-mail}
+   |SYSTEM_PROFILE | dev
 5. Clique em 'Apply'.
 
 ##### Executando a aplicação:
