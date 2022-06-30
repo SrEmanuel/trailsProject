@@ -13,7 +13,7 @@ export function CustomEditor({onChange, initialValue}: Props) {
     <div className="editor">
       <Editor
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue={initialValue}
+        value={initialValue}
         onEditorChange={onChange}
         init={{
           height: 500,
