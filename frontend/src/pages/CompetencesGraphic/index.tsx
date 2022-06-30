@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { FiInfo } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CompetenceDetails } from "../../components/CompetenceDetails";
 import { NavBar } from "../../components/Navbar";
 import { useAuth } from "../../hooks/useAuth";
 import api from "../../services/api";
 import { handleNotifyError } from "../../utils/handleNotifyError";
+import { ReactComponent as NotFound} from '../../assets/images/404.svg';
 import "./styles.scss";
 
 interface CompetencePoints {
@@ -45,9 +46,8 @@ export function CompetencesGraphic() {
   return (
     <div className="container">
       <NavBar />
-      <h1>Seu desempenho em cada competência</h1>
-
       <div className="scoreList">
+      <h1>Seu desempenho em cada competência</h1>
         {competencePoints?.map((competence) => (
           <div key={competence.id} className="score">
             <span>
@@ -82,6 +82,14 @@ export function CompetencesGraphic() {
             </span>
           </div>
         ))}
+
+        { competencePoints.length < 1 && (
+         <div className="not-found">
+           <NotFound />
+           <span>Ops! Você precisa responder exercicios para ter alguma pontuação</span>
+           <Link className="link-btn" to="/cursos" >Voltar as trilhas</Link>
+         </div>
+        ) }
       </div>
 
       <CompetenceDetails
