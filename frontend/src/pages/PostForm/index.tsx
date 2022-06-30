@@ -323,7 +323,7 @@ export function PostForm() {
                 <FormControl className="alternatives-radio-selection">
                   <RadioGroup
                     name="correct"
-                    value={values.correct}
+                    value={values.correct ?? null}
                     onChange={handleChange}
                   >
                     <div className="radio-wrapper">
