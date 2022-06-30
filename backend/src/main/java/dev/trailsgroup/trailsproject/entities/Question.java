@@ -29,7 +29,6 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<QuestionCompetence> competences =  new HashSet<>();
 
-    @JsonIgnore
     private String correct;
 
     private String answerA;
