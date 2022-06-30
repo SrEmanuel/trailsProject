@@ -209,7 +209,7 @@ export function CreateCourse() {
                           avatar={
                             <Avatar
                               alt={teacher.name}
-                              src="/static/images/avatar/1.jpg"
+                              src={teacher.imagePath}
                             />
                           }
                           label={teacher.name}
@@ -221,7 +221,7 @@ export function CreateCourse() {
                 {errors.professors && touched.professors && (
                   <span className="error text">{errors.professors}</span>
                 )}
-                <div className="buttons-container">
+                <div style={{ marginTop: 10 }} className="buttons-container">
                   <button onClick={() => navigate(-1)} type="button">
                     Cancelar
                   </button>
