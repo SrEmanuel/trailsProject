@@ -3,7 +3,7 @@ package dev.trailsgroup.trailsproject.dto;
 import dev.trailsgroup.trailsproject.entities.Competence;
 import dev.trailsgroup.trailsproject.entities.QuestionCompetence;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 

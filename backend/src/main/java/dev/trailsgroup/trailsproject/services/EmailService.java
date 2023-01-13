@@ -3,7 +3,7 @@ package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.entities.User;
 import org.springframework.mail.SimpleMailMessage;
 
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMessage;
 
 public interface EmailService {
 

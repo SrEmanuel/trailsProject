@@ -1,6 +1,6 @@
 package dev.trailsgroup.trailsproject.dto;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 public class UserDTO {
 

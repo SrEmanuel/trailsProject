@@ -1,11 +1,12 @@
 package dev.trailsgroup.trailsproject.services;
 import dev.trailsgroup.trailsproject.services.exceptions.ClientUploadException;
 import dev.trailsgroup.trailsproject.services.exceptions.UploadException;
+
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 import java.nio.file.Files;

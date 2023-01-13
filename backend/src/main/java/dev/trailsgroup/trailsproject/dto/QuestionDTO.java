@@ -2,7 +2,7 @@ package dev.trailsgroup.trailsproject.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 public class QuestionDTO {
 

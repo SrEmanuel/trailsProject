@@ -1,6 +1,6 @@
 package dev.trailsgroup.trailsproject.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_professorsubject")
